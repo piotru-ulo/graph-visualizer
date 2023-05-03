@@ -11,7 +11,7 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
         for (DrawableVertex one : drawableVertices)
             mapka.put(one.getVertex(), one);
         double temperature = 10 * Math.sqrt(drawableVertices.size());
-        double magicConstant = 15;
+        double magicConstant = Math.sqrt(width * height / drawableVertices.size());
         Map<DrawableVertex, Double> moveX = new HashMap<>();
         Map<DrawableVertex, Double> moveY = new HashMap<>();
         for (DrawableVertex one : drawableVertices) {

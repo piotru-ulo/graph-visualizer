@@ -1,11 +1,11 @@
 package pl.edu.tcs.graph;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Edge {
     public int getId();
 
     public int getWeight();
 
-    public List<Vertex> getEndpoints();
+    public Collection<Vertex> getEndpoints();
 }

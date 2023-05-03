@@ -5,20 +5,19 @@ import java.util.Collection;
 public interface Graph {
     public Collection<Vertex> getVertices();
 
-    public Vertex getVertex(int vertexId) throws InvalidVertexException;
+    public Vertex getVertex(int vertexId);
 
     public Collection<Edge> getEdges();
 
-    public Edge getEdge(int edgeId) throws InvalidEdgeException;
+    public Edge getEdge(int edgeId);
 
-    public Collection<Edge> getIncidentEdges(Vertex v) throws InvalidVertexException;
+    public Collection<Edge> getIncidentEdges(Vertex v);
 
-    public Vertex insertVertex(int vertexId) throws InvalidVertexException;
+    public Vertex insertVertex(int vertexId);
 
-    public Edge insertEdge(Vertex from, Vertex to, int edgeWeight, int edgeId)
-            throws InvalidVertexException, InvalidEdgeException;
+    public Edge insertEdge(Vertex from, Vertex to, int edgeWeight, int edgeId);
 
-    public void removeVertex(Vertex v) throws InvalidVertexException;
+    public void removeVertex(Vertex v);
 
-    public void removeEdge(Edge e) throws InvalidEdgeException;
+    public void removeEdge(Edge e);
 }

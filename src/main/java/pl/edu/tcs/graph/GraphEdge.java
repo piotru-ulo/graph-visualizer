@@ -1,23 +1,24 @@
 package pl.edu.tcs.graph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 class GraphEdge implements Edge {
     int id;
-    int edgeWeight;
+    int weight;
     Vertex from, to;
 
     public GraphEdge(Vertex from, Vertex to, int edgeWeight, int id) {
         this.from = from;
         this.to = to;
-        this.edgeWeight = edgeWeight;
+        this.weight = edgeWeight;
         this.id = id;
     }
 
     @Override
     public int getWeight() {
-        return edgeWeight;
+        return weight;
     }
 
     @Override
@@ -26,7 +27,7 @@ class GraphEdge implements Edge {
     }
 
     @Override
-    public List<Vertex> getEndpoints() {
+    public Collection<Vertex> getEndpoints() {
         List<Vertex> returnList = new ArrayList<>();
         returnList.add(from);
         returnList.add(to);

@@ -41,7 +41,7 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>pl.edu.tcs.App</mainClass>
+                            <mainClass>pl.edu.tcs.graph.App</mainClass>
                         </configuration>
                     </execution>
                 </executions>

@@ -5,8 +5,8 @@ import java.util.Collection;
 public class RescaleDraw implements DrawStrategy {
     public void draw(double width, double height, Graph graph, Collection<DrawableVertex> dw) {
         // rescale
-        double x_min = Double.MAX_VALUE, y_min = Double.MAX_VALUE;
-        double x_max = Double.MIN_VALUE, y_max = Double.MIN_VALUE;
+        double x_min = Double.POSITIVE_INFINITY, y_min = Double.POSITIVE_INFINITY;
+        double x_max = Double.NEGATIVE_INFINITY, y_max = Double.NEGATIVE_INFINITY;
         for (DrawableVertex v : dw) {
             x_min = Math.min(x_min, v.getX());
             y_min = Math.min(y_min, v.getY());
@@ -25,8 +25,8 @@ public class RescaleDraw implements DrawStrategy {
         // and the offset = center / 2 * scale
 
         for (DrawableVertex v : dw) {
-            v.setX(v.getX() * scale - (x_min + x_max) / 2 * scale);
-            v.setY(v.getY() * scale - (y_min + y_max) / 2 * scale);
+            v.setX(width / 2 + v.getX() * scale - (x_min + x_max) / 2.0 * scale);
+            v.setY(height / 2 + v.getY() * scale - (y_min + y_max) / 2.0 * scale);
         }
     }
 }

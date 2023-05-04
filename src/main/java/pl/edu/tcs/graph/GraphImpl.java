@@ -67,4 +67,10 @@ public class GraphImpl implements Graph {
         });
         vertices.remove(vertex.getId());
     }
+
+    @Override
+    public Edge insertEdge(int from, int to, int edgeWeight, int edgeId) {
+        Vertex one = vertices.get(from), two = vertices.get(to);
+        return insertEdge(one, two, edgeWeight, edgeId);
+    }
 }

@@ -17,6 +17,8 @@ public interface Graph {
 
     public Edge insertEdge(Vertex from, Vertex to, int edgeWeight, int edgeId);
 
+    public Edge insertEdge(int from, int to, int edgeWeight, int edgeId);
+
     public void removeVertex(Vertex v);
 
     public void removeEdge(Edge e);

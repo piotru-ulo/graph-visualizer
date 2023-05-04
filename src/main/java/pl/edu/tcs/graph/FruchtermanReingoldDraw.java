@@ -22,6 +22,8 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
                 double deltaX = one.getX() - two.getX();
                 double deltaY = one.getY() - two.getY();
                 double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                if (distance > 1000)
+                    continue;
 
                 double repulsionForce = magicConstant * magicConstant / distance;
 
@@ -41,6 +43,8 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
             double deltaX = one.getX() - two.getX();
             double deltaY = one.getY() - two.getY();
             double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            if (distance == 0.0)
+                continue;
 
             double attractionForce = distance * distance / magicConstant;
 
@@ -54,14 +58,16 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
             double deltaX = moveX.get(v);
             double deltaY = moveY.get(v);
             double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            if (distance == 0 || distance < 1.0)
+                continue;
 
             double cappedByTemperature = Math.min(temperature, distance);
 
             double realMoveX = moveX.get(v) / distance * cappedByTemperature;
             double realMoveY = moveY.get(v) / distance * cappedByTemperature;
 
-            v.setX(v.getX() + realMoveX);
-            v.setY(v.getY() + realMoveY);
+            v.setX(Math.min(width, Math.max(0.0, v.getX() + realMoveX)));
+            v.setY(Math.min(height, Math.max(0.0, v.getY() + realMoveY)));
         }
         if (temperature > 1.5)
             temperature *= 0.85;

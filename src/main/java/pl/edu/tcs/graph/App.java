@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    Map<Vertex, DrawableVertex> mapka = new HashMap<>();
+    private Map<Vertex, DrawableVertex> mapka = new HashMap<>();
     double magic = 18 * Math.sqrt(2); // TODO: FIX THIS!
 
     StackPane getVertex(DrawableVertex v) {
@@ -49,11 +49,11 @@ public class App extends Application {
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
 
-    void initialize() {
+    private void initialize() {
         g = new GraphImpl();
     }
 
-    void fakeValues(int i) {
+    private void fakeValues(int i) {
         if (i == 0) {
             g.insertVertex(0);
             g.insertVertex(1);
@@ -75,7 +75,7 @@ public class App extends Application {
             g.insertEdge(r.nextInt(8), r.nextInt(8), 1, i);
     }
 
-    void updateDrawing(Stage primaryStage) {
+    private void updateDrawing(Stage primaryStage) {
         AnchorPane drawingPane = new AnchorPane();
         drawableVertexMap = new HashMap<>();
         drawableEdgeMap = new HashMap<>();
@@ -93,8 +93,7 @@ public class App extends Application {
         strategy.draw(1600, 800, g, drawableVertexMap.values());
 
         strategy = new FruchtermanReingoldDraw();
-        for (int i = 0; i < 850; i++)
-            strategy.draw(1600, 800, g, drawableVertexMap.values());
+        strategy.draw(1600, 800, g, drawableVertexMap.values());
 
         strategy = new RescaleDraw();
         strategy.draw(1600, 800, g, drawableVertexMap.values());

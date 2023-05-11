@@ -23,7 +23,7 @@ public class Controller {
     private AnchorPane menuPane;
     public void nextGraph(ActionEvent e){
         generator.initialize();
-        generator.fakeValues(0);
+        generator.fakeValues(1);
         generator.updateDrawing(mainPane);
 
         stage.setScene(scene);

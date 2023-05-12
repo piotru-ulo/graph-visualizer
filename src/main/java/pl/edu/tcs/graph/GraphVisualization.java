@@ -1,24 +1,24 @@
 package pl.edu.tcs.graph;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class GraphGenerator {
+public class GraphVisualization {
+    AnchorPane drawingPane;
+    int height = 600;
+    int width = 800;
     private Map<Vertex, DrawableVertex> mapka = new HashMap<>();
     double magic = 18 * Math.sqrt(2); // TODO: FIX THIS!
 
-    public GraphGenerator(){}
     StackPane getVertex(DrawableVertex v) {
         Circle circle = new Circle(20.0);
         circle.setFill(v.getFill());
@@ -50,11 +50,28 @@ public class GraphGenerator {
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
 
+    public GraphVisualization() {
+        g = new GraphImpl();
+        drawingPane = new AnchorPane();
+    }
+
     public void initialize() {
+        //System.out.println("initialize");
         g = new GraphImpl();
     }
 
+    public void fromAdjacencyList(int[] input){
+        g = new GraphImpl();
+        for(int i=0; i<input.length; i+=2) {
+            if(!g.containsVertex(input[i]))
+                g.insertVertex(input[i]);
+            if(!g.containsVertex(input[i+1]))
+                g.insertVertex(input[i+1]);
+            g.insertEdge(input[i], input[i+1], 0, i/2);
+        }
+    }
     public void fakeValues(int i) {
+        //System.out.println("fake!");
         if (i == 0) {
             g.insertVertex(0);
             g.insertVertex(1);
@@ -76,37 +93,40 @@ public class GraphGenerator {
             g.insertEdge(r.nextInt(8), r.nextInt(8), 1, i);
     }
 
-    public void updateDrawing(SplitPane splitPane) {
-        AnchorPane anchorPane = (AnchorPane) splitPane.lookup("#graphPane");
-        anchorPane.getChildren().clear();
+    public void updateDrawing() {
+        System.out.println("visualization update!");
+        drawingPane.getChildren().clear();
         drawableVertexMap = new HashMap<>();
         drawableEdgeMap = new HashMap<>();
 
         for (Vertex v : g.getVertices())
             drawableVertexMap.putIfAbsent(v, new DrawableVertexImpl(v));
+        System.out.println(drawableVertexMap);
         for (Edge e : g.getEdges())
             drawableEdgeMap.putIfAbsent(e, new DrawableEdgeImpl(e));
+        System.out.println(drawableEdgeMap);
 
         // TODO: change 1600x800 to something smarter?
         DrawStrategy strategy = new RandomDraw();
-        strategy.draw( 910, 610, g, drawableVertexMap.values());
+        strategy.draw(width, height, g, drawableVertexMap.values());
 
         strategy = new CircularDraw();
-        strategy.draw( 910, 610, g, drawableVertexMap.values());
-        strategy = new FruchtermanReingoldDraw();
-        strategy.draw( 910, 610, g, drawableVertexMap.values());
+        strategy.draw(width, height, g, drawableVertexMap.values());
 
+        strategy = new FruchtermanReingoldDraw();
+        strategy.draw(width, height, g, drawableVertexMap.values());
 
         strategy = new RescaleDraw();
-        strategy.draw( 910, 610, g, drawableVertexMap.values());
-
-
+        strategy.draw(width, height, g, drawableVertexMap.values());
 
         for (Vertex v : g.getVertices())
-            anchorPane.getChildren().add(getVertex(drawableVertexMap.get(v)));
+            drawingPane.getChildren().add(getVertex(drawableVertexMap.get(v)));
         for (Edge e : g.getEdges())
-            anchorPane.getChildren().add(0, getEdge(drawableEdgeMap.get(e)));
+            drawingPane.getChildren().add(0, getEdge(drawableEdgeMap.get(e)));
 
     }
 
+    public AnchorPane getNode() {
+        return drawingPane;
+    }
 }

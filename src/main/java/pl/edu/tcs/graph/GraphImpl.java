@@ -61,6 +61,11 @@ public class GraphImpl implements Graph {
     }
 
     @Override
+    public boolean containsVertex(int vertexId) {
+        return vertices.containsKey(vertexId);
+    }
+
+    @Override
     public void removeVertex(Vertex vertex) {
         getIncidentEdges(vertex).forEach(e -> {
             removeEdge(e);

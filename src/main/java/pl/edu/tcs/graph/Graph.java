@@ -22,6 +22,4 @@ public interface Graph {
     public void removeVertex(Vertex v);
 
     public void removeEdge(Edge e);
-
-    boolean containsVertex(int vertexId);
 }

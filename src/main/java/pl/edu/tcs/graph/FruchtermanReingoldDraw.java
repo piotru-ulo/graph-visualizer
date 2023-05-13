@@ -23,7 +23,18 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
                         continue;
                     double deltaX = one.getX() - two.getX();
                     double deltaY = one.getY() - two.getY();
-                    double distance = Math.max(0.5, Math.sqrt(deltaX * deltaX + deltaY * deltaY));
+                    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                    if (distance == 0) {
+                        double repulsionForce = magicConstant * magicConstant / 20;
+
+                        if (one.getVertex().getId() < two.getVertex().getId())
+                            repulsionForce *= -1;
+
+                        tmpMoveX += repulsionForce;
+                        tmpMoveY += repulsionForce;
+                        continue;
+                    }
 
                     double repulsionForce = magicConstant * magicConstant / distance;
 

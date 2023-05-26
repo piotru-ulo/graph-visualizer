@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 <?import javafx.stage.Stage?>
@@ -19,13 +20,17 @@
                    <AnchorPane fx:id="graphPane" minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="911.0" />
                    <AnchorPane fx:id="menuPane" minHeight="0.0" minWidth="0.0" prefHeight="620.0" prefWidth="291.0">
                         <children>
-                           <Button layoutX="91.0" layoutY="28.0" mnemonicParsing="false" onAction="#nextGraph" text="random" />
+                           <Button layoutX="106.0" layoutY="29.0" mnemonicParsing="false" onAction="#nextGraph" text="random" />
                            <Text layoutX="35.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Graph:" wrappingWidth="124.53668212890625" />
                            <Button layoutX="110.0" layoutY="322.0" mnemonicParsing="false" onAction="#graphFromInput" text="accept" />
                            <TextArea fx:id="adjListInput" layoutX="35.0" layoutY="104.0" prefHeight="200.0" prefWidth="200.0" />
                            <ChoiceBox fx:id="choiceBox" layoutX="35.0" layoutY="389.0" prefWidth="150.0" />
-                           <Text layoutX="35.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algorithm" wrappingWidth="150.6156005859375" />
-                           <Button fx:id="runButton" layoutX="35.0" layoutY="428.0" mnemonicParsing="false" onAction="#runAlgorithm" prefHeight="26.0" prefWidth="63.0" text="Run" />
+                           <Text layoutX="35.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algorithm:" wrappingWidth="150.6156005859375" />
+                           <Button fx:id="runButton" layoutX="214.0" layoutY="388.0" mnemonicParsing="false" onAction="#runAlgorithm" prefHeight="26.0" prefWidth="63.0" text="Run" />
+                           <Text layoutX="35.0" layoutY="448.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Initial:" wrappingWidth="74.93664169311523" />
+                           <Text layoutX="35.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Final:" />
+                           <TextField fx:id="initialVertexField" layoutX="126.0" layoutY="431.0" prefHeight="26.0" prefWidth="59.0" />
+                           <TextField fx:id="finalVertexField" layoutX="127.0" layoutY="463.0" prefHeight="26.0" prefWidth="58.0" />
                         </children>
                      </AnchorPane>
                  </items>

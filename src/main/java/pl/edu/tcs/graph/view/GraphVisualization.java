@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.Random;
 
 public class GraphVisualization {
-    AnchorPane drawingPane;
-    int height = 600;
-    int width = 800;
-    double magic = 18 * Math.sqrt(2); // TODO: FIX THIS!
+    private AnchorPane drawingPane;
+    private int height = 600;
+    private int width = 800;
+    private double magic = 18 * Math.sqrt(2); // TODO: FIX THIS!
 
-    StackPane getVertex(DrawableVertex v) {
+    private StackPane getVertex(DrawableVertex v) {
         Circle circle = new Circle(20.0);
         circle.setFill(v.getFill());
         circle.setStroke(v.getStroke());
@@ -37,7 +37,7 @@ public class GraphVisualization {
 
     private Map<Vertex, DrawableVertex> drawableVertexMap;
 
-    Line getEdge(DrawableEdge e) {
+    private Line getEdge(DrawableEdge e) {
         Vertex one = null, two = null;
         for (Vertex v : e.getEdge().getEndpoints())
             if (one == null)

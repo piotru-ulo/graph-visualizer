@@ -1,16 +1,21 @@
 package pl.edu.tcs.graph;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
+import pl.edu.tcs.graph.view.GraphVisualization;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Controller {
     //GraphGenerator generator = new GraphGenerator();
@@ -27,7 +32,15 @@ public class Controller {
     private AnchorPane menuPane;
     @FXML
     private TextArea adjListInput;
-
+    @FXML
+    private ChoiceBox choiceBox;
+    @FXML
+    private Button runButton;
+    ObservableList<String> choiceList = FXCollections.observableArrayList("DFS", "BFS");
+    @FXML
+    private void initialize(){
+        choiceBox.setItems(choiceList);
+    }
 
     public void nextGraph(ActionEvent e){
         mainPane.lookup("#graphPane");
@@ -36,10 +49,6 @@ public class Controller {
         visualization.initialize();
         visualization.fakeValues(1);
         visualization.updateDrawing();
-
-//        generator.initialize();
-//        generator.fakeValues(1);
-//        generator.updateDrawing(mainPane);
 
         stage.setScene(scene);
         stage.show();
@@ -61,4 +70,13 @@ public class Controller {
         visualization.fromAdjacencyList(input);
         visualization.updateDrawing();
     }
+
+    public void runAlgorithm(ActionEvent e){
+        if(choiceBox.getValue() != null){
+
+        }
+
+    }
+
+
 }

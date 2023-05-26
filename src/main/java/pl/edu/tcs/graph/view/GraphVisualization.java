@@ -1,13 +1,19 @@
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.view;
 
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import pl.edu.tcs.graph.viewmodel.CircularDraw;
+import pl.edu.tcs.graph.viewmodel.FruchtermanReingoldDraw;
+import pl.edu.tcs.graph.viewmodel.RandomDraw;
+import pl.edu.tcs.graph.viewmodel.RescaleDraw;
+import pl.edu.tcs.graph.model.DrawableEdgeImpl;
+import pl.edu.tcs.graph.model.DrawableVertexImpl;
+import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.viewmodel.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -16,7 +22,6 @@ public class GraphVisualization {
     AnchorPane drawingPane;
     int height = 600;
     int width = 800;
-    private Map<Vertex, DrawableVertex> mapka = new HashMap<>();
     double magic = 18 * Math.sqrt(2); // TODO: FIX THIS!
 
     StackPane getVertex(DrawableVertex v) {
@@ -31,6 +36,7 @@ public class GraphVisualization {
     }
 
     private Map<Vertex, DrawableVertex> drawableVertexMap;
+
 
     Line getEdge(DrawableEdge e) {
         Vertex one = null, two = null;
@@ -125,6 +131,8 @@ public class GraphVisualization {
             drawingPane.getChildren().add(0, getEdge(drawableEdgeMap.get(e)));
 
     }
+
+
 
     public AnchorPane getNode() {
         return drawingPane;

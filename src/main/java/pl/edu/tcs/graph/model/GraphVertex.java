@@ -1,4 +1,6 @@
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.model;
+
+import pl.edu.tcs.graph.viewmodel.Vertex;
 
 class GraphVertex implements Vertex {
     int id;

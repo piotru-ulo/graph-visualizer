@@ -1,4 +1,4 @@
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.viewmodel;
 
 import javafx.scene.paint.Paint;
 

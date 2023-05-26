@@ -1,4 +1,7 @@
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.model;
+
+import pl.edu.tcs.graph.viewmodel.Edge;
+import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.util.ArrayList;
 import java.util.Collection;

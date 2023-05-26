@@ -1,5 +1,7 @@
 // For reference, see this: https://citeseer.ist.psu.edu/viewdoc/download?doi=10.1.1.13.8444&rep=rep1&type=pdf
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.viewmodel;
+
+import pl.edu.tcs.graph.viewmodel.*;
 
 import java.util.Collection;
 import java.util.HashMap;

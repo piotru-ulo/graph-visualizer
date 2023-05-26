@@ -1,13 +1,15 @@
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.model;
 
 import javafx.scene.paint.Paint;
+import pl.edu.tcs.graph.viewmodel.DrawableEdge;
+import pl.edu.tcs.graph.viewmodel.Edge;
 
 public class DrawableEdgeImpl implements DrawableEdge {
 
     private Edge underlyingEdge;
     private Paint fill;
 
-    DrawableEdgeImpl(Edge underlyingEdge) {
+    public DrawableEdgeImpl(Edge underlyingEdge) {
         fill = javafx.scene.paint.Color.BLACK;
         this.underlyingEdge = underlyingEdge;
     }

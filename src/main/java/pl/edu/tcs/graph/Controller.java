@@ -47,7 +47,7 @@ public class Controller {
         graphPane.getChildren().add(visualization.getNode());
         visualization.initialize();
         visualization.fakeValues(1);
-        visualization.updateDrawing();
+        visualization.updateDrawing(true);
 
         stage.setScene(scene);
         stage.show();
@@ -66,7 +66,7 @@ public class Controller {
             return;
         }
         visualization.fromAdjacencyList(input);
-        visualization.updateDrawing();
+        visualization.updateDrawing(true);
     }
 
     public void runAlgorithm(ActionEvent e) { // TODO: implement!

@@ -31,6 +31,8 @@ class GraphEdge implements Edge {
 
     @Override
     public Collection<Vertex> getEndpoints() {
+        if (from == null || to == null)
+            throw new RuntimeException();
         List<Vertex> returnList = new ArrayList<>();
         returnList.add(from);
         returnList.add(to);

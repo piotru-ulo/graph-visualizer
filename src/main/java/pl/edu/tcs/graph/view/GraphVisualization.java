@@ -83,7 +83,7 @@ public class GraphVisualization {
             g.insertEdge(r.nextInt(8), r.nextInt(8), 1, i);
     }
 
-    public void updateDrawing() {
+    public void updateDrawing(boolean redraw) {
         drawingPane.getChildren().clear();
         drawableVertexMap = new HashMap<>();
         drawableEdgeMap = new HashMap<>();
@@ -93,24 +93,24 @@ public class GraphVisualization {
         for (Edge e : g.getEdges())
             drawableEdgeMap.putIfAbsent(e, new DrawableEdgeImpl(e));
 
-        // TODO: change 1600x800 to something smarter?
-        DrawStrategy strategy = new RandomDraw();
-        strategy.draw(width, height, g, drawableVertexMap.values());
+        if (redraw) {
+            DrawStrategy strategy = new RandomDraw();
+            strategy.draw(width, height, g, drawableVertexMap.values());
 
-        strategy = new CircularDraw();
-        strategy.draw(width, height, g, drawableVertexMap.values());
+            strategy = new CircularDraw();
+            strategy.draw(width, height, g, drawableVertexMap.values());
 
-        strategy = new FruchtermanReingoldDraw();
-        strategy.draw(width, height, g, drawableVertexMap.values());
+            strategy = new FruchtermanReingoldDraw();
+            strategy.draw(width, height, g, drawableVertexMap.values());
 
-        strategy = new RescaleDraw();
-        strategy.draw(width, height, g, drawableVertexMap.values());
+            strategy = new RescaleDraw();
+            strategy.draw(width, height, g, drawableVertexMap.values());
+        }
 
         for (Vertex v : g.getVertices())
             drawingPane.getChildren().add(getVertex(drawableVertexMap.get(v)));
         for (Edge e : g.getEdges())
             drawingPane.getChildren().add(0, getEdge(drawableEdgeMap.get(e)));
-
     }
 
     public AnchorPane getNode() {

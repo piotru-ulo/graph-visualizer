@@ -15,10 +15,8 @@ import javafx.event.ActionEvent;
 import pl.edu.tcs.graph.view.GraphVisualization;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Controller {
-    //GraphGenerator generator = new GraphGenerator();
     GraphVisualization visualization = new GraphVisualization();
     @FXML
     private Stage stage;
@@ -33,16 +31,17 @@ public class Controller {
     @FXML
     private TextArea adjListInput;
     @FXML
-    private ChoiceBox choiceBox;
+    private ChoiceBox<String> choiceBox;
     @FXML
     private Button runButton;
     ObservableList<String> choiceList = FXCollections.observableArrayList("DFS", "BFS");
+
     @FXML
-    private void initialize(){
+    private void initialize() {
         choiceBox.setItems(choiceList);
     }
 
-    public void nextGraph(ActionEvent e){
+    public void nextGraph(ActionEvent e) {
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -54,29 +53,26 @@ public class Controller {
         stage.show();
     }
 
-    public void graphFromInput(ActionEvent e) {
-         mainPane.lookup("graphPane");
-         graphPane.getChildren().clear();
-         graphPane.getChildren().add(visualization.getNode());
-         visualization.initialize();
-         System.out.println("input:" + adjListInput.getText());
-         int[] input = Arrays.stream(adjListInput.getText().split("[\\s\n]+"))
-                 .mapToInt(Integer::parseInt)
-                 .toArray();
-        if(input.length%2 != 0) {
-            //TODO: wrong input handling
+    public void graphFromInput(ActionEvent e) { // TODO: do it better?
+        mainPane.lookup("graphPane");
+        graphPane.getChildren().clear();
+        graphPane.getChildren().add(visualization.getNode());
+        visualization.initialize();
+        int[] input = Arrays.stream(adjListInput.getText().split("[\\s\n]+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+        if (input.length % 2 != 0) {
+            // TODO: wrong input handling
             return;
         }
         visualization.fromAdjacencyList(input);
         visualization.updateDrawing();
     }
 
-    public void runAlgorithm(ActionEvent e){
-        if(choiceBox.getValue() != null){
+    public void runAlgorithm(ActionEvent e) { // TODO: implement!
+        if (choiceBox.getValue() != null) {
 
         }
-
     }
-
 
 }

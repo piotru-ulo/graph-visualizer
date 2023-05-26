@@ -1,6 +1,5 @@
 package pl.edu.tcs.graph.model;
 
-import pl.edu.tcs.graph.*;
 import pl.edu.tcs.graph.viewmodel.Edge;
 import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;

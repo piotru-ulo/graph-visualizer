@@ -37,7 +37,6 @@ public class GraphVisualization {
 
     private Map<Vertex, DrawableVertex> drawableVertexMap;
 
-
     Line getEdge(DrawableEdge e) {
         Vertex one = null, two = null;
         for (Vertex v : e.getEdge().getEndpoints())
@@ -62,36 +61,21 @@ public class GraphVisualization {
     }
 
     public void initialize() {
-        //System.out.println("initialize");
         g = new GraphImpl();
     }
 
-    public void fromAdjacencyList(int[] input){
+    public void fromAdjacencyList(int[] input) {
         g = new GraphImpl();
-        for(int i=0; i<input.length; i+=2) {
-            if(!g.containsVertex(input[i]))
+        for (int i = 0; i < input.length; i += 2) {
+            if (!g.containsVertex(input[i]))
                 g.insertVertex(input[i]);
-            if(!g.containsVertex(input[i+1]))
-                g.insertVertex(input[i+1]);
-            g.insertEdge(input[i], input[i+1], 0, i/2);
+            if (!g.containsVertex(input[i + 1]))
+                g.insertVertex(input[i + 1]);
+            g.insertEdge(input[i], input[i + 1], 0, i / 2);
         }
     }
+
     public void fakeValues(int i) {
-        //System.out.println("fake!");
-        if (i == 0) {
-            g.insertVertex(0);
-            g.insertVertex(1);
-            g.insertVertex(2);
-            g.insertVertex(3);
-            g.insertVertex(4);
-            g.insertEdge(0, 1, 0, 0);
-            g.insertEdge(1, 2, 0, 1);
-            g.insertEdge(2, 3, 0, 2);
-            g.insertEdge(2, 4, 0, 3);
-            g.insertEdge(4, 0, 0, 4);
-            g.insertEdge(0, 2, 0, 5);
-            return;
-        }
         for (i = 0; i < 8; i++)
             g.insertVertex(i);
         Random r = new Random();
@@ -100,17 +84,14 @@ public class GraphVisualization {
     }
 
     public void updateDrawing() {
-        System.out.println("visualization update!");
         drawingPane.getChildren().clear();
         drawableVertexMap = new HashMap<>();
         drawableEdgeMap = new HashMap<>();
 
         for (Vertex v : g.getVertices())
             drawableVertexMap.putIfAbsent(v, new DrawableVertexImpl(v));
-        System.out.println(drawableVertexMap);
         for (Edge e : g.getEdges())
             drawableEdgeMap.putIfAbsent(e, new DrawableEdgeImpl(e));
-        System.out.println(drawableEdgeMap);
 
         // TODO: change 1600x800 to something smarter?
         DrawStrategy strategy = new RandomDraw();
@@ -131,8 +112,6 @@ public class GraphVisualization {
             drawingPane.getChildren().add(0, getEdge(drawableEdgeMap.get(e)));
 
     }
-
-
 
     public AnchorPane getNode() {
         return drawingPane;

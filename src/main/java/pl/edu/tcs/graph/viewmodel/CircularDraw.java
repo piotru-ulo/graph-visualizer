@@ -1,9 +1,5 @@
 package pl.edu.tcs.graph.viewmodel;
 
-import pl.edu.tcs.graph.viewmodel.DrawStrategy;
-import pl.edu.tcs.graph.viewmodel.DrawableVertex;
-import pl.edu.tcs.graph.viewmodel.Graph;
-
 import java.util.Collection;
 
 public class CircularDraw implements DrawStrategy {

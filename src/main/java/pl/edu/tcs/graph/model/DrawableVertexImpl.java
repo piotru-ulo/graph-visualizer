@@ -1,6 +1,8 @@
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.model;
 
 import javafx.scene.paint.Paint;
+import pl.edu.tcs.graph.viewmodel.DrawableVertex;
+import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public class DrawableVertexImpl implements DrawableVertex {
 
@@ -8,7 +10,7 @@ public class DrawableVertexImpl implements DrawableVertex {
     private double x, y;
     private Paint fill, stroke;
 
-    DrawableVertexImpl(Vertex underlyingVertex) {
+    public DrawableVertexImpl(Vertex underlyingVertex) {
         x = y = 0.0;
         fill = javafx.scene.paint.Color.WHITE;
         stroke = javafx.scene.paint.Color.BLACK;

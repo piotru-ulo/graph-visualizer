@@ -1,4 +1,8 @@
-package pl.edu.tcs.graph;
+package pl.edu.tcs.graph.viewmodel;
+
+import pl.edu.tcs.graph.viewmodel.DrawStrategy;
+import pl.edu.tcs.graph.viewmodel.DrawableVertex;
+import pl.edu.tcs.graph.viewmodel.Graph;
 
 import java.util.Collection;
 import java.util.Random;

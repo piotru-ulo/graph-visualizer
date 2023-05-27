@@ -1,37 +1,61 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javafx.util.Pair;
 import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.viewmodel.EdgeMiddleman;
+import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
-import pl.edu.tcs.graph.viewmodel.VertexMiddleman;
 
 public class DFS implements Algorithm {
+    // properties
+    private Set<AlgorithmProperties> properties = new HashSet<>(Arrays.asList(
+            AlgorithmProperties.SOURCE,
+            AlgorithmProperties.TARGET ));
+
+    @Override
+    public Set<AlgorithmProperties> getProperties() {
+        return properties;
+    }
+    private Vertex targetVertex = null;
+    private boolean found = false;
+    //algo
     private Map<Vertex, Boolean> visited;
 
-    private void dfs(Graph g, Vertex u, VertexMiddleman vM, EdgeMiddleman eM)
+    private void dfs(Graph g, Vertex u, AlgoMiddleman aM)
             throws AlgorithmException {
-        vM.setColor(u, javafx.scene.paint.Color.PINK);
+        aM.setVertexColor(u, javafx.scene.paint.Color.PINK);
         visited.put(u, true);
+
+        if(u.equals(targetVertex)) {
+            aM.setVertexColor(u, javafx.scene.paint.Color.GOLD);
+            found = true;
+        }
+
         for (Vertex to : g.getIncidentVertices(u)) {
+            if(found)
+                return;
             if (visited.containsKey(to))
                 continue;
-            eM.setColor(g.getCorrespondingEdge(u, to), javafx.scene.paint.Color.GREEN);
-            dfs(g, to, vM, eM);
+            aM.setEdgeColor(g.getCorrespondingEdge(u, to), javafx.scene.paint.Color.GREEN);
+            dfs(g, to, aM);
         }
     }
 
     @Override
-    public void run(Graph g, VertexMiddleman vM, EdgeMiddleman eM,
-            Collection<Pair<String, Integer>> requirements) throws AlgorithmException {
+    public void run(Graph g, AlgoMiddleman aM,
+                    Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
         try {
-            dfs(g, g.getVertex(1), vM, eM);
+            Vertex sourceVertex  = g.getVertex(1);
+            System.out.println(requirements);
+            if(requirements.get(AlgorithmProperties.SOURCE) !=null && g.getVertex(requirements.get(AlgorithmProperties.SOURCE))!=null)
+                sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
+            if(requirements.get(AlgorithmProperties.TARGET) !=null && g.getVertex(requirements.get(AlgorithmProperties.TARGET))!=null)
+                targetVertex = g.getVertex(requirements.get(AlgorithmProperties.TARGET));
+            dfs(g, sourceVertex, aM);
         } catch (AlgorithmException e) {
             throw e;
         }

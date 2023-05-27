@@ -7,10 +7,10 @@ import pl.edu.tcs.graph.viewmodel.Edge;
 public class DrawableEdgeImpl implements DrawableEdge {
 
     private Edge underlyingEdge;
-    private Paint fill;
+    private Paint stroke;
 
     public DrawableEdgeImpl(Edge underlyingEdge) {
-        fill = javafx.scene.paint.Color.BLACK;
+        stroke = javafx.scene.paint.Color.BLACK;
         this.underlyingEdge = underlyingEdge;
     }
 
@@ -20,13 +20,13 @@ public class DrawableEdgeImpl implements DrawableEdge {
     }
 
     @Override
-    public Paint getFill() {
-        return fill;
+    public Paint getStroke() {
+        return stroke;
     }
 
     @Override
-    public void setFill(Paint newPaint) {
-        fill = newPaint;
+    public void setStroke(Paint newPaint) {
+        stroke = newPaint;
     }
 
 }

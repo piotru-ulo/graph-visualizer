@@ -82,4 +82,19 @@ public class GraphImpl implements Graph {
         Vertex one = vertices.get(from), two = vertices.get(to);
         return insertEdge(one, two, edgeWeight, edgeId);
     }
+
+    @Override
+    public Collection<Vertex> getIncidentVertices(Vertex v) {
+        return getIncidentEdges(v).stream().flatMap(e -> e.getEndpoints().stream()).filter(maybe -> maybe != v)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Edge getCorrespondingEdge(Vertex from, Vertex to) {
+        return getIncidentEdges(from)
+                .stream()
+                .filter(e -> e.getEndpoints().stream().anyMatch(v -> v == to))
+                .findFirst()
+                .orElse(null);
+    }
 }

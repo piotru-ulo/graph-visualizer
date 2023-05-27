@@ -11,11 +11,7 @@ public interface DrawableVertex {
 
     Paint getFill();
 
-    Paint getStroke();
-
     void setFill(Paint newPaint);
-
-    void setStroke(Paint newPaint);
 
     public double getX();
 

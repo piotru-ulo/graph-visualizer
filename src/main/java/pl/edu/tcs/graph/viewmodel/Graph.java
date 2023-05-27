@@ -13,6 +13,8 @@ public interface Graph {
 
     public Collection<Edge> getIncidentEdges(Vertex v);
 
+    public Collection<Vertex> getIncidentVertices(Vertex v);
+
     public Vertex insertVertex(int vertexId);
 
     public Edge insertEdge(Vertex from, Vertex to, int edgeWeight, int edgeId);
@@ -24,4 +26,6 @@ public interface Graph {
     public void removeEdge(Edge e);
 
     boolean containsVertex(int i);
+
+    Edge getCorrespondingEdge(Vertex from, Vertex to);
 }

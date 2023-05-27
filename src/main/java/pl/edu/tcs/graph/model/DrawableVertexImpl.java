@@ -8,12 +8,11 @@ public class DrawableVertexImpl implements DrawableVertex {
 
     private Vertex underlyingVertex;
     private double x, y;
-    private Paint fill, stroke;
+    private Paint fill;
 
     public DrawableVertexImpl(Vertex underlyingVertex) {
         x = y = 0.0;
         fill = javafx.scene.paint.Color.WHITE;
-        stroke = javafx.scene.paint.Color.BLACK;
         this.underlyingVertex = underlyingVertex;
     }
 
@@ -48,18 +47,8 @@ public class DrawableVertexImpl implements DrawableVertex {
     }
 
     @Override
-    public Paint getStroke() {
-        return stroke;
-    }
-
-    @Override
     public void setFill(Paint newPaint) {
         fill = newPaint;
-    }
-
-    @Override
-    public void setStroke(Paint newPaint) {
-        stroke = newPaint;
     }
 
 }

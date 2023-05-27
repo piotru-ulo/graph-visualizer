@@ -2,32 +2,32 @@ package pl.edu.tcs.graph.view;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import pl.edu.tcs.graph.viewmodel.CircularDraw;
-import pl.edu.tcs.graph.viewmodel.FruchtermanReingoldDraw;
-import pl.edu.tcs.graph.viewmodel.RandomDraw;
-import pl.edu.tcs.graph.viewmodel.RescaleDraw;
+import javafx.util.Pair;
 import pl.edu.tcs.graph.model.DrawableEdgeImpl;
 import pl.edu.tcs.graph.model.DrawableVertexImpl;
 import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.viewmodel.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class GraphVisualization {
     private AnchorPane drawingPane;
     private int height = 600;
     private int width = 800;
-    private double magic = 18 * Math.sqrt(2); // TODO: FIX THIS!
+    private double magic = 15 * Math.sqrt(2); // TODO: FIX THIS!
 
     private StackPane getVertex(DrawableVertex v) {
         Circle circle = new Circle(20.0);
         circle.setFill(v.getFill());
-        circle.setStroke(v.getStroke());
+        circle.setStroke(javafx.scene.paint.Color.BLACK);
         Text text = new Text(Integer.valueOf(v.getVertex().getId()).toString());
         StackPane stackPane = new StackPane(circle, text);
         stackPane.setLayoutX(v.getX());
@@ -48,12 +48,16 @@ public class GraphVisualization {
                 drawableVertexMap.get(one).getY() + magic,
                 drawableVertexMap.get(two).getX() + magic,
                 drawableVertexMap.get(two).getY() + magic);
-        returnLine.setFill(e.getFill());
+        returnLine.setStroke(e.getStroke());
         return returnLine;
     }
 
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
+
+    public Graph getGraph() {
+        return g;
+    }
 
     public GraphVisualization() {
         g = new GraphImpl();
@@ -79,14 +83,39 @@ public class GraphVisualization {
         for (i = 0; i < 8; i++)
             g.insertVertex(i);
         Random r = new Random();
-        for (i = 0; i < 15; i++)
-            g.insertEdge(r.nextInt(8), r.nextInt(8), 1, i);
+        Set<Pair<Integer, Integer>> mapka = new HashSet<>();
+        for (i = 0; i < 15; i++) {
+            int a = r.nextInt(8), b = r.nextInt(8);
+            if (mapka.contains(new Pair<Integer, Integer>(a, b)) ||
+                    mapka.contains(new Pair<Integer, Integer>(b, a)))
+                continue;
+            mapka.add(new Pair<Integer, Integer>(a, b));
+            g.insertEdge(a, b, 1, i);
+
+        }
+    }
+
+    public boolean setVertexColor(Vertex v, Paint p) {
+        if (!drawableVertexMap.containsKey(v))
+            return false;
+        drawableVertexMap.get(v).setFill(p);
+        return true;
+    }
+
+    public boolean setEdgeColor(Edge e, Paint p) {
+        if (!drawableEdgeMap.containsKey(e))
+            return false;
+        drawableEdgeMap.get(e).setStroke(p);
+        return true;
     }
 
     public void updateDrawing(boolean redraw) {
         drawingPane.getChildren().clear();
-        drawableVertexMap = new HashMap<>();
-        drawableEdgeMap = new HashMap<>();
+
+        if (redraw) {
+            drawableVertexMap = new HashMap<>();
+            drawableEdgeMap = new HashMap<>();
+        }
 
         for (Vertex v : g.getVertices())
             drawableVertexMap.putIfAbsent(v, new DrawableVertexImpl(v));

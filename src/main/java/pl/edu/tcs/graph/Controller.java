@@ -14,12 +14,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-
+import javafx.util.Pair;
 import javafx.event.ActionEvent;
 import pl.edu.tcs.graph.algo.AlgorithmException;
 import pl.edu.tcs.graph.algo.BFS;
 import pl.edu.tcs.graph.algo.Bipartition;
 import pl.edu.tcs.graph.algo.DFS;
+import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.view.GraphVisualization;
 import pl.edu.tcs.graph.viewmodel.Edge;
 import pl.edu.tcs.graph.viewmodel.EdgeMiddleman;
@@ -27,9 +28,43 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 import pl.edu.tcs.graph.viewmodel.VertexMiddleman;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public class Controller {
-    GraphVisualization visualization = new GraphVisualization();
+    private GraphVisualization visualization = new GraphVisualization();
+    private VertexMiddleman vM = new VertexMiddleman() {
+        @Override
+        public boolean setColor(Vertex v, Paint c) {
+            boolean result = visualization.setVertexColor(v, c);
+            try {
+                Thread.sleep(paint_delay);
+            } catch (InterruptedException e) {
+            }
+            Platform.runLater((() -> {
+                visualization.updateDrawing(false);
+                stage.setScene(scene);
+                stage.show();
+            }));
+            return result;
+        }
+    };
+    private EdgeMiddleman eM = new EdgeMiddleman() {
+        @Override
+        public boolean setColor(Edge e, Paint c) {
+            boolean result = visualization.setEdgeColor(e, c);
+            try {
+                Thread.sleep(paint_delay);
+            } catch (InterruptedException ee) {
+            }
+            Platform.runLater((() -> {
+                visualization.updateDrawing(false);
+                stage.setScene(scene);
+                stage.show();
+            }));
+            return result;
+        }
+    };
+
     @FXML
     private Stage stage;
     @FXML
@@ -94,96 +129,36 @@ public class Controller {
     private int paint_delay = 700;
     private boolean isSomeoneRunning = false;
 
+    private void runAlgo(Algorithm a, Collection<Pair<String, Integer>> requirements) {
+        new Thread(() -> {
+            try {
+                a.run(visualization.getGraph(), vM, eM, requirements);
+                isSomeoneRunning = false;
+            } catch (AlgorithmException e) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(e.getLocalizedMessage());
+                    alert.showAndWait();
+                    isSomeoneRunning = false;
+                });
+            }
+        }).start();
+    }
+
     public void runAlgorithm(ActionEvent ev) {
         if (choiceBox.getValue() == null || isSomeoneRunning)
             return;
         isSomeoneRunning = true;
-        VertexMiddleman vM = new VertexMiddleman() {
-            @Override
-            public boolean setColor(Vertex v, Paint c) {
-                boolean result = visualization.setVertexColor(v, c);
-                try {
-                    Thread.sleep(paint_delay);
-                } catch (InterruptedException e) {
-                }
-                Platform.runLater((() -> {
-                    visualization.updateDrawing(false);
-                    stage.setScene(scene);
-                    stage.show();
-                }));
-                return result;
-            }
-        };
-        EdgeMiddleman eM = new EdgeMiddleman() {
-            @Override
-            public boolean setColor(Edge e, Paint c) {
-                boolean result = visualization.setEdgeColor(e, c);
-                try {
-                    Thread.sleep(paint_delay);
-                } catch (InterruptedException ee) {
-                }
-                Platform.runLater((() -> {
-                    visualization.updateDrawing(false);
-                    stage.setScene(scene);
-                    stage.show();
-                }));
-                return result;
-            }
-        };
         for (Vertex v : visualization.getGraph().getVertices())
             visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
-        if (choiceBox.getValue() == "DFS") {
-            new Thread(() -> {
-                DFS dfs = new DFS();
-                try {
-                    dfs.run(visualization.getGraph(), vM, eM, null);
-                    isSomeoneRunning = false;
-                } catch (AlgorithmException e) {
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(e.getLocalizedMessage());
-                        alert.showAndWait();
-                        isSomeoneRunning = false;
-                    });
-                }
-            }).start();
-        } else if (choiceBox.getValue() == "BIPARTITION") {
-            new Thread(() -> {
-                Bipartition bipartition = new Bipartition();
-                try {
-                    bipartition.run(visualization.getGraph(), vM, eM, null);
-
-                    isSomeoneRunning = false;
-                } catch (AlgorithmException e) {
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(e.getLocalizedMessage());
-                        alert.showAndWait();
-                        isSomeoneRunning = false;
-                    });
-                }
-            }).start();
-        } else if (choiceBox.getValue() == "BFS") {
-            new Thread(() -> {
-                BFS bfs = new BFS();
-                try {
-                    bfs.run(visualization.getGraph(), vM, eM, null);
-
-                    isSomeoneRunning = false;
-                } catch (AlgorithmException ex) {
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText(ex.getLocalizedMessage());
-                        alert.showAndWait();
-                        isSomeoneRunning = false;
-                    });
-                }
-            }).start();
-        }
+        if (choiceBox.getValue() == "DFS")
+            runAlgo(new DFS(), null);
+        else if (choiceBox.getValue() == "BIPARTITION")
+            runAlgo(new Bipartition(), null);
+        else if (choiceBox.getValue() == "BFS")
+            runAlgo(new BFS(), null);
     }
 }

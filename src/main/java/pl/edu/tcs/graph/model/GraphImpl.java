@@ -1,12 +1,11 @@
 package pl.edu.tcs.graph.model;
 
+import javafx.util.Pair;
 import pl.edu.tcs.graph.viewmodel.Edge;
 import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GraphImpl implements Graph {
@@ -97,4 +96,35 @@ public class GraphImpl implements Graph {
                 .findFirst()
                 .orElse(null);
     }
+
+    public static Graph fromAdjacencyList(int[] input) {
+        Graph g = new GraphImpl();
+        for (int i = 0; i < input.length; i += 2) {
+            if (!g.containsVertex(input[i]))
+                g.insertVertex(input[i]);
+            if (!g.containsVertex(input[i + 1]))
+                g.insertVertex(input[i + 1]);
+            g.insertEdge(input[i], input[i + 1], 0, i / 2);
+        }
+        return g;
+    }
+
+    public static Graph randomGraph(int i) {
+        Graph g = new GraphImpl();
+        for (i = 0; i < 8; i++)
+            g.insertVertex(i);
+        Random r = new Random();
+        Set<Pair<Integer, Integer>> mapka = new HashSet<>();
+        for (i = 0; i < 15; i++) {
+            int a = r.nextInt(8), b = r.nextInt(8);
+            if (mapka.contains(new Pair<Integer, Integer>(a, b)) ||
+                    mapka.contains(new Pair<Integer, Integer>(b, a)))
+                continue;
+            mapka.add(new Pair<Integer, Integer>(a, b));
+            g.insertEdge(a, b, 1, i);
+        }
+        return g;
+    }
+
+
 }

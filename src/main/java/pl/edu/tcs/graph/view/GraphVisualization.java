@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public class GraphVisualization {
+public class GraphVisualization implements Visualization{
     private AnchorPane drawingPane;
     private int height = 600;
     private int width = 800;
@@ -83,8 +83,14 @@ public class GraphVisualization {
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
 
+    @Override
     public Graph getGraph() {
         return g;
+    }
+
+    @Override
+    public void setGraph(Graph newGraph) {
+        g = newGraph;
     }
 
     public GraphVisualization() {
@@ -92,37 +98,12 @@ public class GraphVisualization {
         drawingPane = new AnchorPane();
     }
 
+    @Override
     public void initialize() {
         g = new GraphImpl();
     }
 
-    public void fromAdjacencyList(int[] input) {
-        g = new GraphImpl();
-        for (int i = 0; i < input.length; i += 2) {
-            if (!g.containsVertex(input[i]))
-                g.insertVertex(input[i]);
-            if (!g.containsVertex(input[i + 1]))
-                g.insertVertex(input[i + 1]);
-            g.insertEdge(input[i], input[i + 1], 0, i / 2);
-        }
-    }
-
-    public void fakeValues(int i) {
-        for (i = 0; i < 8; i++)
-            g.insertVertex(i);
-        Random r = new Random();
-        Set<Pair<Integer, Integer>> mapka = new HashSet<>();
-        for (i = 0; i < 15; i++) {
-            int a = r.nextInt(8), b = r.nextInt(8);
-            if (mapka.contains(new Pair<Integer, Integer>(a, b)) ||
-                    mapka.contains(new Pair<Integer, Integer>(b, a)))
-                continue;
-            mapka.add(new Pair<Integer, Integer>(a, b));
-            g.insertEdge(a, b, 1, i);
-
-        }
-    }
-
+    @Override
     public boolean setVertexColor(Vertex v, Paint p) {
         if (!drawableVertexMap.containsKey(v))
             return false;
@@ -130,6 +111,7 @@ public class GraphVisualization {
         return true;
     }
 
+    @Override
     public boolean setEdgeColor(Edge e, Paint p) {
         if (!drawableEdgeMap.containsKey(e))
             return false;
@@ -137,6 +119,7 @@ public class GraphVisualization {
         return true;
     }
 
+    @Override
     public void updateDrawing(boolean redraw) {
         drawingPane.getChildren().clear();
 
@@ -171,6 +154,7 @@ public class GraphVisualization {
                 drawingPane.getChildren().add(0, l);
     }
 
+    @Override
     public AnchorPane getNode() {
         return drawingPane;
     }

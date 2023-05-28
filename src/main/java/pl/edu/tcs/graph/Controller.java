@@ -23,9 +23,12 @@ import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.DFS;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.view.GraphVisualization;
+import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.viewmodel.Edge;
+import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.net.URL;
@@ -34,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Controller {
-    private GraphVisualization visualization = new GraphVisualization();
+    private Visualization visualization = new GraphVisualization();
     private AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
         public boolean setVertexColor(Vertex v, Paint c) {
@@ -105,8 +108,7 @@ public class Controller {
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
-        visualization.initialize();
-        visualization.fakeValues(1);
+        visualization.setGraph(GraphImpl.randomGraph(1));
         visualization.updateDrawing(true);
 
         stage.setScene(scene);
@@ -124,7 +126,7 @@ public class Controller {
                     .toArray();
             if (input.length % 2 != 0)
                 throw new Exception();
-            visualization.fromAdjacencyList(input);
+            visualization.setGraph(GraphImpl.fromAdjacencyList(input));
             visualization.updateDrawing(true);
         } catch (Exception exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

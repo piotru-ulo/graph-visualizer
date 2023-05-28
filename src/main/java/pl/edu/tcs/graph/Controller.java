@@ -6,11 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -25,6 +21,7 @@ import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.view.GraphVisualization;
+import pl.edu.tcs.graph.view.GridVisualization;
 import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.viewmodel.Edge;
@@ -44,7 +41,7 @@ public class Controller {
             boolean result = visualization.setVertexColor(v, c);
             try {
                 Thread.sleep(paint_delay);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
@@ -59,7 +56,7 @@ public class Controller {
             boolean result = visualization.setEdgeColor(e, c);
             try {
                 Thread.sleep(paint_delay);
-            } catch (InterruptedException ee) {
+            } catch (InterruptedException ignored) {
             }
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
@@ -86,6 +83,32 @@ public class Controller {
     private ChoiceBox<String> choiceBox;
     @FXML
     private Button runButton;
+
+    @FXML
+    private TextField gridHeightTextField;
+
+    @FXML
+    private TextField gridWidthTextField;
+
+    public void changeToGrid() {
+//        try {
+            int height = Integer.parseInt(gridHeightTextField.getText());
+            int width = Integer.parseInt(gridWidthTextField.getText());
+            System.out.println("changing to grid: "+height + " " + width);
+            visualization = new GridVisualization(width, height, width*20, height*20);
+            visualization.initialize();
+            mainPane.lookup("#graphPane");
+            graphPane.getChildren().clear();
+            graphPane.getChildren().add(visualization.getNode());
+            stage.setScene(scene);
+            stage.show();
+            //TODO: change visualization back to GraphVisualization if you want to switch off the grid
+
+//        } catch (Exception e) {
+//            throw new RuntimeException("wrong input!");
+//        }
+    }
+
     ObservableList<String> choiceList = FXCollections.observableArrayList("DFS", "BFS", "BIPARTITION", "BRIDGES",
             "ARTICULATION POINTS");
 

@@ -1,8 +1,15 @@
 package pl.edu.tcs.graph.model;
 
+import javafx.scene.Node;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.viewmodel.Vertex;
+
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DrawableGridVertex implements DrawableVertex {
     private final GridVertex underlyingVertex;
@@ -10,11 +17,22 @@ public class DrawableGridVertex implements DrawableVertex {
 
     double x;
     double y;
+    double size;
 
-    public DrawableGridVertex(GridVertex v, double x, double y) {
+    @Override
+    public Collection<Node> toDraw() {
+        List<Node> nodes = new ArrayList<>();
+        Rectangle square = new Rectangle(x, y, size, size);
+        square.setStroke(fill);
+        nodes.add(square);
+        return nodes;
+    }
+
+    public DrawableGridVertex(GridVertex v, double x, double y, double size) {
         this.underlyingVertex = v;
         this.x = x;
         this.y = y;
+        this.size = size;
         fill = Paint.valueOf("white");
     }
 
@@ -52,4 +70,5 @@ public class DrawableGridVertex implements DrawableVertex {
     public double getY() {
         return y;
     }
+
 }

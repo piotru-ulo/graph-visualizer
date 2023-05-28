@@ -178,11 +178,7 @@ public class Controller {
     }
 
     public void openProperties(ActionEvent e) {
-        if (choiceBox.getValue() == null) {
-
-        }
         try {
-            // load stage
             URL fxmlLocation = getClass().getResource("/properties.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Stage root = loader.load();
@@ -193,14 +189,13 @@ public class Controller {
                 controller.setListOfProperties(new Bipartition().getProperties());
             else if (choiceBox.getValue() == "BFS")
                 controller.setListOfProperties(new BFS().getProperties());
+            else if (choiceBox.getValue() == "BRIDGES")
+                controller.setListOfProperties(new Bridges().getProperties());
+            else if (choiceBox.getValue() == "ARTICULATION POINTS")
+                controller.setListOfProperties(new Articulation().getProperties());
             root.show();
-
-            // load properties
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
-
 }

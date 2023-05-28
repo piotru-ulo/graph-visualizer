@@ -1,8 +1,12 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
-import javafx.util.Pair;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
@@ -10,17 +14,16 @@ import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public class BFS implements Algorithm {
-    // properties
-    private final Set<AlgorithmProperties> properties = new HashSet<>(Arrays.asList(
+    private final Collection<AlgorithmProperties> properties = Arrays.asList(
             AlgorithmProperties.SOURCE,
-            AlgorithmProperties.TARGET ));
+            AlgorithmProperties.TARGET);
 
     @Override
-    public Set<AlgorithmProperties> getProperties() {
+    public Collection<AlgorithmProperties> getProperties() {
         return properties;
     }
-    private  Vertex targetVertex = null;
-    //algo
+
+    private Vertex targetVertex = null;
     private Map<Vertex, Boolean> visited;
     private Queue<Vertex> que;
 
@@ -36,7 +39,7 @@ public class BFS implements Algorithm {
                 if (!visited.containsKey(to)) {
                     visited.put(to, true);
                     que.add(to);
-                    if(to.equals(targetVertex)){
+                    if (to.equals(targetVertex)) {
                         aM.setVertexColor(to, javafx.scene.paint.Color.GOLD);
                         return;
                     }
@@ -52,13 +55,12 @@ public class BFS implements Algorithm {
             throws AlgorithmException {
         visited = new HashMap<>();
         try {
-            Vertex sourceVertex  = g.getVertex(1);
+            Vertex sourceVertex = g.getVertex(1);
             System.out.println(requirements);
-            if(requirements.get(AlgorithmProperties.SOURCE) !=null)
+            if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
-            if(requirements.get(AlgorithmProperties.TARGET) !=null)
+            if (requirements.get(AlgorithmProperties.TARGET) != null)
                 targetVertex = g.getVertex(requirements.get(AlgorithmProperties.TARGET));
-
             bfs(g, sourceVertex, aM);
         } catch (AlgorithmException e) {
             throw e;

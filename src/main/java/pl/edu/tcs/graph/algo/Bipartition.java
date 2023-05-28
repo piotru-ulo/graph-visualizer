@@ -1,8 +1,11 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
-import javafx.util.Pair;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
@@ -10,14 +13,13 @@ import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public class Bipartition implements Algorithm {
-    // properties
-    private Set<AlgorithmProperties> properties = new HashSet<>();
+    private Collection<AlgorithmProperties> properties = Arrays.asList();
 
     @Override
-    public Set<AlgorithmProperties> getProperties() {
+    public Collection<AlgorithmProperties> getProperties() {
         return properties;
     }
-    //algo
+
     private Map<Vertex, Boolean> color;
 
     private void dfs(boolean col, Graph g, Vertex u, AlgoMiddleman aM)

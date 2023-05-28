@@ -14,11 +14,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import javafx.event.ActionEvent;
 import pl.edu.tcs.graph.algo.AlgorithmException;
+import pl.edu.tcs.graph.algo.Articulation;
 import pl.edu.tcs.graph.algo.BFS;
 import pl.edu.tcs.graph.algo.Bipartition;
+import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.DFS;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
@@ -29,7 +30,6 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +50,7 @@ public class Controller {
             }));
             return result;
         }
+
         @Override
         public boolean setEdgeColor(Edge e, Paint c) {
             boolean result = visualization.setEdgeColor(e, c);
@@ -82,14 +83,15 @@ public class Controller {
     private ChoiceBox<String> choiceBox;
     @FXML
     private Button runButton;
-    ObservableList<String> choiceList = FXCollections.observableArrayList("DFS", "BFS", "BIPARTITION");
+    ObservableList<String> choiceList = FXCollections.observableArrayList("DFS", "BFS", "BIPARTITION", "BRIDGES",
+            "ARTICULATION POINTS");
 
     @FXML
     private Button setPropertiesButton;
 
     private static Map<AlgorithmProperties, Integer> requirements;
 
-    public void setRequirements(Map<AlgorithmProperties, Integer> req){
+    public void setRequirements(Map<AlgorithmProperties, Integer> req) {
         requirements = new HashMap<>(req);
         System.out.println(requirements);
     }
@@ -155,7 +157,7 @@ public class Controller {
     public void runAlgorithm(ActionEvent ev) {
         if (choiceBox.getValue() == null || isSomeoneRunning)
             return;
-        if(requirements == null)
+        if (requirements == null)
             requirements = new HashMap<>();
         isSomeoneRunning = true;
         System.out.println(requirements);
@@ -169,9 +171,14 @@ public class Controller {
             runAlgo(new Bipartition(), requirements);
         else if (choiceBox.getValue() == "BFS")
             runAlgo(new BFS(), requirements);
+        else if (choiceBox.getValue() == "BRIDGES")
+            runAlgo(new Bridges(), requirements);
+        else if (choiceBox.getValue() == "ARTICULATION POINTS")
+            runAlgo(new Articulation(), requirements);
     }
-    public void openProperties(ActionEvent e){
-        if(choiceBox.getValue() == null){
+
+    public void openProperties(ActionEvent e) {
+        if (choiceBox.getValue() == null) {
 
         }
         try {
@@ -190,8 +197,7 @@ public class Controller {
 
             // load properties
 
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 

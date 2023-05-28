@@ -12,6 +12,8 @@ import pl.edu.tcs.graph.model.DrawableVertexImpl;
 import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.viewmodel.*;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,19 +39,45 @@ public class GraphVisualization {
 
     private Map<Vertex, DrawableVertex> drawableVertexMap;
 
-    private Line getEdge(DrawableEdge e) {
+    private Collection<Line> getEdge(DrawableEdge e, boolean directed) {
         Vertex one = null, two = null;
         for (Vertex v : e.getEdge().getEndpoints())
             if (one == null)
                 one = v;
             else
                 two = v;
-        Line returnLine = new Line(drawableVertexMap.get(one).getX() + magic,
+        Line line = new Line(drawableVertexMap.get(one).getX() + magic,
                 drawableVertexMap.get(one).getY() + magic,
                 drawableVertexMap.get(two).getX() + magic,
                 drawableVertexMap.get(two).getY() + magic);
-        returnLine.setStroke(e.getStroke());
-        return returnLine;
+        line.setStroke(e.getStroke());
+        if (!directed)
+            return Arrays.asList(line);
+        double slope = (double) (line.getEndY() - line.getStartY())
+                / (line.getEndX() - line.getStartX());
+        double lineAngle = Math.atan(slope);
+        double arrowAngle = line.getStartX() > line.getEndX() ? Math.toRadians(45) : -Math.toRadians(225);
+
+        double arrowX = (line.getStartX() + line.getEndX()) / 2.;
+        double arrowY = (line.getStartY() + line.getEndY()) / 2.;
+
+        double len = Math.sqrt((line.getStartX() - line.getEndX())
+                * (line.getStartX() - line.getEndX())
+                + (line.getStartY() - line.getEndY()) * (line.getStartY() - line.getEndY()));
+        double arrowLength = len / 20.;
+
+        Line arrow1 = new Line();
+        arrow1.setStartX(arrowX);
+        arrow1.setStartY(arrowY);
+        arrow1.setEndX(arrowX + arrowLength * Math.cos(lineAngle - arrowAngle));
+        arrow1.setEndY(arrowY + arrowLength * Math.sin(lineAngle - arrowAngle));
+
+        Line arrow2 = new Line();
+        arrow2.setStartX(arrowX);
+        arrow2.setStartY(arrowY);
+        arrow2.setEndX(arrowX + arrowLength * Math.cos(lineAngle + arrowAngle));
+        arrow2.setEndY(arrowY + arrowLength * Math.sin(lineAngle + arrowAngle));
+        return Arrays.asList(arrow1, arrow2, line);
     }
 
     private Graph g;
@@ -139,7 +167,8 @@ public class GraphVisualization {
         for (Vertex v : g.getVertices())
             drawingPane.getChildren().add(getVertex(drawableVertexMap.get(v)));
         for (Edge e : g.getEdges())
-            drawingPane.getChildren().add(0, getEdge(drawableEdgeMap.get(e)));
+            for (Line l : getEdge(drawableEdgeMap.get(e), false)) // TODO: not always '''true'''
+                drawingPane.getChildren().add(0, l);
     }
 
     public AnchorPane getNode() {

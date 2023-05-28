@@ -66,5 +66,4 @@ public class BFS implements Algorithm {
             throw e;
         }
     }
-
 }

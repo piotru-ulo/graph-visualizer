@@ -5,7 +5,6 @@ import pl.edu.tcs.graph.viewmodel.DrawableEdge;
 import pl.edu.tcs.graph.viewmodel.Edge;
 
 public class DrawableEdgeImpl implements DrawableEdge {
-
     private Edge underlyingEdge;
     private Paint stroke;
 
@@ -28,5 +27,4 @@ public class DrawableEdgeImpl implements DrawableEdge {
     public void setStroke(Paint newPaint) {
         stroke = newPaint;
     }
-
 }

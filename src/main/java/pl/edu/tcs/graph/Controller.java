@@ -66,7 +66,6 @@ public class Controller {
             return result;
         }
     };
-
     @FXML
     private Stage stage;
     @FXML
@@ -85,10 +84,8 @@ public class Controller {
     private Button runButton;
     ObservableList<String> choiceList = FXCollections.observableArrayList("DFS", "BFS", "BIPARTITION", "BRIDGES",
             "ARTICULATION POINTS");
-
     @FXML
     private Button setPropertiesButton;
-
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {

@@ -3,7 +3,6 @@ package pl.edu.tcs.graph.algo;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import pl.edu.tcs.graph.model.Algorithm;

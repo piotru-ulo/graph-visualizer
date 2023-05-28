@@ -38,5 +38,4 @@ class GraphEdge implements Edge {
         returnList.add(to);
         return returnList;
     }
-
 }

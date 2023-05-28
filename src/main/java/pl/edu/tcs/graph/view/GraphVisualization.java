@@ -53,8 +53,7 @@ public class GraphVisualization {
         line.setStroke(e.getStroke());
         if (!directed)
             return Arrays.asList(line);
-        double slope = (double) (line.getEndY() - line.getStartY())
-                / (line.getEndX() - line.getStartX());
+        double slope = (double) (line.getEndY() - line.getStartY()) / (line.getEndX() - line.getStartX());
         double lineAngle = Math.atan(slope);
         double arrowAngle = line.getStartX() > line.getEndX() ? Math.toRadians(45) : -Math.toRadians(225);
 

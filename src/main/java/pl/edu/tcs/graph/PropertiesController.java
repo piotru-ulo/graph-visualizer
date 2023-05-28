@@ -12,7 +12,6 @@ import pl.edu.tcs.graph.model.AlgorithmProperties;
 import java.util.*;
 
 public class PropertiesController {
-
     @FXML
     private AnchorPane propertiesPane;
     @FXML
@@ -56,7 +55,6 @@ public class PropertiesController {
                 Integer x = Integer.parseInt(i.getValue().getText());
                 requirements.put(i.getKey(), x);
             } catch (Exception e) {
-                // Wrong input
             }
         }
         Controller controller = new Controller();
@@ -64,5 +62,4 @@ public class PropertiesController {
         Stage stage = (Stage) propertiesPane.getScene().getWindow();
         stage.close();
     }
-
 }

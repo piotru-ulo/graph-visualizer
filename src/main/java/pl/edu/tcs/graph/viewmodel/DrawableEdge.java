@@ -5,7 +5,7 @@ import javafx.scene.paint.Paint;
 public interface DrawableEdge {
     public Edge getEdge();
 
-    Paint getStroke();
+    public Paint getStroke();
 
-    void setStroke(Paint newPaint);
+    public void setStroke(Paint newPaint);
 }

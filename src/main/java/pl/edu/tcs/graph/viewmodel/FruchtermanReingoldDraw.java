@@ -13,7 +13,7 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
                 c.getX() * (a.getY() - b.getY()) == 0;
     }
 
-    Random r = new Random();
+    private Random r = new Random();
 
     private void randDisp(DrawableVertex v, double width, double height) {
         v.setX(Math.min(width, Math.max(0.0, v.getX() - 37 + r.nextInt(75))));

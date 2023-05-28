@@ -7,14 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
-    @Override
     public void start(Stage primaryStage) throws Exception {
-
         URL fxmlLocation = getClass().getResource("/graph.fxml");
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         primaryStage = loader.load();
-
         primaryStage.show();
     }
 

@@ -56,5 +56,4 @@ public class Bridges implements Algorithm {
             throw e;
         }
     }
-
 }

@@ -5,7 +5,6 @@ import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public class DrawableVertexImpl implements DrawableVertex {
-
     private Vertex underlyingVertex;
     private double x, y;
     private Paint fill;
@@ -50,5 +49,4 @@ public class DrawableVertexImpl implements DrawableVertex {
     public void setFill(Paint newPaint) {
         fill = newPaint;
     }
-
 }

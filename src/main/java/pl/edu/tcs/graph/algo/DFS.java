@@ -37,7 +37,7 @@ public class DFS implements Algorithm {
         for (Vertex to : g.getIncidentVertices(u)) {
             if (found)
                 return;
-            if (visited.containsKey(to))
+            if (visited.containsKey(to) || !to.isActive())
                 continue;
             aM.setEdgeColor(g.getCorrespondingEdge(u, to), javafx.scene.paint.Color.GREEN);
             dfs(g, to, aM);

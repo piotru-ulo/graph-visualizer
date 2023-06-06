@@ -25,7 +25,6 @@ import pl.edu.tcs.graph.view.GridVisualization;
 import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.net.URL;
@@ -35,7 +34,7 @@ import java.util.Map;
 
 public class Controller {
     private Visualization visualization = new GraphVisualization();
-    private AlgoMiddleman aM = new AlgoMiddleman() {
+    private final AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
         public boolean setVertexColor(Vertex v, Paint c) {
             boolean result = visualization.setVertexColor(v, c);
@@ -95,7 +94,18 @@ public class Controller {
             int height = Integer.parseInt(gridHeightTextField.getText());
             int width = Integer.parseInt(gridWidthTextField.getText());
             System.out.println("changing to grid: "+height + " " + width);
-            visualization = new GridVisualization(width, height, width*20, height*20);
+            visualization = new GridVisualization(width, height, width*20, height*20,
+                    dv -> {
+                if(dv.getVertex().isActive()) {
+                    dv.setFill(Paint.valueOf("gray"));
+                    dv.getVertex().setActive(false);
+                }
+                else {
+                    dv.setFill(Paint.valueOf("white"));
+                    dv.getVertex().setActive(true);
+                }
+                return null;
+            });
             visualization.initialize();
             mainPane.lookup("#graphPane");
             graphPane.getChildren().clear();
@@ -159,7 +169,7 @@ public class Controller {
         }
     }
 
-    private int paint_delay = 100;
+    private final int paint_delay = 50; //TODO: change dynamically
     private boolean isSomeoneRunning = false;
 
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {
@@ -187,7 +197,7 @@ public class Controller {
         isSomeoneRunning = true;
         System.out.println(requirements);
         for (Vertex v : visualization.getGraph().getVertices())
-            visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
+            if(v.isActive()) visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
         if (choiceBox.getValue() == "DFS")
@@ -207,7 +217,7 @@ public class Controller {
             URL fxmlLocation = getClass().getResource("/properties.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Stage root = loader.load();
-            PropertiesController controller = loader.<PropertiesController>getController();
+            PropertiesController controller = loader.getController();
             if (choiceBox.getValue() == "DFS")
                 controller.setListOfProperties(new DFS().getProperties());
             else if (choiceBox.getValue() == "BIPARTITION")

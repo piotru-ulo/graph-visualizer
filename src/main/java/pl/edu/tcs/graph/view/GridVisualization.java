@@ -43,14 +43,13 @@ public class GridVisualization implements Visualization{
         this.graphHeight = graphHeight;
         this.pixelWidth = pixelWidth;
         this.pixelHeight = pixelHeight;
+        initialize();
     }
 
     @Override
     public void updateDrawing(boolean redraw) {
         if(redraw)
             initialize();
-
-        //TODO!
     }
 
     @Override

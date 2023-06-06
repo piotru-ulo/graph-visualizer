@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DrawableGridVertex implements DrawableVertex {
     private final GridVertex underlyingVertex;
-    private Paint fill;
+    private final Rectangle toDraw;
 
     double x;
     double y;
@@ -21,11 +21,7 @@ public class DrawableGridVertex implements DrawableVertex {
 
     @Override
     public Collection<Node> toDraw() {
-        List<Node> nodes = new ArrayList<>();
-        Rectangle square = new Rectangle(x, y, size, size);
-        square.setStroke(fill);
-        nodes.add(square);
-        return nodes;
+        return List.of(new Node[]{toDraw});
     }
 
     public DrawableGridVertex(GridVertex v, double x, double y, double size) {
@@ -33,7 +29,9 @@ public class DrawableGridVertex implements DrawableVertex {
         this.x = x;
         this.y = y;
         this.size = size;
-        fill = Paint.valueOf("white");
+        toDraw = new Rectangle(x, y, size, size);
+        toDraw.setStroke(Paint.valueOf("black"));
+        toDraw.setFill(Paint.valueOf("white"));
     }
 
     @Override
@@ -53,12 +51,12 @@ public class DrawableGridVertex implements DrawableVertex {
 
     @Override
     public Paint getFill() {
-        return fill;
+        return toDraw.getFill();
     }
 
     @Override
     public void setFill(Paint newPaint) {
-        fill = newPaint;
+        toDraw.setFill(newPaint);
     }
 
     @Override

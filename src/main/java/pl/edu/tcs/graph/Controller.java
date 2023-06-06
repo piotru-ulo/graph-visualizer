@@ -159,7 +159,7 @@ public class Controller {
         }
     }
 
-    private int paint_delay = 700;
+    private int paint_delay = 100;
     private boolean isSomeoneRunning = false;
 
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {

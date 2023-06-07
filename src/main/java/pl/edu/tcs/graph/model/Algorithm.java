@@ -1,6 +1,7 @@
 package pl.edu.tcs.graph.model;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 import pl.edu.tcs.graph.algo.AlgorithmException;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;

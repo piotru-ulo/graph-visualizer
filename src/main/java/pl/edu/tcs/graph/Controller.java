@@ -81,6 +81,13 @@ public class Controller {
     private ChoiceBox<GraphAlgorithms> choiceBox;
     @FXML
     private Button runButton;
+    @FXML
+    private Button setPropertiesButton;
+
+    @FXML
+    private void initialize() {
+        choiceBox.setItems(choiceList);
+    }
 
     private enum GraphAlgorithms {
         DFS,
@@ -93,19 +100,11 @@ public class Controller {
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
             GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
             GraphAlgorithms.ARTICULATION_POINTS);
-
-    @FXML
-    private Button setPropertiesButton;
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {
         requirements = new HashMap<>(req);
         System.out.println(requirements);
-    }
-
-    @FXML
-    private void initialize() {
-        choiceBox.setItems(choiceList);
     }
 
     public void nextGraph(ActionEvent e) {

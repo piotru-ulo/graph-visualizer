@@ -118,7 +118,6 @@ public class GraphVisualization {
                 continue;
             mapka.add(new Pair<Integer, Integer>(a, b));
             g.insertEdge(a, b, 1, i);
-
         }
     }
 
@@ -150,10 +149,7 @@ public class GraphVisualization {
             drawableEdgeMap.putIfAbsent(e, new DrawableEdgeImpl(e));
 
         if (redraw) {
-            DrawStrategy strategy = new RandomDraw();
-            strategy.draw(width, height, g, drawableVertexMap.values());
-
-            strategy = new CircularDraw();
+            DrawStrategy strategy = new CircularDraw();
             strategy.draw(width, height, g, drawableVertexMap.values());
 
             strategy = new FruchtermanReingoldDraw();

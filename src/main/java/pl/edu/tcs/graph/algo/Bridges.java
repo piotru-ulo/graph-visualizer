@@ -20,25 +20,25 @@ public class Bridges implements Algorithm {
     }
 
     private Map<Vertex, Boolean> visited;
-    private Map<Vertex, Integer> tin, low;
+    private Map<Vertex, Integer> preOrder, low;
     private int time = 0;
 
-    private void dfs(Graph g, Vertex u, Vertex par, AlgoMiddleman aM)
+    private void dfs(Graph g, Vertex u, Vertex p, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         visited.put(u, true);
         time++;
-        tin.put(u, time);
+        preOrder.put(u, time);
         low.put(u, time);
         for (Vertex to : g.getIncidentVertices(u)) {
-            if (to == par)
+            if (to == p)
                 continue;
             if (visited.containsKey(to))
-                low.put(u, Math.min(low.get(u), tin.get(to)));
+                low.put(u, Math.min(low.get(u), preOrder.get(to)));
             else {
-                dfs(g, to, u, aM);
+                dfs(g, to, u, algoMiddleman);
                 low.put(u, Math.min(low.get(u), low.get(to)));
-                if (low.get(to) > tin.get(u)) {
-                    aM.setEdgeColor(g.getCorrespondingEdge(u, to), javafx.scene.paint.Color.RED);
+                if (low.get(to) > preOrder.get(u)) {
+                    algoMiddleman.setEdgeColor(g.getCorrespondingEdge(u, to), 255, 160, 122);
                 }
             }
         }
@@ -48,7 +48,7 @@ public class Bridges implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
-        tin = new HashMap<>();
+        preOrder = new HashMap<>();
         low = new HashMap<>();
         try {
             dfs(g, g.getVertex(1), g.getVertex(1), aM);

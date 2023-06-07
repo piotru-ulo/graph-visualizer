@@ -37,8 +37,8 @@ public class Controller {
     private GraphVisualization visualization = new GraphVisualization();
     private AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
-        public boolean setVertexColor(Vertex v, Paint c) {
-            boolean result = visualization.setVertexColor(v, c);
+        public boolean setVertexColor(Vertex v, int r, int g, int b) {
+            boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
             } catch (InterruptedException e) {
@@ -52,8 +52,8 @@ public class Controller {
         }
 
         @Override
-        public boolean setEdgeColor(Edge e, Paint c) {
-            boolean result = visualization.setEdgeColor(e, c);
+        public boolean setEdgeColor(Edge e, int r, int g, int b) {
+            boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
             } catch (InterruptedException ee) {
@@ -79,11 +79,22 @@ public class Controller {
     @FXML
     private TextArea adjListInput;
     @FXML
-    private ChoiceBox<String> choiceBox;
+    private ChoiceBox<GraphAlgorithms> choiceBox;
     @FXML
     private Button runButton;
-    ObservableList<String> choiceList = FXCollections.observableArrayList("DFS", "BFS", "BIPARTITION", "BRIDGES",
-            "ARTICULATION POINTS");
+
+    private enum GraphAlgorithms {
+        DFS,
+        BFS,
+        BIPARTITION,
+        BRIDGES,
+        ARTICULATION_POINTS
+    }
+
+    ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
+            GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
+            GraphAlgorithms.ARTICULATION_POINTS);
+
     @FXML
     private Button setPropertiesButton;
     private static Map<AlgorithmProperties, Integer> requirements;
@@ -162,15 +173,15 @@ public class Controller {
             visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
-        if (choiceBox.getValue() == "DFS")
+        if (choiceBox.getValue() == GraphAlgorithms.DFS)
             runAlgo(new DFS(), requirements);
-        else if (choiceBox.getValue() == "BIPARTITION")
+        else if (choiceBox.getValue() == GraphAlgorithms.BIPARTITION)
             runAlgo(new Bipartition(), requirements);
-        else if (choiceBox.getValue() == "BFS")
+        else if (choiceBox.getValue() == GraphAlgorithms.BFS)
             runAlgo(new BFS(), requirements);
-        else if (choiceBox.getValue() == "BRIDGES")
+        else if (choiceBox.getValue() == GraphAlgorithms.BRIDGES)
             runAlgo(new Bridges(), requirements);
-        else if (choiceBox.getValue() == "ARTICULATION POINTS")
+        else if (choiceBox.getValue() == GraphAlgorithms.ARTICULATION_POINTS)
             runAlgo(new Articulation(), requirements);
     }
 
@@ -180,15 +191,15 @@ public class Controller {
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Stage root = loader.load();
             PropertiesController controller = loader.<PropertiesController>getController();
-            if (choiceBox.getValue() == "DFS")
+            if (choiceBox.getValue() == GraphAlgorithms.DFS)
                 controller.setListOfProperties(new DFS().getProperties());
-            else if (choiceBox.getValue() == "BIPARTITION")
+            else if (choiceBox.getValue() == GraphAlgorithms.BIPARTITION)
                 controller.setListOfProperties(new Bipartition().getProperties());
-            else if (choiceBox.getValue() == "BFS")
+            else if (choiceBox.getValue() == GraphAlgorithms.BFS)
                 controller.setListOfProperties(new BFS().getProperties());
-            else if (choiceBox.getValue() == "BRIDGES")
+            else if (choiceBox.getValue() == GraphAlgorithms.BRIDGES)
                 controller.setListOfProperties(new Bridges().getProperties());
-            else if (choiceBox.getValue() == "ARTICULATION POINTS")
+            else if (choiceBox.getValue() == GraphAlgorithms.ARTICULATION_POINTS)
                 controller.setListOfProperties(new Articulation().getProperties());
             root.show();
         } catch (Exception ex) {

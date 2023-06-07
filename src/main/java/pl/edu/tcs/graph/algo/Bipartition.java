@@ -21,14 +21,17 @@ public class Bipartition implements Algorithm {
 
     private Map<Vertex, Boolean> color;
 
-    private void dfs(boolean col, Graph g, Vertex u, AlgoMiddleman aM)
+    private void dfs(boolean col, Graph g, Vertex u, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
-        aM.setVertexColor(u, col ? javafx.scene.paint.Color.GREEN : javafx.scene.paint.Color.YELLOW);
+        if (col)
+            algoMiddleman.setVertexColor(u, 0, 128, 0);
+        else
+            algoMiddleman.setVertexColor(u, 255, 255, 0);
         color.put(u, col);
         for (Vertex to : g.getIncidentVertices(u)) {
             if (!color.containsKey(to)) {
-                dfs(!col, g, to, aM);
-            } else if (color.get(to) == col) {
+                dfs(!col, g, to, algoMiddleman);
+            } else if (color.get(to).equals(col)) {
                 throw new AlgorithmException("Given graph has negative length cycle.");
             }
         }

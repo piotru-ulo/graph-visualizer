@@ -27,26 +27,26 @@ public class BFS implements Algorithm {
     private Map<Vertex, Boolean> visited;
     private Queue<Vertex> que;
 
-    private void bfs(Graph g, Vertex u, AlgoMiddleman aM)
+    private void bfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         que = new LinkedList<>();
         que.add(u);
         visited.put(u, true);
         while (!que.isEmpty()) {
             Vertex v = que.poll();
-            aM.setVertexColor(v, javafx.scene.paint.Color.AQUAMARINE);
+            algoMiddleman.setVertexColor(v, 127, 255, 212);
             for (Vertex to : g.getIncidentVertices(v)) {
                 if (!visited.containsKey(to)) {
                     visited.put(to, true);
                     que.add(to);
                     if (to.equals(targetVertex)) {
-                        aM.setVertexColor(to, javafx.scene.paint.Color.GOLD);
+                        algoMiddleman.setVertexColor(to, 212, 175, 55);
                         return;
                     }
-                    aM.setVertexColor(to, javafx.scene.paint.Color.BEIGE);
+                    algoMiddleman.setVertexColor(to, 250, 240, 230);
                 }
             }
-            aM.setVertexColor(v, javafx.scene.paint.Color.BLUEVIOLET);
+            algoMiddleman.setVertexColor(v, 138, 43, 226);
         }
     }
 

@@ -24,13 +24,13 @@ public class DFS implements Algorithm {
     private boolean found = false;
     private Map<Vertex, Boolean> visited;
 
-    private void dfs(Graph g, Vertex u, AlgoMiddleman aM)
+    private void dfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
-        aM.setVertexColor(u, javafx.scene.paint.Color.PINK);
+        algoMiddleman.setVertexColor(u, 255, 192, 203);
         visited.put(u, true);
 
         if (u.equals(targetVertex)) {
-            aM.setVertexColor(u, javafx.scene.paint.Color.GOLD);
+            algoMiddleman.setVertexColor(u, 255, 215, 0);
             found = true;
         }
 
@@ -39,8 +39,8 @@ public class DFS implements Algorithm {
                 return;
             if (visited.containsKey(to))
                 continue;
-            aM.setEdgeColor(g.getCorrespondingEdge(u, to), javafx.scene.paint.Color.GREEN);
-            dfs(g, to, aM);
+            algoMiddleman.setEdgeColor(g.getCorrespondingEdge(u, to), 0, 128, 0);
+            dfs(g, to, algoMiddleman);
         }
     }
 

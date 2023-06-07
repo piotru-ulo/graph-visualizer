@@ -6,10 +6,9 @@ import javafx.scene.paint.Paint;
 import java.util.Collection;
 
 public interface DrawableEdge {
-
     public Edge getEdge();
 
-    Paint getStroke();
+    public Paint getStroke();
 
     Collection<Node> toDraw();
 

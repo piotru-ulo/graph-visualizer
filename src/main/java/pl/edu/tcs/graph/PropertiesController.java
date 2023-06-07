@@ -1,5 +1,10 @@
 package pl.edu.tcs.graph;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,10 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 
-import java.util.*;
-
 public class PropertiesController {
-
     @FXML
     private AnchorPane propertiesPane;
     @FXML
@@ -26,7 +28,6 @@ public class PropertiesController {
         y = 10.0;
         requirements = new HashMap<>();
         fields = new ArrayList<>();
-
     }
 
     public void setListOfProperties(Collection<AlgorithmProperties> ap) {
@@ -56,7 +57,6 @@ public class PropertiesController {
                 Integer x = Integer.parseInt(i.getValue().getText());
                 requirements.put(i.getKey(), x);
             } catch (Exception e) {
-                // Wrong input
             }
         }
         Controller controller = new Controller();
@@ -64,5 +64,4 @@ public class PropertiesController {
         Stage stage = (Stage) propertiesPane.getScene().getWindow();
         stage.close();
     }
-
 }

@@ -25,7 +25,7 @@ public interface Graph {
 
     public void removeEdge(Edge e);
 
-    boolean containsVertex(int i);
+    public boolean containsVertex(int i);
 
-    Edge getCorrespondingEdge(Vertex from, Vertex to);
+    public Edge getCorrespondingEdge(Vertex from, Vertex to);
 }

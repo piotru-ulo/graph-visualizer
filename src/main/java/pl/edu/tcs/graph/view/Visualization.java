@@ -8,11 +8,16 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public interface Visualization {
     Graph getGraph();
+
     void setGraph(Graph newGraph);
+
     void initialize();
+
     void updateDrawing(boolean redraw);
+
     AnchorPane getNode();
 
     boolean setVertexColor(Vertex v, Paint p);
+
     boolean setEdgeColor(Edge e, Paint p);
 }

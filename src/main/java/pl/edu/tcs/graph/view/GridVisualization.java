@@ -14,13 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class GridVisualization implements Visualization{
+public class GridVisualization implements Visualization {
     private final AnchorPane drawingPane;
     private GridGraph gg;
     private Map<Vertex, DrawableGridVertex> drawableVertexes;
     double pixelWidth;
     double pixelHeight;
-    Function<? super  DrawableGridVertex, Object> onClickHandler;
+    Function<? super DrawableGridVertex, Object> onClickHandler;
 
     double vertexSize = 20;
 
@@ -28,15 +28,15 @@ public class GridVisualization implements Visualization{
     int graphHeight;
 
     public double getPosX(GridVertex v) {
-        return 1.0f*v.getX()*pixelWidth/graphWidth;
+        return 1.0f * v.getX() * pixelWidth / graphWidth;
     }
 
-    public double getPosY (GridVertex v) {
-        return 1.0f*v.getY()*pixelHeight/graphHeight;
+    public double getPosY(GridVertex v) {
+        return 1.0f * v.getY() * pixelHeight / graphHeight;
     }
 
     public GridVisualization(int graphWidth, int graphHeight, double pixelWidth, double pixelHeight) {
-        vertexSize = Math.min(pixelWidth/graphWidth, pixelHeight/graphHeight);
+        vertexSize = Math.min(pixelWidth / graphWidth, pixelHeight / graphHeight);
         drawingPane = new AnchorPane();
         gg = new GridGraph(graphWidth, graphHeight);
         drawableVertexes = new HashMap<>();
@@ -47,8 +47,9 @@ public class GridVisualization implements Visualization{
         initialize();
     }
 
-    public GridVisualization(int graphWidth, int graphHeight, double pixelWidth, double pixelHeight, Function<? super  DrawableGridVertex, Object> onClickHandler) {
-        vertexSize = Math.min(pixelWidth/graphWidth, pixelHeight/graphHeight);
+    public GridVisualization(int graphWidth, int graphHeight, double pixelWidth, double pixelHeight,
+            Function<? super DrawableGridVertex, Object> onClickHandler) {
+        vertexSize = Math.min(pixelWidth / graphWidth, pixelHeight / graphHeight);
         drawingPane = new AnchorPane();
         gg = new GridGraph(graphWidth, graphHeight);
         drawableVertexes = new HashMap<>();
@@ -60,7 +61,7 @@ public class GridVisualization implements Visualization{
         this.onClickHandler = onClickHandler;
     }
 
-    public void setOnClickHandler(Function<? super  DrawableGridVertex, Object> onClickHandler) {
+    public void setOnClickHandler(Function<? super DrawableGridVertex, Object> onClickHandler) {
         this.onClickHandler = onClickHandler;
         for (var dv : drawableVertexes.values())
             dv.setOnclick(onClickHandler);
@@ -68,8 +69,9 @@ public class GridVisualization implements Visualization{
 
     @Override
     public void updateDrawing(boolean redraw) {
-        if(redraw)
+        if (redraw) {
             initialize();
+        }
     }
 
     @Override
@@ -79,10 +81,9 @@ public class GridVisualization implements Visualization{
 
     @Override
     public void setGraph(Graph newGraph) {
-        if(newGraph instanceof GridGraph) {
+        if (newGraph instanceof GridGraph) {
             gg = (GridGraph) newGraph;
-        }
-        else {
+        } else {
             throw new RuntimeException("Grid graph set to non-grid graph");
         }
     }
@@ -90,27 +91,28 @@ public class GridVisualization implements Visualization{
     @Override
     public void initialize() {
         drawingPane.getChildren().clear();
-        for(int x = 0; x<=graphWidth; x++) {
+        for (int x = 0; x <= graphWidth; x++) {
             Line line = new Line();
-            line.setStartX(x*(1.0f*pixelWidth/graphWidth));
-            line.setEndX(x*(1.0f*pixelWidth/graphWidth));
+            line.setStartX(x * (1.0f * pixelWidth / graphWidth));
+            line.setEndX(x * (1.0f * pixelWidth / graphWidth));
             line.setStartY(0);
             line.setEndY(pixelHeight);
             drawingPane.getChildren().add(line);
         }
-        for(int y = 0; y<=graphHeight; y++) {
+        for (int y = 0; y <= graphHeight; y++) {
             Line line = new Line();
             line.setStartX(0);
             line.setEndX(pixelWidth);
-            line.setStartY(y*(1.0f*pixelHeight/graphHeight));
-            line.setEndY(y*(1.0f*pixelHeight/graphHeight));
+            line.setStartY(y * (1.0f * pixelHeight / graphHeight));
+            line.setEndY(y * (1.0f * pixelHeight / graphHeight));
             drawingPane.getChildren().add(line);
         }
         drawableVertexes = new HashMap<>();
-        for(int x = 0; x<graphWidth; x++) {
-            for(int y = 0; y<graphHeight; y++) {
+        for (int x = 0; x < graphWidth; x++) {
+            for (int y = 0; y < graphHeight; y++) {
                 GridVertex actV = (GridVertex) gg.getVertex(x, y);
-                DrawableGridVertex actDrawV = new DrawableGridVertex(actV, getPosX(actV), getPosY(actV), vertexSize, onClickHandler);
+                DrawableGridVertex actDrawV = new DrawableGridVertex(actV, getPosX(actV), getPosY(actV), vertexSize,
+                        onClickHandler);
                 drawableVertexes.put(actV, actDrawV);
                 drawingPane.getChildren().addAll(actDrawV.toDraw());
             }
@@ -118,13 +120,15 @@ public class GridVisualization implements Visualization{
     }
 
     @Override
-    public AnchorPane getNode() { return drawingPane; }
+    public AnchorPane getNode() {
+        return drawingPane;
+    }
 
     @Override
     public boolean setVertexColor(Vertex v, Paint p) {
-        if(!drawableVertexes.containsKey(v))
+        if (!drawableVertexes.containsKey(v))
             return false;
-        System.out.println("changed color of "+v.getId()+ " to " + p);
+        System.out.println("changed color of " + v.getId() + " to " + p);
         drawableVertexes.get(v).setFill(p);
         return true;
     }

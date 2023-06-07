@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class DrawableVertexImpl implements DrawableVertex {
-
     private Vertex underlyingVertex;
     private double x, y;
     private Paint fill;
@@ -57,7 +56,7 @@ public class DrawableVertexImpl implements DrawableVertex {
         StackPane stackPane = new StackPane(circle, text);
         stackPane.setLayoutX(getX());
         stackPane.setLayoutY(getY());
-        return List.of(new StackPane[]{stackPane});
+        return List.of(new StackPane[] { stackPane });
     }
 
     @Override
@@ -69,5 +68,4 @@ public class DrawableVertexImpl implements DrawableVertex {
     public void setFill(Paint newPaint) {
         fill = newPaint;
     }
-
 }

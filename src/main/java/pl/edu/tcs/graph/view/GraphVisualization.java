@@ -1,27 +1,16 @@
 package pl.edu.tcs.graph.view;
 
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
-import javafx.util.Pair;
 import pl.edu.tcs.graph.model.DrawableEdgeImpl;
 import pl.edu.tcs.graph.model.DrawableVertexImpl;
 import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.viewmodel.*;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
-public class GraphVisualization implements Visualization{
+public class GraphVisualization implements Visualization {
     private AnchorPane drawingPane;
     private int height = 600;
     private int width = 800;
@@ -90,10 +79,7 @@ public class GraphVisualization implements Visualization{
         }
 
         if (redraw) {
-            DrawStrategy strategy = new RandomDraw();
-            strategy.draw(width, height, g, drawableVertexMap.values());
-
-            strategy = new CircularDraw();
+            DrawStrategy strategy = new CircularDraw();
             strategy.draw(width, height, g, drawableVertexMap.values());
 
             strategy = new FruchtermanReingoldDraw();

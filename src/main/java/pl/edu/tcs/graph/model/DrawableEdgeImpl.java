@@ -6,7 +6,6 @@ import javafx.scene.shape.Line;
 import pl.edu.tcs.graph.viewmodel.DrawableEdge;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,17 +14,11 @@ import java.util.List;
 import static pl.edu.tcs.graph.view.GraphVisualization.magic;
 
 public class DrawableEdgeImpl implements DrawableEdge {
-
     private Edge underlyingEdge;
     private Paint stroke;
     public boolean directed;
     private DrawableVertex from;
     private DrawableVertex to;
-
-//    public DrawableEdgeImpl(Edge underlyingEdge) {
-//        stroke = javafx.scene.paint.Color.BLACK;
-//        this.underlyingEdge = underlyingEdge;
-//    }
 
     public DrawableEdgeImpl(Edge underlyingEdge, DrawableVertex from, DrawableVertex to) {
         stroke = javafx.scene.paint.Color.BLACK;

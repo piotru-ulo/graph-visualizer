@@ -126,5 +126,4 @@ public class GraphImpl implements Graph {
         return g;
     }
 
-
 }

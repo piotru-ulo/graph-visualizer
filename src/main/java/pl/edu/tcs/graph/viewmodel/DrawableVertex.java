@@ -12,9 +12,9 @@ public interface DrawableVertex {
 
     public void setY(double newY);
 
-    Paint getFill();
+    public Paint getFill();
 
-    void setFill(Paint newPaint);
+    public void setFill(Paint newPaint);
 
     public double getX();
 

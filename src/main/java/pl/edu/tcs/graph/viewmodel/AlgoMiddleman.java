@@ -1,8 +1,7 @@
 package pl.edu.tcs.graph.viewmodel;
 
-import javafx.scene.paint.Paint;
-
 public interface AlgoMiddleman {
-    boolean setVertexColor(Vertex v, Paint c);
-    boolean setEdgeColor(Edge v, Paint c);
+    public boolean setVertexColor(Vertex v, int r, int g, int b);
+
+    public boolean setEdgeColor(Edge v, int r, int g, int b);
 }

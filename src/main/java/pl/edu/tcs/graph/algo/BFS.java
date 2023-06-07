@@ -36,7 +36,7 @@ public class BFS implements Algorithm {
             Vertex v = que.poll();
             algoMiddleman.setVertexColor(v, 127, 255, 212);
             for (Vertex to : g.getIncidentVertices(v)) {
-                if (!visited.containsKey(to)) {
+                if (!visited.containsKey(to) && to.isActive()) {
                     visited.put(to, true);
                     que.add(to);
                     if (to.equals(targetVertex)) {

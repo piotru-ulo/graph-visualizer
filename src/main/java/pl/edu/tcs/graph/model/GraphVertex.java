@@ -4,6 +4,7 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 
 class GraphVertex implements Vertex {
     int id;
+    boolean active = true;
 
     public GraphVertex(int id) {
         this.id = id;
@@ -12,5 +13,15 @@ class GraphVertex implements Vertex {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public void setActive(boolean a) {
+        active = a;
     }
 }

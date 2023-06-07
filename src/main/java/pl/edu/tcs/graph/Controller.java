@@ -11,7 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import pl.edu.tcs.graph.algo.AlgorithmException;
@@ -22,7 +24,10 @@ import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.DFS;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.view.GraphVisualization;
+import pl.edu.tcs.graph.view.GridVisualization;
+import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.viewmodel.Edge;
 import pl.edu.tcs.graph.viewmodel.Vertex;
@@ -33,14 +38,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Controller {
-    private GraphVisualization visualization = new GraphVisualization();
-    private AlgoMiddleman aM = new AlgoMiddleman() {
+    private Visualization visualization = new GraphVisualization();
+    private final AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
         public boolean setVertexColor(Vertex v, int r, int g, int b) {
             boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
@@ -55,7 +60,7 @@ public class Controller {
             boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
-            } catch (InterruptedException ee) {
+            } catch (InterruptedException ignored) {
             }
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
@@ -82,7 +87,41 @@ public class Controller {
     @FXML
     private Button runButton;
     @FXML
+    private TextField gridHeightTextField;
+    @FXML
+    private TextField gridWidthTextField;
+    @FXML
     private Button setPropertiesButton;
+
+    public void changeToGrid() {
+        // try {
+        int height = Integer.parseInt(gridHeightTextField.getText());
+        int width = Integer.parseInt(gridWidthTextField.getText());
+        System.out.println("changing to grid: " + height + " " + width);
+        visualization = new GridVisualization(width, height, width * 20, height * 20,
+                dv -> {
+                    if (dv.getVertex().isActive()) {
+                        dv.setFill(Paint.valueOf("gray"));
+                        dv.getVertex().setActive(false);
+                    } else {
+                        dv.setFill(Paint.valueOf("white"));
+                        dv.getVertex().setActive(true);
+                    }
+                    return null;
+                });
+        visualization.initialize();
+        mainPane.lookup("#graphPane");
+        graphPane.getChildren().clear();
+        graphPane.getChildren().add(visualization.getNode());
+        stage.setScene(scene);
+        stage.show();
+        // TODO: change visualization back to GraphVisualization if you want to switch
+        // off the grid
+
+        // } catch (Exception e) {
+        // throw new RuntimeException("wrong input!");
+        // }
+    }
 
     @FXML
     private void initialize() {
@@ -111,8 +150,7 @@ public class Controller {
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
-        visualization.initialize();
-        visualization.fakeValues(1);
+        visualization.setGraph(GraphImpl.randomGraph(1));
         visualization.updateDrawing(true);
 
         stage.setScene(scene);
@@ -130,7 +168,7 @@ public class Controller {
                     .toArray();
             if (input.length % 2 != 0)
                 throw new Exception();
-            visualization.fromAdjacencyList(input);
+            visualization.setGraph(GraphImpl.fromAdjacencyList(input));
             visualization.updateDrawing(true);
         } catch (Exception exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -140,7 +178,7 @@ public class Controller {
         }
     }
 
-    private int paint_delay = 700;
+    private final int paint_delay = 50; // TODO: change dynamically
     private boolean isSomeoneRunning = false;
 
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {
@@ -168,7 +206,8 @@ public class Controller {
         isSomeoneRunning = true;
         System.out.println(requirements);
         for (Vertex v : visualization.getGraph().getVertices())
-            visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
+            if (v.isActive())
+                visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
         if (choiceBox.getValue() == GraphAlgorithms.DFS)

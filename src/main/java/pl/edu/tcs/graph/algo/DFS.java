@@ -37,7 +37,7 @@ public class DFS implements Algorithm {
         for (Vertex to : g.getIncidentVertices(u)) {
             if (found)
                 return;
-            if (visited.containsKey(to))
+            if (visited.containsKey(to) || !to.isActive())
                 continue;
             algoMiddleman.setEdgeColor(g.getCorrespondingEdge(u, to), 0, 128, 0);
             dfs(g, to, algoMiddleman);

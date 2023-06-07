@@ -1,5 +1,9 @@
 package pl.edu.tcs.graph.viewmodel;
 
 public interface Vertex {
-    public int getId();
+    int getId();
+
+    boolean isActive();
+
+    void setActive(boolean a);
 }

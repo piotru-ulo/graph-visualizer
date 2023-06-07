@@ -1,8 +1,15 @@
 package pl.edu.tcs.graph.model;
 
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.viewmodel.Vertex;
+
+import java.util.Collection;
+import java.util.List;
 
 public class DrawableVertexImpl implements DrawableVertex {
     private Vertex underlyingVertex;
@@ -38,6 +45,18 @@ public class DrawableVertexImpl implements DrawableVertex {
     @Override
     public double getY() {
         return y;
+    }
+
+    @Override
+    public Collection<Node> toDraw() {
+        Circle circle = new Circle(20.0);
+        circle.setFill(getFill());
+        circle.setStroke(javafx.scene.paint.Color.BLACK);
+        Text text = new Text(Integer.valueOf(getVertex().getId()).toString());
+        StackPane stackPane = new StackPane(circle, text);
+        stackPane.setLayoutX(getX());
+        stackPane.setLayoutY(getY());
+        return List.of(new StackPane[] { stackPane });
     }
 
     @Override

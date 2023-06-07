@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 class GraphEdge implements Edge {
     private int id;
     private int weight;

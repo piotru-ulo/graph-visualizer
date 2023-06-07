@@ -12,8 +12,6 @@ import java.util.function.Function;
 
 public class DrawableGridVertex implements DrawableVertex {
 
-    private Function<? super DrawableGridVertex, Object> onClick;
-
     private final GridVertex underlyingVertex;
     private final Rectangle toDraw;
 
@@ -45,12 +43,10 @@ public class DrawableGridVertex implements DrawableVertex {
         toDraw = new Rectangle(x, y, size, size);
         toDraw.setStroke(Paint.valueOf("black"));
         toDraw.setFill(Paint.valueOf("white"));
-        this.onClick = onClick;
         toDraw.setOnMouseClicked(e -> onClick.apply(this));
     }
 
     public void setOnclick(Function<? super DrawableGridVertex, Object> onClick) {
-        this.onClick = onClick;
     }
 
     @Override

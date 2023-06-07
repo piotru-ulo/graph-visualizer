@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public class DrawableGridVertex implements DrawableVertex {
 
-    private Function<? super  DrawableGridVertex, Object> onClick;
+    private Function<? super DrawableGridVertex, Object> onClick;
 
     private final GridVertex underlyingVertex;
     private final Rectangle toDraw;
@@ -23,7 +23,7 @@ public class DrawableGridVertex implements DrawableVertex {
 
     @Override
     public Collection<Node> toDraw() {
-        return List.of(new Node[]{toDraw});
+        return List.of(new Node[] { toDraw });
     }
 
     public DrawableGridVertex(GridVertex v, double x, double y, double size) {
@@ -36,7 +36,8 @@ public class DrawableGridVertex implements DrawableVertex {
         toDraw.setFill(Paint.valueOf("white"));
     }
 
-    public DrawableGridVertex(GridVertex v, double x, double y, double size, Function<? super DrawableGridVertex, Object> onClick) {
+    public DrawableGridVertex(GridVertex v, double x, double y, double size,
+            Function<? super DrawableGridVertex, Object> onClick) {
         this.underlyingVertex = v;
         this.x = x;
         this.y = y;
@@ -48,7 +49,7 @@ public class DrawableGridVertex implements DrawableVertex {
         toDraw.setOnMouseClicked(e -> onClick.apply(this));
     }
 
-    public void setOnclick(Function<? super  DrawableGridVertex, Object>  onClick) {
+    public void setOnclick(Function<? super DrawableGridVertex, Object> onClick) {
         this.onClick = onClick;
     }
 

@@ -29,9 +29,9 @@ public class Bipartition implements Algorithm {
             algoMiddleman.setVertexColor(u, 255, 255, 0);
         color.put(u, col);
         for (Vertex to : g.getIncidentVertices(u)) {
-            if (!color.containsKey(to)) {
+            if (to.isActive() && !color.containsKey(to)) {
                 dfs(!col, g, to, algoMiddleman);
-            } else if (color.get(to).equals(col)) {
+            } else if (to.isActive() && color.get(to).equals(col)) {
                 throw new AlgorithmException("Given graph has negative length cycle.");
             }
         }

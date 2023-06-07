@@ -8,4 +8,6 @@ public interface Edge {
     public int getWeight();
 
     public Collection<Vertex> getEndpoints();
+
+    public boolean isDirected();
 }

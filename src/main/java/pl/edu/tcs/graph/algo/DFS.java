@@ -40,6 +40,7 @@ public class DFS implements Algorithm {
             if (visited.containsKey(to) || !to.isActive())
                 continue;
             algoMiddleman.setEdgeColor(g.getCorrespondingEdge(u, to), 0, 128, 0);
+            System.out.println("Kraw: " + u.getId() + " -- " + to.getId());
             dfs(g, to, algoMiddleman);
         }
     }

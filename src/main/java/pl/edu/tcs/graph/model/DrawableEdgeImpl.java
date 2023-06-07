@@ -16,7 +16,6 @@ import static pl.edu.tcs.graph.view.GraphVisualization.magic;
 public class DrawableEdgeImpl implements DrawableEdge {
     private Edge underlyingEdge;
     private Paint stroke;
-    public boolean directed;
     private DrawableVertex from;
     private DrawableVertex to;
 
@@ -49,7 +48,11 @@ public class DrawableEdgeImpl implements DrawableEdge {
                 to.getX() + magic,
                 to.getY() + magic);
         line.setStroke(getStroke());
-        if (!directed)
+
+        double arrowStrokeWidth = underlyingEdge.getWeight();
+        line.setStrokeWidth(Math.sqrt(Math.max(1, arrowStrokeWidth)));
+
+        if (!underlyingEdge.isDirected())
             return List.of(line);
         double slope = (double) (line.getEndY() - line.getStartY())
                 / (line.getEndX() - line.getStartX());
@@ -69,12 +72,14 @@ public class DrawableEdgeImpl implements DrawableEdge {
         arrow1.setStartY(arrowY);
         arrow1.setEndX(arrowX + arrowLength * Math.cos(lineAngle - arrowAngle));
         arrow1.setEndY(arrowY + arrowLength * Math.sin(lineAngle - arrowAngle));
+        arrow1.setStrokeWidth(Math.sqrt(Math.max(1, arrowStrokeWidth)));
 
         Line arrow2 = new Line();
         arrow2.setStartX(arrowX);
         arrow2.setStartY(arrowY);
         arrow2.setEndX(arrowX + arrowLength * Math.cos(lineAngle + arrowAngle));
         arrow2.setEndY(arrowY + arrowLength * Math.sin(lineAngle + arrowAngle));
+        arrow2.setStrokeWidth(Math.sqrt(Math.max(1, arrowStrokeWidth)));
         return Arrays.asList(arrow1, arrow2, line);
     }
 

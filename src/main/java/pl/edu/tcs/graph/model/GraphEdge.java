@@ -7,16 +7,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 class GraphEdge implements Edge {
-    int id;
-    int weight;
-    Vertex from, to;
+    private int id;
+    private int weight;
+    private Vertex from, to;
+    private boolean directed;
 
     public GraphEdge(Vertex from, Vertex to, int edgeWeight, int id) {
         this.from = from;
         this.to = to;
         this.weight = edgeWeight;
         this.id = id;
+        this.directed = false;
+    }
+
+    public GraphEdge(Vertex from, Vertex to, int edgeWeight, boolean directed, int id) {
+        this.from = from;
+        this.to = to;
+        this.weight = edgeWeight;
+        this.id = id;
+        this.directed = directed;
     }
 
     @Override
@@ -37,5 +49,10 @@ class GraphEdge implements Edge {
         returnList.add(from);
         returnList.add(to);
         return returnList;
+    }
+
+    @Override
+    public boolean isDirected() {
+        return directed;
     }
 }

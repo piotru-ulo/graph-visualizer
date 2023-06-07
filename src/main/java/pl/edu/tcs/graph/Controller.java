@@ -24,6 +24,7 @@ import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.DFS;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.DigraphImpl;
 import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.view.GraphVisualization;
 import pl.edu.tcs.graph.view.GridVisualization;

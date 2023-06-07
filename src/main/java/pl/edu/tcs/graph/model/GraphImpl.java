@@ -5,7 +5,12 @@ import pl.edu.tcs.graph.viewmodel.Edge;
 import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GraphImpl implements Graph {
@@ -99,12 +104,12 @@ public class GraphImpl implements Graph {
 
     public static Graph fromAdjacencyList(int[] input) {
         Graph g = new GraphImpl();
-        for (int i = 0; i < input.length; i += 2) {
+        for (int i = 0; i < input.length; i += 3) {
             if (!g.containsVertex(input[i]))
                 g.insertVertex(input[i]);
             if (!g.containsVertex(input[i + 1]))
                 g.insertVertex(input[i + 1]);
-            g.insertEdge(input[i], input[i + 1], 0, i / 2);
+            g.insertEdge(input[i], input[i + 1], input[i + 2], i / 2);
         }
         return g;
     }
@@ -121,7 +126,7 @@ public class GraphImpl implements Graph {
                     mapka.contains(new Pair<Integer, Integer>(b, a)))
                 continue;
             mapka.add(new Pair<Integer, Integer>(a, b));
-            g.insertEdge(a, b, 1, i);
+            g.insertEdge(a, b, 1 + r.nextInt(10), i);
         }
         return g;
     }

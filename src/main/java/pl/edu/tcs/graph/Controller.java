@@ -22,6 +22,7 @@ import pl.edu.tcs.graph.algo.BFS;
 import pl.edu.tcs.graph.algo.Bipartition;
 import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.DFS;
+import pl.edu.tcs.graph.algo.SCC;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.DigraphImpl;
@@ -134,12 +135,13 @@ public class Controller {
         BFS,
         BIPARTITION,
         BRIDGES,
-        ARTICULATION_POINTS
+        ARTICULATION_POINTS,
+        SCCS
     }
 
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
             GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-            GraphAlgorithms.ARTICULATION_POINTS);
+            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS);
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {
@@ -151,7 +153,7 @@ public class Controller {
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
-        visualization.setGraph(GraphImpl.randomGraph(1));
+        visualization.setGraph(DigraphImpl.randomGraph(1));
         visualization.updateDrawing(true);
 
         stage.setScene(scene);
@@ -169,7 +171,7 @@ public class Controller {
                     .toArray();
             if (input.length % 2 != 0)
                 throw new Exception();
-            visualization.setGraph(GraphImpl.fromAdjacencyList(input));
+            visualization.setGraph(DigraphImpl.fromAdjacencyList(input));
             visualization.updateDrawing(true);
         } catch (Exception exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -205,7 +207,6 @@ public class Controller {
         if (requirements == null)
             requirements = new HashMap<>();
         isSomeoneRunning = true;
-        System.out.println(requirements);
         for (Vertex v : visualization.getGraph().getVertices())
             if (v.isActive())
                 visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
@@ -221,6 +222,8 @@ public class Controller {
             runAlgo(new Bridges(), requirements);
         else if (choiceBox.getValue() == GraphAlgorithms.ARTICULATION_POINTS)
             runAlgo(new Articulation(), requirements);
+        else if (choiceBox.getValue() == GraphAlgorithms.SCCS)
+            runAlgo(new SCC(), requirements);
     }
 
     public void openProperties(ActionEvent e) {
@@ -239,6 +242,8 @@ public class Controller {
                 controller.setListOfProperties(new Bridges().getProperties());
             else if (choiceBox.getValue() == GraphAlgorithms.ARTICULATION_POINTS)
                 controller.setListOfProperties(new Articulation().getProperties());
+            else if (choiceBox.getValue() == GraphAlgorithms.SCCS)
+                controller.setListOfProperties(new SCC().getProperties());
             root.show();
         } catch (Exception ex) {
             ex.printStackTrace();

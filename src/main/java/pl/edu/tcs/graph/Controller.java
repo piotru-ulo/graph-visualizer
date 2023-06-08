@@ -22,6 +22,7 @@ import pl.edu.tcs.graph.algo.BFS;
 import pl.edu.tcs.graph.algo.Bipartition;
 import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.DFS;
+import pl.edu.tcs.graph.algo.MST;
 import pl.edu.tcs.graph.algo.SCC;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
@@ -136,12 +137,13 @@ public class Controller {
         BIPARTITION,
         BRIDGES,
         ARTICULATION_POINTS,
-        SCCS
+        SCCS,
+        MST
     }
 
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
             GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS);
+            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS, GraphAlgorithms.MST);
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {
@@ -224,6 +226,8 @@ public class Controller {
             runAlgo(new Articulation(), requirements);
         else if (choiceBox.getValue() == GraphAlgorithms.SCCS)
             runAlgo(new SCC(), requirements);
+        else if (choiceBox.getValue() == GraphAlgorithms.MST)
+            runAlgo(new MST(), requirements);
     }
 
     public void openProperties(ActionEvent e) {
@@ -244,6 +248,8 @@ public class Controller {
                 controller.setListOfProperties(new Articulation().getProperties());
             else if (choiceBox.getValue() == GraphAlgorithms.SCCS)
                 controller.setListOfProperties(new SCC().getProperties());
+            else if (choiceBox.getValue() == GraphAlgorithms.MST)
+                controller.setListOfProperties(new MST().getProperties());
             root.show();
         } catch (Exception ex) {
             ex.printStackTrace();

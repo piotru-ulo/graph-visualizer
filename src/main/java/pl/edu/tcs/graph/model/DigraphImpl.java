@@ -104,12 +104,12 @@ public class DigraphImpl implements Graph {
 
     public static Graph fromAdjacencyList(int[] input) {
         Graph g = new DigraphImpl();
-        for (int i = 0; i < input.length; i += 2) {
+        for (int i = 0; i < input.length; i += 3) {
             if (!g.containsVertex(input[i]))
                 g.insertVertex(input[i]);
             if (!g.containsVertex(input[i + 1]))
                 g.insertVertex(input[i + 1]);
-            g.insertEdge(input[i], input[i + 1], 1, i / 2);
+            g.insertEdge(input[i], input[i + 1], input[i + 2], i / 3);
         }
         return g;
     }

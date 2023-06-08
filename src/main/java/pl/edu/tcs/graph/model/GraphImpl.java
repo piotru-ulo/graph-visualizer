@@ -109,7 +109,7 @@ public class GraphImpl implements Graph {
                 g.insertVertex(input[i]);
             if (!g.containsVertex(input[i + 1]))
                 g.insertVertex(input[i + 1]);
-            g.insertEdge(input[i], input[i + 1], input[i + 2], i / 2);
+            g.insertEdge(input[i], input[i + 1], input[i + 2], i / 3);
         }
         return g;
     }

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.stage.Stage?>
 
-<Stage fx:id="stage" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.tcs.graph.Controller">
+<Stage fx:id="stage" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.tcs.graph.Controller">
    <scene>
       <Scene fx:id="scene">
           <AnchorPane prefHeight="621.0" prefWidth="1212.0">
@@ -20,18 +21,24 @@
                    <AnchorPane fx:id="graphPane" minHeight="0.0" minWidth="0.0" prefHeight="617.0" prefWidth="911.0" />
                    <AnchorPane fx:id="menuPane" minHeight="0.0" minWidth="0.0" prefHeight="620.0" prefWidth="291.0">
                         <children>
-                           <Button layoutX="52.0" layoutY="30.0" mnemonicParsing="false" onAction="#nextGraph" text="random" />
-                           <Text layoutX="35.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Graph:" wrappingWidth="124.53668212890625" />
-                           <Button layoutX="110.0" layoutY="310.0" mnemonicParsing="false" onAction="#graphFromInput" text="accept" />
+                           <Button fx:id="randomButton" layoutX="157.0" layoutY="311.0" mnemonicParsing="false" onAction="#nextGraph" text="random" />
+                           <Text fx:id="insertLabel" layoutX="35.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Graph:" wrappingWidth="124.53668212890625" />
+                           <Button fx:id="acceptFromInput" layoutX="66.0" layoutY="311.0" mnemonicParsing="false" onAction="#graphFromInput" text="accept" />
                            <TextArea fx:id="adjListInput" layoutX="35.0" layoutY="104.0" prefHeight="200.0" prefWidth="200.0" />
-                           <ChoiceBox fx:id="choiceBox" layoutX="35.0" layoutY="504.0" prefWidth="150.0" />
-                           <Text layoutX="35.0" layoutY="487.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algorithm:" wrappingWidth="150.6156005859375" />
-                           <Button fx:id="runButton" layoutX="214.0" layoutY="503.0" mnemonicParsing="false" onAction="#runAlgorithm" prefHeight="26.0" prefWidth="63.0" text="Run" />
-                           <Button fx:id="setPropertiesButton" layoutX="35.0" layoutY="545.0" mnemonicParsing="false" onAction="#openProperties" text="Set properties" />
-                           <Button layoutX="177.0" layoutY="366.0" mnemonicParsing="false" onAction="#changeToGrid" text="accept" />
-                           <Text layoutX="35.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Set grid size:" wrappingWidth="89.53668212890625" />
+                           <ChoiceBox fx:id="choiceBox" layoutX="34.0" layoutY="442.0" prefWidth="150.0" />
+                           <Text layoutX="35.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Algorithm:" wrappingWidth="150.6156005859375" />
+                           <Button fx:id="runButton" layoutX="203.0" layoutY="441.0" mnemonicParsing="false" onAction="#runAlgorithm" prefHeight="26.0" prefWidth="63.0" text="Run" />
+                           <Button fx:id="setPropertiesButton" layoutX="34.0" layoutY="475.0" mnemonicParsing="false" onAction="#openProperties" text="Set properties" />
+                           <Button fx:id="gridAcceptButton" layoutX="177.0" layoutY="366.0" mnemonicParsing="false" onAction="#changeToGrid" text="accept" />
+                           <Text fx:id="gridLabel" layoutX="35.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Set grid size:" wrappingWidth="89.53668212890625" />
                            <TextField fx:id="gridWidthTextField" layoutX="36.0" layoutY="366.0" prefHeight="25.0" prefWidth="56.0" />
                            <TextField fx:id="gridHeightTextField" layoutX="107.0" layoutY="366.0" prefHeight="25.0" prefWidth="57.0" />
+                           <TextField fx:id="paintDelayTextField" layoutX="173.0" layoutY="573.0" prefHeight="26.0" prefWidth="58.0" />
+                           <Text layoutX="173.0" layoutY="562.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delay in ms:" wrappingWidth="74.307861328125" />
+                           <Button layoutX="245.0" layoutY="573.0" mnemonicParsing="false" onAction="#setDelay" text="Set" />
+                           <Text layoutX="34.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Switch mode:" wrappingWidth="106.83636474609375" />
+                           <Button layoutX="139.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeMode" prefHeight="13.0" prefWidth="67.0" text="Switch" />
+                           <CheckBox fx:id="diGraphCheckBox" layoutX="166.0" layoutY="77.0" mnemonicParsing="false" onAction="#diGraphSwitch" prefHeight="18.0" prefWidth="82.0" text="DiGraph" />
                         </children>
                      </AnchorPane>
                  </items>

@@ -6,14 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import pl.edu.tcs.graph.algo.AlgorithmException;
@@ -95,9 +91,71 @@ public class Controller {
     private TextField gridWidthTextField;
     @FXML
     private Button setPropertiesButton;
+    @FXML
+    private TextField paintDelayTextField;
+    @FXML
+    private Text gridLabel;
+    @FXML
+    private Button gridAcceptButton;
+    @FXML
+    private Text insertLabel;
+    @FXML
+    private Button acceptFromInput;
+    @FXML
+    private Button randomButton;
+    @FXML
+    private CheckBox diGraphCheckBox;
+
+    private boolean diGraph = false;
+
+    @FXML
+    private void diGraphSwitch(){
+        diGraph = !diGraph;
+    }
+
+
+    private boolean mode = true;
+
+    @FXML
+    private void changeMode() {
+        mode = !mode;
+        if (!mode) {      // grid mode
+            gridLabel.setVisible(true);
+            gridAcceptButton.setVisible(true);
+            gridHeightTextField.setVisible(true);
+            gridWidthTextField.setVisible(true);
+            adjListInput.setVisible(false);
+            insertLabel.setVisible(false);
+            acceptFromInput.setVisible(false);
+            randomButton.setVisible(false);
+            diGraph = false;
+            diGraphCheckBox.setSelected(false);
+            diGraphCheckBox.setVisible(false);
+            visualization = new GridVisualization(0,0,0,0);
+            choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
+                    GraphAlgorithms.BFS );
+            choiceBox.setItems(choiceList);
+
+        } else { // graph mode
+            gridLabel.setVisible(false);
+            gridAcceptButton.setVisible(false);
+            gridHeightTextField.setVisible(false);
+            gridWidthTextField.setVisible(false);
+            adjListInput.setVisible(true);
+            insertLabel.setVisible(true);
+            acceptFromInput.setVisible(true);
+            randomButton.setVisible(true);
+            diGraphCheckBox.setVisible(true);
+            visualization = new GraphVisualization();
+            choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
+                    GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
+                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS, GraphAlgorithms.MST);
+            choiceBox.setItems(choiceList);
+        }
+        graphPane.getChildren().clear();
+    }
 
     public void changeToGrid() {
-        // try {
         int height = Integer.parseInt(gridHeightTextField.getText());
         int width = Integer.parseInt(gridWidthTextField.getText());
         System.out.println("changing to grid: " + height + " " + width);
@@ -118,17 +176,16 @@ public class Controller {
         graphPane.getChildren().add(visualization.getNode());
         stage.setScene(scene);
         stage.show();
-        // TODO: change visualization back to GraphVisualization if you want to switch
-        // off the grid
-
-        // } catch (Exception e) {
-        // throw new RuntimeException("wrong input!");
-        // }
     }
 
     @FXML
     private void initialize() {
+
         choiceBox.setItems(choiceList);
+        gridLabel.setVisible(false);
+        gridAcceptButton.setVisible(false);
+        gridHeightTextField.setVisible(false);
+        gridWidthTextField.setVisible(false);
     }
 
     private enum GraphAlgorithms {
@@ -155,7 +212,10 @@ public class Controller {
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
-        visualization.setGraph(DigraphImpl.randomGraph(1));
+        if (diGraph)
+            visualization.setGraph(DigraphImpl.randomGraph(1));
+        else
+            visualization.setGraph(GraphImpl.randomGraph(1));
         visualization.updateDrawing(true);
 
         stage.setScene(scene);
@@ -171,9 +231,12 @@ public class Controller {
             int[] input = Arrays.stream(adjListInput.getText().split("[\\s\n]+"))
                     .mapToInt(Integer::parseInt)
                     .toArray();
-            if (input.length % 2 != 0)
+            if (input.length % 3 != 0)
                 throw new Exception();
-            visualization.setGraph(DigraphImpl.fromAdjacencyList(input));
+            if(diGraph)
+                visualization.setGraph(DigraphImpl.fromAdjacencyList(input));
+            else
+                visualization.setGraph(GraphImpl.fromAdjacencyList(input));
             visualization.updateDrawing(true);
         } catch (Exception exception) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -183,7 +246,12 @@ public class Controller {
         }
     }
 
-    private final int paint_delay = 50; // TODO: change dynamically
+    private int paint_delay = 50;
+    @FXML
+    private void setDelay() {
+        paint_delay = Integer.parseInt(paintDelayTextField.getText());
+    }
+
     private boolean isSomeoneRunning = false;
 
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {

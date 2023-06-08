@@ -111,6 +111,19 @@ public class Controller {
     @FXML
     private void diGraphSwitch(){
         diGraph = !diGraph;
+        graphPane.getChildren().clear();
+        if(!diGraph){
+            choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
+                    GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
+                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST);
+            choiceBox.setItems(choiceList);
+
+        } else {
+            choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
+                    GraphAlgorithms.BFS,
+                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS);
+            choiceBox.setItems(choiceList);
+        }
     }
 
 
@@ -149,7 +162,7 @@ public class Controller {
             visualization = new GraphVisualization();
             choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
                     GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS, GraphAlgorithms.MST);
+                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST);
             choiceBox.setItems(choiceList);
         }
         graphPane.getChildren().clear();
@@ -199,8 +212,8 @@ public class Controller {
     }
 
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-            GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS, GraphAlgorithms.MST);
+                    GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
+                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST);
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {

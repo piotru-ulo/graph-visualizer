@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GridGraph implements Graph {
-    GridVertex[][] grid; // x, y
-    Edge[][][] edges;
-    int height;
-    int width;
+    private GridVertex[][] grid; // x, y
+    private Edge[][][] edges;
+    private int height;
+    private int width;
 
-    void addEdges(int x, int y) {
+    private void addEdges(int x, int y) {
         if (x < width - 1)
             edges[x][y][0] = new GraphEdge(grid[x][y], grid[x + 1][y], 1, (x + y * height) * 4);
         if (y > 0)

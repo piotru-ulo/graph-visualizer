@@ -42,7 +42,11 @@ public class Bipartition implements Algorithm {
             throws AlgorithmException {
         color = new HashMap<>();
         try {
-            dfs(false, g, g.getVertex(1), aM);
+            for (Vertex v : g.getVertices()) {
+                if (color.containsKey(v))
+                    continue;
+                dfs(false, g, v, aM);
+            }
         } catch (AlgorithmException e) {
             throw e;
         }

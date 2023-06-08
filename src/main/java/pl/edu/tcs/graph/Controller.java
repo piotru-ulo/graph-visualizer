@@ -6,7 +6,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -17,6 +23,7 @@ import pl.edu.tcs.graph.algo.Articulation;
 import pl.edu.tcs.graph.algo.BFS;
 import pl.edu.tcs.graph.algo.Bipartition;
 import pl.edu.tcs.graph.algo.Bridges;
+import pl.edu.tcs.graph.algo.CycleFinding;
 import pl.edu.tcs.graph.algo.DFS;
 import pl.edu.tcs.graph.algo.MST;
 import pl.edu.tcs.graph.algo.SCC;
@@ -109,30 +116,29 @@ public class Controller {
     private boolean diGraph = false;
 
     @FXML
-    private void diGraphSwitch(){
+    private void diGraphSwitch() {
         diGraph = !diGraph;
         graphPane.getChildren().clear();
-        if(!diGraph){
+        if (!diGraph) {
             choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
                     GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST);
+                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS,
+                    GraphAlgorithms.ANYCYCLE);
             choiceBox.setItems(choiceList);
 
         } else {
             choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                    GraphAlgorithms.BFS,
-                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.SCCS);
+                    GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
             choiceBox.setItems(choiceList);
         }
     }
-
 
     private boolean mode = true;
 
     @FXML
     private void changeMode() {
         mode = !mode;
-        if (!mode) {      // grid mode
+        if (!mode) { // grid mode
             gridLabel.setVisible(true);
             gridAcceptButton.setVisible(true);
             gridHeightTextField.setVisible(true);
@@ -144,9 +150,9 @@ public class Controller {
             diGraph = false;
             diGraphCheckBox.setSelected(false);
             diGraphCheckBox.setVisible(false);
-            visualization = new GridVisualization(0,0,0,0);
+            visualization = new GridVisualization(0, 0, 0, 0);
             choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                    GraphAlgorithms.BFS );
+                    GraphAlgorithms.BFS);
             choiceBox.setItems(choiceList);
 
         } else { // graph mode
@@ -162,7 +168,8 @@ public class Controller {
             visualization = new GraphVisualization();
             choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
                     GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST);
+                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS,
+                    GraphAlgorithms.ANYCYCLE);
             choiceBox.setItems(choiceList);
         }
         graphPane.getChildren().clear();
@@ -208,12 +215,13 @@ public class Controller {
         BRIDGES,
         ARTICULATION_POINTS,
         SCCS,
-        MST
+        MST,
+        ANYCYCLE
     }
 
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                    GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST);
+            GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
+            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {
@@ -246,7 +254,7 @@ public class Controller {
                     .toArray();
             if (input.length % 3 != 0)
                 throw new Exception();
-            if(diGraph)
+            if (diGraph)
                 visualization.setGraph(DigraphImpl.fromAdjacencyList(input));
             else
                 visualization.setGraph(GraphImpl.fromAdjacencyList(input));
@@ -260,6 +268,7 @@ public class Controller {
     }
 
     private int paint_delay = 50;
+
     @FXML
     private void setDelay() {
         paint_delay = Integer.parseInt(paintDelayTextField.getText());
@@ -309,6 +318,8 @@ public class Controller {
             runAlgo(new SCC(), requirements);
         else if (choiceBox.getValue() == GraphAlgorithms.MST)
             runAlgo(new MST(), requirements);
+        else if (choiceBox.getValue() == GraphAlgorithms.ANYCYCLE)
+            runAlgo(new CycleFinding(), requirements);
     }
 
     public void openProperties(ActionEvent e) {
@@ -331,6 +342,8 @@ public class Controller {
                 controller.setListOfProperties(new SCC().getProperties());
             else if (choiceBox.getValue() == GraphAlgorithms.MST)
                 controller.setListOfProperties(new MST().getProperties());
+            else if (choiceBox.getValue() == GraphAlgorithms.ANYCYCLE)
+                controller.setListOfProperties(new CycleFinding().getProperties());
             root.show();
         } catch (Exception ex) {
             ex.printStackTrace();

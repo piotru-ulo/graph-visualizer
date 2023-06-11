@@ -22,8 +22,8 @@ public class SCC implements Algorithm {
 
     private Map<Vertex, Integer> dp, vertexComponentId;
     private Stack<Vertex> vertexList;
-    private int time = 0;
-    private int componentCount = 0;
+    private int time;
+    private int componentCount;
 
     private void colorVertex(Vertex v, AlgoMiddleman algoMiddleman, int component) {
         int r = 7123 * component % 256;
@@ -38,6 +38,7 @@ public class SCC implements Algorithm {
         dp.put(u, time);
         int low = time;
         vertexList.add(u);
+        colorVertex(u, algoMiddleman, 123);
         for (Vertex to : g.getIncidentVertices(u)) {
             if (!vertexComponentId.containsKey(to)) {
                 if (dp.containsKey(to))
@@ -65,6 +66,7 @@ public class SCC implements Algorithm {
         vertexList = new Stack<>();
         dp = new HashMap<>();
         vertexComponentId = new HashMap<>();
+        time = componentCount = 0;
         try {
             for (Vertex v : g.getVertices()) {
                 if (vertexComponentId.containsKey(v))

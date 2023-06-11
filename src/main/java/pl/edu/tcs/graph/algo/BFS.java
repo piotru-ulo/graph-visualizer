@@ -23,7 +23,7 @@ public class BFS implements Algorithm {
         return properties;
     }
 
-    private Vertex targetVertex = null;
+    private Vertex targetVertex;
     private Map<Vertex, Boolean> visited;
     private Queue<Vertex> que;
 
@@ -54,6 +54,7 @@ public class BFS implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         visited = new HashMap<>();
+        targetVertex = null;
         try {
             Vertex sourceVertex = g.getVertex(1);
             System.out.println(requirements);

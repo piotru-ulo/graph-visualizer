@@ -21,7 +21,7 @@ public class Bridges implements Algorithm {
 
     private Map<Vertex, Boolean> visited;
     private Map<Vertex, Integer> preOrder, low;
-    private int time = 0;
+    private int time;
 
     private void dfs(Graph g, Vertex u, Vertex p, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
@@ -50,6 +50,7 @@ public class Bridges implements Algorithm {
         visited = new HashMap<>();
         preOrder = new HashMap<>();
         low = new HashMap<>();
+        time = 0;
         try {
             dfs(g, g.getVertex(1), g.getVertex(1), aM);
         } catch (AlgorithmException e) {

@@ -20,8 +20,8 @@ public class DFS implements Algorithm {
         return properties;
     }
 
-    private Vertex targetVertex = null;
-    private boolean found = false;
+    private Vertex targetVertex;
+    private boolean found;
     private Map<Vertex, Boolean> visited;
 
     private void dfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
@@ -48,6 +48,8 @@ public class DFS implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
+        targetVertex = null;
+        found = false;
         try {
             Vertex sourceVertex = g.getVertex(1);
             System.out.println(requirements);

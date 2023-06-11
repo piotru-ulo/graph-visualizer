@@ -14,7 +14,6 @@ import java.util.Collection;
 
 public interface Visualization {
 
-
     Graph getGraph();
 
     void setGraph(Graph newGraph);

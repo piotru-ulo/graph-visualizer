@@ -61,7 +61,7 @@ public class GraphVisualization implements Visualization {
     }
 
     @Override
-    public void setVertexContextMenu(ContextMenu vcm){
+    public void setVertexContextMenu(ContextMenu vcm) {
         vertexContextMenu = vcm;
     }
 
@@ -77,7 +77,7 @@ public class GraphVisualization implements Visualization {
         for (Vertex v : g.getVertices())
             drawableVertexMap.putIfAbsent(v, new DrawableVertexImpl(v));
 
-        if(vertexContextMenu!=null)
+        if (vertexContextMenu != null)
             for (var de : drawableVertexMap.values())
                 de.setContextMenu(vertexContextMenu);
 

@@ -169,8 +169,13 @@ public class Controller {
     }
 
     public void changeToGrid() {
-        int height = Integer.parseInt(gridHeightTextField.getText());
-        int width = Integer.parseInt(gridWidthTextField.getText());
+        int height, width;
+        try {
+            height = Integer.parseInt(gridHeightTextField.getText());
+            width = Integer.parseInt(gridWidthTextField.getText());
+        } catch (Exception e) {
+            return;
+        }
         System.out.println("changing to grid: " + height + " " + width);
         visualization = new GridVisualization(width, height, width * 20, height * 20,
                 dv -> {

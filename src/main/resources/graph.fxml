@@ -49,10 +49,10 @@
                                  <content>
                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                           <children>
-                                             <Button fx:id="gridAcceptButton" layoutX="195.0" layoutY="273.0" mnemonicParsing="false" onAction="#changeToGrid" text="accept" />
-                                             <Text fx:id="gridLabel" layoutX="47.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Set grid size:" wrappingWidth="89.53668212890625" />
-                                             <TextField fx:id="gridWidthTextField" layoutX="47.0" layoutY="273.0" prefHeight="25.0" prefWidth="56.0" />
-                                             <TextField fx:id="gridHeightTextField" layoutX="118.0" layoutY="273.0" prefHeight="25.0" prefWidth="57.0" />
+                                             <Button fx:id="gridAcceptButton" layoutX="177.0" layoutY="56.0" mnemonicParsing="false" onAction="#changeToGrid" text="accept" />
+                                             <Text fx:id="gridLabel" layoutX="29.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Set grid size:" wrappingWidth="89.53668212890625" />
+                                             <TextField fx:id="gridWidthTextField" layoutX="29.0" layoutY="56.0" prefHeight="25.0" prefWidth="56.0" />
+                                             <TextField fx:id="gridHeightTextField" layoutX="100.0" layoutY="56.0" prefHeight="25.0" prefWidth="57.0" />
                                           </children>
                                        </AnchorPane>
                                  </content>

@@ -22,29 +22,16 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import pl.edu.tcs.graph.algo.AlgorithmException;
-import pl.edu.tcs.graph.algo.Articulation;
-import pl.edu.tcs.graph.algo.BFS;
-import pl.edu.tcs.graph.algo.Bipartition;
-import pl.edu.tcs.graph.algo.Bridges;
-import pl.edu.tcs.graph.algo.CycleFinding;
-import pl.edu.tcs.graph.algo.DFS;
-import pl.edu.tcs.graph.algo.MST;
-import pl.edu.tcs.graph.algo.Maze;
-import pl.edu.tcs.graph.algo.SCC;
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
-import pl.edu.tcs.graph.model.DigraphImpl;
-import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.algo.*;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.view.GraphVisualization;
 import pl.edu.tcs.graph.view.GridVisualization;
 import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,12 +47,15 @@ public class Controller {
         SCCS(new SCC()),
         MST(new MST()),
         ANYCYCLE(new CycleFinding()),
+        GEOTEST(new TestGeoAlgo()),
         MAZE(new Maze());
 
         private final Algorithm algorithm;
     }
 
     private Visualization visualization = new GraphVisualization();
+
+    private Collection<Algorithm.VertexAction> vertexActions;
 
     private Thread algoThread;
     private final AlgoMiddleman aM = new AlgoMiddleman() {
@@ -98,6 +88,20 @@ public class Controller {
             }));
             return result;
         }
+
+        @Override
+        public double getX(Vertex v) {
+            if(visualization.getGraph() instanceof GridGraph)
+                return ((GridGraph) visualization.getGraph()).getX(v);
+            return 0;
+        }
+
+        @Override
+        public double getY(Vertex v) {
+            if(visualization.getGraph() instanceof GridGraph)
+                return ((GridGraph) visualization.getGraph()).getY(v);
+            return 0;
+        }
     };
     @FXML
     private Stage stage;
@@ -108,33 +112,15 @@ public class Controller {
     @FXML
     private AnchorPane graphPane;
     @FXML
-    private AnchorPane menuPane;
-    @FXML
     private TextArea adjListInput;
     @FXML
     private ChoiceBox<GraphAlgorithms> choiceBox;
-    @FXML
-    private Button runButton;
     @FXML
     private TextField gridHeightTextField;
     @FXML
     private TextField gridWidthTextField;
     @FXML
-    private Button setPropertiesButton;
-    @FXML
     private TextField paintDelayTextField;
-    @FXML
-    private Text gridLabel;
-    @FXML
-    private Button gridAcceptButton;
-    @FXML
-    private Text insertLabel;
-    @FXML
-    private Button acceptFromInput;
-    @FXML
-    private Button randomButton;
-    @FXML
-    private CheckBox diGraphCheckBox;
 
     @FXML
     private TabPane tabPane;
@@ -166,8 +152,13 @@ public class Controller {
     }
 
     public void changeToGrid() {
-        int height = Integer.parseInt(gridHeightTextField.getText());
-        int width = Integer.parseInt(gridWidthTextField.getText());
+        int height, width;
+        try {
+            height = Integer.parseInt(gridHeightTextField.getText());
+            width = Integer.parseInt(gridWidthTextField.getText());
+        } catch (Exception e) {
+            return;
+        }
         System.out.println("changing to grid: " + height + " " + width);
         visualization = new GridVisualization(width, height, width * 20, height * 20,
                 dv -> {
@@ -181,6 +172,7 @@ public class Controller {
                     return null;
                 });
         visualization.initialize();
+        visualization.setVertexActions(vertexActions);
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -196,43 +188,45 @@ public class Controller {
                 System.out.println("interrupting");
                 isSomeoneRunning = false;
                 algoThread.stop();
-                // TODO: fix the stop?
             }
             if (newTab == normalTab) {
                 System.out.println("normal tab ");
                 visualization = new GraphVisualization();
-                choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                        GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-                        GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS,
+                choiceList = FXCollections.observableArrayList(
+                        GraphAlgorithms.DFS,
+                        GraphAlgorithms.BFS,
+                        GraphAlgorithms.BIPARTITION,
+                        GraphAlgorithms.BRIDGES,
+                        GraphAlgorithms.ARTICULATION_POINTS,
+                        GraphAlgorithms.MST,
+                        GraphAlgorithms.SCCS,
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
-
-//                choiceBox.getSelectionModel().selectedItemProperty().
-//                        addListener((boxObservable, oldValue, newValue) -> {
-//                            ContextMenu contextMenu = new ContextMenu(
-//                                    new MenuItem("option 1"),
-//                                    new MenuItem("option 2"));
-//                            for(AlgorithmProperties ap : )
-//                            visualization.setVertexContextMenu(contextMenu);
-//                            System.out.println("Selected: " + newValue);
-//
-//                        });
-            }
-            else if(newTab == gridTab) {
+            } else if (newTab == gridTab) {
                 System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
-                choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                        GraphAlgorithms.BFS, GraphAlgorithms.MAZE);
+                choiceList = FXCollections.observableArrayList(
+                        GraphAlgorithms.DFS,
+                        GraphAlgorithms.BFS,
+                        GraphAlgorithms.MAZE,
+                        GraphAlgorithms.GEOTEST);
                 choiceBox.setItems(choiceList);
             }
+            visualization.setVertexActions(vertexActions);
             graphPane.getChildren().clear();
+        });
+        choiceBox.getSelectionModel().selectedItemProperty().addListener((boxObservable, oldValue, newValue) -> {
+            System.out.println("cz changed to :" + newValue);
+            if (newValue != null) {
+                vertexActions = newValue.algorithm.getVertexActions();
+                visualization.setVertexActions(vertexActions);
+            }
         });
     }
 
-
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
             GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE, GraphAlgorithms.MAZE);
+            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {
@@ -317,7 +311,9 @@ public class Controller {
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
 
-        runAlgo(choiceBox.getValue().getAlgorithm(), requirements);
+        Algorithm currentAlgo = choiceBox.getValue().getAlgorithm();
+        runAlgo(currentAlgo, requirements);
+
     }
 
     public void openProperties(ActionEvent e) {

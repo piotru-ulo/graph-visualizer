@@ -1,17 +1,12 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.viewmodel.Graph;
-import pl.edu.tcs.graph.viewmodel.Vertex;
+import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.Vertex;
 
 public class BFS implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList(
@@ -23,7 +18,21 @@ public class BFS implements Algorithm {
         return properties;
     }
 
-    private Vertex targetVertex;
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return Arrays.asList(
+                new VertexAction("set start", (v -> {
+                    sourceVertex = v;
+                    return null;
+                })),
+                new VertexAction("set end", (v -> {
+                    targetVertex = v;
+                    return null;
+                })));
+    }
+
+    private Vertex targetVertex = null;
+    private Vertex sourceVertex = null;
     private Map<Vertex, Boolean> visited;
     private Queue<Vertex> que;
 
@@ -54,15 +63,17 @@ public class BFS implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         visited = new HashMap<>();
-        targetVertex = null;
         try {
-            Vertex sourceVertex = g.getVertex(1);
             System.out.println(requirements);
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
             if (requirements.get(AlgorithmProperties.TARGET) != null)
                 targetVertex = g.getVertex(requirements.get(AlgorithmProperties.TARGET));
+            if (sourceVertex == null)
+                sourceVertex = g.getVertex(1);
             bfs(g, sourceVertex, aM);
+            sourceVertex = targetVertex = null;
+
         } catch (AlgorithmException e) {
             throw e;
         }

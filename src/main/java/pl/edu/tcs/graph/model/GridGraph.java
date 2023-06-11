@@ -1,9 +1,5 @@
 package pl.edu.tcs.graph.model;
 
-import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Graph;
-import pl.edu.tcs.graph.viewmodel.Vertex;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -145,4 +141,27 @@ public class GridGraph implements Graph {
                 return edge;
         return null;
     }
+
+    public double getX(Vertex v) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j].equals(v)) {
+                    return i;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Vertex not found in the grid");
+    }
+
+    public double getY(Vertex v) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j].equals(v)) {
+                    return j;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Vertex not found in the grid");
+    }
+
 }

@@ -1,8 +1,9 @@
 package pl.edu.tcs.graph.viewmodel;
 
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.paint.Paint;
+import pl.edu.tcs.graph.model.Algorithm;
+import pl.edu.tcs.graph.model.Vertex;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -26,5 +27,5 @@ public interface DrawableVertex {
 
     void setOnclick(Function<? super DrawableVertex, Object> onClick);
 
-    void setContextMenu(ContextMenu contextMenu);
+    void setActions(Collection<Algorithm.VertexAction> actions);
 }

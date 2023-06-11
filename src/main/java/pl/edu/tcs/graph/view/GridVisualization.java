@@ -1,17 +1,18 @@
 package pl.edu.tcs.graph.view;
 
-import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.DrawableGridVertex;
 import pl.edu.tcs.graph.model.GridGraph;
 import pl.edu.tcs.graph.model.GridVertex;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
-import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Graph;
-import pl.edu.tcs.graph.viewmodel.Vertex;
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.Vertex;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -77,9 +78,9 @@ public class GridVisualization implements Visualization {
     }
 
     @Override
-    public void setVertexContextMenu(ContextMenu cm) {
-        for (var v : drawableVertexes.values()){
-            v.setContextMenu(cm);
+    public void setVertexActions(Collection<Algorithm.VertexAction> actions) {
+        for (var v : drawableVertexes.values()) {
+            v.setActions(actions);
         }
     }
 
@@ -120,8 +121,8 @@ public class GridVisualization implements Visualization {
         for (int x = 0; x < graphWidth; x++) {
             for (int y = 0; y < graphHeight; y++) {
                 GridVertex actV = (GridVertex) gg.getVertex(x, y);
-                DrawableGridVertex actDrawV = new DrawableGridVertex(actV, getPosX(actV), getPosY(actV), vertexSize,
-                        onClickHandler);
+                DrawableGridVertex actDrawV = new DrawableGridVertex(actV, getPosX(actV), getPosY(actV), vertexSize);
+                actDrawV.setOnclick(onClickHandler);
                 drawableVertexes.put(actV, actDrawV);
                 drawingPane.getChildren().addAll(actDrawV.toDraw());
             }

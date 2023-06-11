@@ -11,16 +11,21 @@ import java.util.Map;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Graph;
-import pl.edu.tcs.graph.viewmodel.Vertex;
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.Vertex;
 
 public class MST implements Algorithm {
-    private Collection<AlgorithmProperties> properties = Arrays.asList();
+    private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
         return properties;
+    }
+
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
     }
 
     private Map<Vertex, Vertex> forest;

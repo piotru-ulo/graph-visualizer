@@ -3,14 +3,16 @@ package pl.edu.tcs.graph.model;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
-import pl.edu.tcs.graph.viewmodel.Vertex;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -33,13 +35,29 @@ public class DrawableVertexImpl implements DrawableVertex {
 
     @Override
     public void setOnclick(Function<? super DrawableVertex, Object> onClick) {
-        toDraw.setOnMouseClicked(e -> onClick.apply(this));
+        toDraw.setOnMouseClicked(e -> {
+            if(e.getButton() == MouseButton.PRIMARY) {
+                System.out.println("onclick requested");
+                onClick.apply(this);
+            }
+        });
     }
 
     @Override
-    public void setContextMenu(ContextMenu contextMenu) {
-        toDraw.setOnContextMenuRequested(e ->
-                contextMenu.show(circle, Side.BOTTOM, e.getX(), e.getY()-2*DrawableVertexImpl.defaultSize));
+    public void setActions(Collection<Algorithm.VertexAction> actions) {
+        ContextMenu contextMenu = new ContextMenu();
+        if(actions==null) actions = new ArrayList<>();
+        for(var action : actions) {
+            MenuItem item = new MenuItem(action.getName());
+            item.setOnAction(event-> {
+                action.apply(underlyingVertex);
+            });
+            contextMenu.getItems().add(item);
+        }
+        toDraw.setOnContextMenuRequested(e -> {
+            System.out.println("cm requested");
+            contextMenu.show(circle, Side.BOTTOM, e.getX(), e.getY() - 2 * DrawableVertexImpl.defaultSize);
+        });
     }
 
     @Override

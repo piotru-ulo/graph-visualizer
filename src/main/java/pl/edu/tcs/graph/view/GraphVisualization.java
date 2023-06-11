@@ -1,13 +1,12 @@
 package pl.edu.tcs.graph.view;
 
-import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
-import pl.edu.tcs.graph.model.DrawableEdgeImpl;
-import pl.edu.tcs.graph.model.DrawableVertexImpl;
-import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class GraphVisualization implements Visualization {
 
     private Map<Vertex, DrawableVertex> drawableVertexMap;
 
-    private ContextMenu vertexContextMenu;
+    private Collection<Algorithm.VertexAction> vertexActions = new ArrayList<>();
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
 
@@ -60,8 +59,11 @@ public class GraphVisualization implements Visualization {
     }
 
     @Override
-    public void setVertexContextMenu(ContextMenu vcm) {
-        vertexContextMenu = vcm;
+    public void setVertexActions(Collection<Algorithm.VertexAction> vcm) {
+        vertexActions = vcm;
+        if(drawableVertexMap != null)
+            for (var dv : drawableVertexMap.values())
+                dv.setActions(vertexActions);
     }
 
     @Override
@@ -76,9 +78,8 @@ public class GraphVisualization implements Visualization {
         for (Vertex v : g.getVertices())
             drawableVertexMap.putIfAbsent(v, new DrawableVertexImpl(v));
 
-        if (vertexContextMenu != null)
-            for (var de : drawableVertexMap.values())
-                de.setContextMenu(vertexContextMenu);
+        for (var dv : drawableVertexMap.values())
+            dv.setActions(vertexActions);
 
         for (Edge e : g.getEdges()) {
             DrawableVertex one = null, two = null;

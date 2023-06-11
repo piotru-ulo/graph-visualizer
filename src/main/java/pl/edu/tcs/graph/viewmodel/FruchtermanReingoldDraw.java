@@ -1,6 +1,10 @@
 // For reference, see this: https://citeseer.ist.psu.edu/viewdoc/download?doi=10.1.1.13.8444&rep=rep1&type=pdf
 package pl.edu.tcs.graph.viewmodel;
 
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.Vertex;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,8 +74,8 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
     }
 
     private void calculateAttraction(Graph graph, Map<Vertex, DrawableVertex> vertexToDrawable,
-            Map<DrawableVertex, Double> moveX, Map<DrawableVertex, Double> moveY,
-            Collection<DrawableVertex> drawableVertices) {
+                                     Map<DrawableVertex, Double> moveX, Map<DrawableVertex, Double> moveY,
+                                     Collection<DrawableVertex> drawableVertices) {
         for (Edge e : graph.getEdges()) {
             DrawableVertex one = null, two = null;
             for (Vertex v : e.getEndpoints())

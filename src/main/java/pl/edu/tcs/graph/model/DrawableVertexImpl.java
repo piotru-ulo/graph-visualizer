@@ -4,6 +4,7 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -35,7 +36,12 @@ public class DrawableVertexImpl implements DrawableVertex {
 
     @Override
     public void setOnclick(Function<? super DrawableVertex, Object> onClick) {
-        toDraw.setOnMouseClicked(e -> onClick.apply(this));
+        toDraw.setOnMouseClicked(e -> {
+            if(e.getButton() == MouseButton.PRIMARY) {
+                System.out.println("onclick requested");
+                onClick.apply(this);
+            }
+        });
     }
 
     @Override

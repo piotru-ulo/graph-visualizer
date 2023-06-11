@@ -4,6 +4,7 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
@@ -38,21 +39,15 @@ public class DrawableGridVertex implements DrawableVertex {
         toDraw.setFill(Paint.valueOf("white"));
     }
 
-    public DrawableGridVertex(GridVertex v, double x, double y, double size,
-            Function<? super DrawableGridVertex, Object> onClick) {
-        this.underlyingVertex = v;
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        toDraw = new Rectangle(x, y, size, size);
-        toDraw.setOnMouseClicked(e -> onClick.apply(this));
-        toDraw.setStroke(Paint.valueOf("black"));
-        toDraw.setFill(Paint.valueOf("white"));
-    }
-
     @Override
     public void setOnclick(Function<? super DrawableVertex, Object> onClick) {
-        toDraw.setOnMouseClicked(e -> onClick.apply(this));
+        toDraw.setOnMouseClicked(e -> {
+            if(e.getButton() == MouseButton.PRIMARY) {
+                System.out.println("onclick requested");
+                onClick.apply(this);
+            }
+        });
+        toDraw.setPickOnBounds(true);
     }
 
     @Override
@@ -66,8 +61,10 @@ public class DrawableGridVertex implements DrawableVertex {
             });
             contextMenu.getItems().add(item);
         }
-        toDraw.setOnContextMenuRequested(e ->
-                contextMenu.show(toDraw, Side.BOTTOM, e.getX(), e.getY()-2*DrawableVertexImpl.defaultSize));
+        toDraw.setOnContextMenuRequested(e -> {
+            contextMenu.show(toDraw, Side.BOTTOM, 0, 0);
+            //naah not the best placement
+        });
     }
 
     @Override

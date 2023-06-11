@@ -121,8 +121,8 @@ public class GridVisualization implements Visualization {
         for (int x = 0; x < graphWidth; x++) {
             for (int y = 0; y < graphHeight; y++) {
                 GridVertex actV = (GridVertex) gg.getVertex(x, y);
-                DrawableGridVertex actDrawV = new DrawableGridVertex(actV, getPosX(actV), getPosY(actV), vertexSize,
-                        onClickHandler);
+                DrawableGridVertex actDrawV = new DrawableGridVertex(actV, getPosX(actV), getPosY(actV), vertexSize);
+                actDrawV.setOnclick(onClickHandler);
                 drawableVertexes.put(actV, actDrawV);
                 drawingPane.getChildren().addAll(actDrawV.toDraw());
             }

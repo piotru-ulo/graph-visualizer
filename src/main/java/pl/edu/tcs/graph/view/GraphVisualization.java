@@ -64,8 +64,9 @@ public class GraphVisualization implements Visualization {
     @Override
     public void setVertexActions(Collection<Algorithm.VertexAction> vcm) {
         vertexActions = vcm;
-        for (var dv : drawableVertexMap.values())
-            dv.setActions(vertexActions);
+        if(drawableVertexMap != null)
+            for (var dv : drawableVertexMap.values())
+                dv.setActions(vertexActions);
     }
 
     @Override

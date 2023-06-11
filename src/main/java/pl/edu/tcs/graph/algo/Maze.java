@@ -24,6 +24,11 @@ public class Maze implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Set<Vertex> unvisited;
 
     private int countOccupied(Graph g, Vertex u) {

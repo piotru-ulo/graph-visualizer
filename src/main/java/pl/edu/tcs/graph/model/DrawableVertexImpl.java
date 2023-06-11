@@ -3,6 +3,7 @@ package pl.edu.tcs.graph.model;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -37,9 +38,21 @@ public class DrawableVertexImpl implements DrawableVertex {
     }
 
     @Override
-    public void setContextMenu(ContextMenu contextMenu) {
-        toDraw.setOnContextMenuRequested(e ->
-                contextMenu.show(circle, Side.BOTTOM, e.getX(), e.getY()-2*DrawableVertexImpl.defaultSize));
+    public void setActions(Collection<Algorithm.VertexAction> actions) {
+        ContextMenu contextMenu = new ContextMenu();
+        for(var action : actions) {
+            MenuItem item = new MenuItem(action.getName());
+            item.setOnAction(event-> {
+                action.apply(underlyingVertex);
+            });
+            contextMenu.getItems().add(item);
+        }
+        toDraw.setOnContextMenuRequested(e -> {
+            System.out.println("context menu requested");
+            for(var action: actions)
+                System.out.println(action.getName());
+            contextMenu.show(circle, Side.BOTTOM, e.getX(), e.getY() - 2 * DrawableVertexImpl.defaultSize);
+        });
     }
 
     @Override

@@ -6,15 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -45,6 +37,7 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,6 +59,8 @@ public class Controller {
     }
 
     private Visualization visualization = new GraphVisualization();
+
+    private Collection<Algorithm.VertexAction> vertexActions;
 
     private Thread algoThread;
     private final AlgoMiddleman aM = new AlgoMiddleman() {
@@ -181,6 +176,7 @@ public class Controller {
                     return null;
                 });
         visualization.initialize();
+        visualization.setVertexActions(vertexActions);
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -206,17 +202,6 @@ public class Controller {
                         GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS,
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
-
-//                choiceBox.getSelectionModel().selectedItemProperty().
-//                        addListener((boxObservable, oldValue, newValue) -> {
-//                            ContextMenu contextMenu = new ContextMenu(
-//                                    new MenuItem("option 1"),
-//                                    new MenuItem("option 2"));
-//                            for(AlgorithmProperties ap : )
-//                            visualization.setVertexContextMenu(contextMenu);
-//                            System.out.println("Selected: " + newValue);
-//
-//                        });
             }
             else if(newTab == gridTab) {
                 System.out.println("grid tab");
@@ -225,7 +210,16 @@ public class Controller {
                         GraphAlgorithms.BFS, GraphAlgorithms.MAZE);
                 choiceBox.setItems(choiceList);
             }
+            visualization.setVertexActions(vertexActions);
             graphPane.getChildren().clear();
+            choiceBox.getSelectionModel().selectedItemProperty().
+                    addListener((boxObservable, oldValue, newValue) -> {
+                        System.out.println("cz changed to :" + newValue);
+                        if(newValue!=null) {
+                            vertexActions = newValue.algorithm.getVertexActions();
+                            visualization.setVertexActions(vertexActions);
+                        }
+                    });
         });
     }
 
@@ -317,7 +311,9 @@ public class Controller {
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
 
-        runAlgo(choiceBox.getValue().getAlgorithm(), requirements);
+        Algorithm currentAlgo = choiceBox.getValue().getAlgorithm();
+        runAlgo(currentAlgo, requirements);
+
     }
 
     public void openProperties(ActionEvent e) {

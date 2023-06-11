@@ -4,6 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.DrawableGridVertex;
 import pl.edu.tcs.graph.model.GridGraph;
 import pl.edu.tcs.graph.model.GridVertex;
@@ -12,6 +13,7 @@ import pl.edu.tcs.graph.viewmodel.Edge;
 import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -77,9 +79,9 @@ public class GridVisualization implements Visualization {
     }
 
     @Override
-    public void setVertexContextMenu(ContextMenu cm) {
+    public void setVertexActions(Collection<Algorithm.VertexAction> actions) {
         for (var v : drawableVertexes.values()){
-            v.setContextMenu(cm);
+            v.setActions(actions);
         }
     }
 

@@ -19,6 +19,11 @@ public class Bipartition implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Map<Vertex, Boolean> color;
 
     private void dfs(boolean col, Graph g, Vertex u, AlgoMiddleman algoMiddleman)

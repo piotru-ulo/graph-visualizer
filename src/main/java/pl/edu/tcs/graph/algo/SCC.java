@@ -20,6 +20,11 @@ public class SCC implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Map<Vertex, Integer> dp, vertexComponentId;
     private Stack<Vertex> vertexList;
     private int time;

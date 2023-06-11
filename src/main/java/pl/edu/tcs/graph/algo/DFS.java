@@ -20,6 +20,11 @@ public class DFS implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Vertex targetVertex;
     private boolean found;
     private Map<Vertex, Boolean> visited;

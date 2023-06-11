@@ -19,6 +19,11 @@ public class Bridges implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Map<Vertex, Boolean> visited;
     private Map<Vertex, Integer> preOrder, low;
     private int time;

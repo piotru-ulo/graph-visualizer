@@ -23,6 +23,11 @@ public class MST implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Map<Vertex, Vertex> forest;
 
     Vertex findTopmost(Vertex v) {

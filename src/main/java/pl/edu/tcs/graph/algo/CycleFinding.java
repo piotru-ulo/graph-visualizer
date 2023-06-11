@@ -19,6 +19,11 @@ public class CycleFinding implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Map<Vertex, Integer> vertexColor;
     private Map<Vertex, Vertex> vertexParent;
     private Vertex cycleStart, cycleEnd;

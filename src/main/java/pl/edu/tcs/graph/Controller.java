@@ -135,7 +135,7 @@ public class Controller {
 
         } else {
             choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                    GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
+                    GraphAlgorithms.BFS, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
             choiceBox.setItems(choiceList);
         }
     }

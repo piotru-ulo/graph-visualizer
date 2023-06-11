@@ -141,4 +141,27 @@ public class GridGraph implements Graph {
                 return edge;
         return null;
     }
+
+    public double getX(Vertex v) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j].equals(v)) {
+                    return i;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Vertex not found in the grid");
+    }
+
+    public double getY(Vertex v) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j].equals(v)) {
+                    return j;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Vertex not found in the grid");
+    }
+
 }

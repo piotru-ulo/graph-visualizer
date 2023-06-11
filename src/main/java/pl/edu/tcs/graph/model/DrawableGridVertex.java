@@ -16,9 +16,9 @@ public class DrawableGridVertex implements DrawableVertex {
     private final GridVertex underlyingVertex;
     private final Rectangle toDraw;
 
-    double x;
-    double y;
-    double size;
+    private double x;
+    private double y;
+    private double size;
 
     @Override
     public Collection<Node> toDraw() {

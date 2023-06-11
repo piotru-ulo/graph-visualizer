@@ -6,7 +6,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -20,6 +28,7 @@ import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.CycleFinding;
 import pl.edu.tcs.graph.algo.DFS;
 import pl.edu.tcs.graph.algo.MST;
+import pl.edu.tcs.graph.algo.Maze;
 import pl.edu.tcs.graph.algo.SCC;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
@@ -34,7 +43,6 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -167,11 +175,11 @@ public class Controller {
     private void initialize() {
         choiceBox.setItems(choiceList);
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            if(algoThread!=null) {
+            if (algoThread != null) {
                 System.out.println("interrupting");
                 isSomeoneRunning = false;
                 algoThread.stop();
-                //TODO: fix the stop?
+                // TODO: fix the stop?
             }
             if (newTab == normalTab) {
                 System.out.println("normal tab ");
@@ -182,20 +190,19 @@ public class Controller {
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
 
-//                choiceBox.getSelectionModel().selectedItemProperty().
-//                        addListener((boxObservable, oldValue, newValue) -> {
-//                            ContextMenu contextMenu = new ContextMenu();
-//                            for(AlgorithmProperties ap : )
-//                            visualization.setVertexContextMenu();
-//                            System.out.println("Selected: " + newValue);
-//
-//                        });
-            }
-            else if(newTab == gridTab) {
+                // choiceBox.getSelectionModel().selectedItemProperty().
+                // addListener((boxObservable, oldValue, newValue) -> {
+                // ContextMenu contextMenu = new ContextMenu();
+                // for(AlgorithmProperties ap : )
+                // visualization.setVertexContextMenu();
+                // System.out.println("Selected: " + newValue);
+                //
+                // });
+            } else if (newTab == gridTab) {
                 System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
                 choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                        GraphAlgorithms.BFS);
+                        GraphAlgorithms.BFS, GraphAlgorithms.MAZE);
                 choiceBox.setItems(choiceList);
             }
             graphPane.getChildren().clear();
@@ -210,7 +217,8 @@ public class Controller {
         ARTICULATION_POINTS,
         SCCS,
         MST,
-        ANYCYCLE
+        ANYCYCLE,
+        MAZE
     }
 
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
@@ -316,6 +324,8 @@ public class Controller {
             runAlgo(new MST(), requirements);
         else if (choiceBox.getValue() == GraphAlgorithms.ANYCYCLE)
             runAlgo(new CycleFinding(), requirements);
+        else if (choiceBox.getValue() == GraphAlgorithms.MAZE)
+            runAlgo(new Maze(), requirements);
     }
 
     public void openProperties(ActionEvent e) {
@@ -340,6 +350,8 @@ public class Controller {
                 controller.setListOfProperties(new MST().getProperties());
             else if (choiceBox.getValue() == GraphAlgorithms.ANYCYCLE)
                 controller.setListOfProperties(new CycleFinding().getProperties());
+            else if (choiceBox.getValue() == GraphAlgorithms.MAZE)
+                controller.setListOfProperties(new Maze().getProperties());
             root.show();
         } catch (Exception ex) {
             ex.printStackTrace();

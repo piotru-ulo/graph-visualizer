@@ -1,9 +1,9 @@
 package pl.edu.tcs.graph.model;
 
 public class GridVertex extends GraphVertex {
-    int x = 0;
-    int y = 0;
-    int width = 1;
+    private int x = 0;
+    private int y = 0;
+    private int width = 1;
 
     public GridVertex(int id) {
         super(id);

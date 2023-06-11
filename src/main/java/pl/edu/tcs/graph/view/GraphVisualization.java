@@ -1,7 +1,6 @@
 package pl.edu.tcs.graph.view;
 
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import pl.edu.tcs.graph.model.DrawableEdgeImpl;

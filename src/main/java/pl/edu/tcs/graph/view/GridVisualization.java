@@ -20,14 +20,14 @@ public class GridVisualization implements Visualization {
     private final AnchorPane drawingPane;
     private GridGraph gg;
     private Map<Vertex, DrawableGridVertex> drawableVertexes;
-    double pixelWidth;
-    double pixelHeight;
-    Function<? super DrawableVertex, Object> onClickHandler;
+    private double pixelWidth;
+    private double pixelHeight;
+    private Function<? super DrawableVertex, Object> onClickHandler;
 
-    double vertexSize = 20;
+    private double vertexSize = 20;
 
-    int graphWidth;
-    int graphHeight;
+    private int graphWidth;
+    private int graphHeight;
 
     public double getPosX(GridVertex v) {
         return 1.0f * v.getX() * pixelWidth / graphWidth;

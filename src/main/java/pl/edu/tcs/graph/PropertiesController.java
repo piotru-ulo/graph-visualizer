@@ -20,8 +20,8 @@ public class PropertiesController {
     @FXML
     private Button propertiesOkButton;
     private double y;
-    Map<AlgorithmProperties, Integer> requirements;
-    Collection<Pair<AlgorithmProperties, TextField>> fields;
+    private Map<AlgorithmProperties, Integer> requirements;
+    private Collection<Pair<AlgorithmProperties, TextField>> fields;
 
     @FXML
     private void initialize() {

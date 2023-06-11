@@ -16,6 +16,7 @@ import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
 
 public class Maze implements Algorithm {
+
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
     @Override

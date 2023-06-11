@@ -212,17 +212,16 @@ public class Controller {
             }
             visualization.setVertexActions(vertexActions);
             graphPane.getChildren().clear();
-            choiceBox.getSelectionModel().selectedItemProperty().
-                    addListener((boxObservable, oldValue, newValue) -> {
-                        System.out.println("cz changed to :" + newValue);
-                        if(newValue!=null) {
-                            vertexActions = newValue.algorithm.getVertexActions();
-                            visualization.setVertexActions(vertexActions);
-                        }
-                    });
         });
+        choiceBox.getSelectionModel().selectedItemProperty().
+            addListener((boxObservable, oldValue, newValue) -> {
+                System.out.println("cz changed to :" + newValue);
+                if(newValue!=null) {
+                    vertexActions = newValue.algorithm.getVertexActions();
+                    visualization.setVertexActions(vertexActions);
+                }
+            });
     }
-
 
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
             GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,

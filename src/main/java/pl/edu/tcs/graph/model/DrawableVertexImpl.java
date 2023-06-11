@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -40,6 +41,7 @@ public class DrawableVertexImpl implements DrawableVertex {
     @Override
     public void setActions(Collection<Algorithm.VertexAction> actions) {
         ContextMenu contextMenu = new ContextMenu();
+        if(actions==null) actions = new ArrayList<>();
         for(var action : actions) {
             MenuItem item = new MenuItem(action.getName());
             item.setOnAction(event-> {
@@ -48,9 +50,7 @@ public class DrawableVertexImpl implements DrawableVertex {
             contextMenu.getItems().add(item);
         }
         toDraw.setOnContextMenuRequested(e -> {
-            System.out.println("context menu requested");
-            for(var action: actions)
-                System.out.println(action.getName());
+            System.out.println("cm requested");
             contextMenu.show(circle, Side.BOTTOM, e.getX(), e.getY() - 2 * DrawableVertexImpl.defaultSize);
         });
     }

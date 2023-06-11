@@ -1,11 +1,13 @@
 package pl.edu.tcs.graph.view;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import pl.edu.tcs.graph.model.DrawableGridVertex;
 import pl.edu.tcs.graph.model.GridGraph;
 import pl.edu.tcs.graph.model.GridVertex;
+import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.viewmodel.Edge;
 import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
@@ -20,7 +22,7 @@ public class GridVisualization implements Visualization {
     private Map<Vertex, DrawableGridVertex> drawableVertexes;
     double pixelWidth;
     double pixelHeight;
-    Function<? super DrawableGridVertex, Object> onClickHandler;
+    Function<? super DrawableVertex, Object> onClickHandler;
 
     double vertexSize = 20;
 
@@ -48,7 +50,7 @@ public class GridVisualization implements Visualization {
     }
 
     public GridVisualization(int graphWidth, int graphHeight, double pixelWidth, double pixelHeight,
-            Function<? super DrawableGridVertex, Object> onClickHandler) {
+            Function<? super DrawableVertex, Object> onClickHandler) {
         vertexSize = Math.min(pixelWidth / graphWidth, pixelHeight / graphHeight);
         drawingPane = new AnchorPane();
         gg = new GridGraph(graphWidth, graphHeight);
@@ -61,7 +63,7 @@ public class GridVisualization implements Visualization {
         this.onClickHandler = onClickHandler;
     }
 
-    public void setOnClickHandler(Function<? super DrawableGridVertex, Object> onClickHandler) {
+    public void setOnClickHandler(Function<? super DrawableVertex, Object> onClickHandler) {
         this.onClickHandler = onClickHandler;
         for (var dv : drawableVertexes.values())
             dv.setOnclick(onClickHandler);
@@ -71,6 +73,13 @@ public class GridVisualization implements Visualization {
     public void updateDrawing(boolean redraw) {
         if (redraw) {
             initialize();
+        }
+    }
+
+    @Override
+    public void setVertexContextMenu(ContextMenu cm) {
+        for (var v : drawableVertexes.values()){
+            v.setContextMenu(cm);
         }
     }
 

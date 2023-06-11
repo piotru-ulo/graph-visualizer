@@ -1,6 +1,7 @@
 package pl.edu.tcs.graph.model;
 
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
@@ -41,12 +42,19 @@ public class DrawableGridVertex implements DrawableVertex {
         this.y = y;
         this.size = size;
         toDraw = new Rectangle(x, y, size, size);
+        toDraw.setOnMouseClicked(e -> onClick.apply(this));
         toDraw.setStroke(Paint.valueOf("black"));
         toDraw.setFill(Paint.valueOf("white"));
+    }
+
+    @Override
+    public void setOnclick(Function<? super DrawableVertex, Object> onClick) {
         toDraw.setOnMouseClicked(e -> onClick.apply(this));
     }
 
-    public void setOnclick(Function<? super DrawableGridVertex, Object> onClick) {
+    @Override
+    public void setContextMenu(ContextMenu contextMenu) {
+        toDraw.setOnContextMenuRequested(e -> contextMenu.show(toDraw, e.getSceneX(), e.getSceneY()));
     }
 
     @Override

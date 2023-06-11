@@ -1,7 +1,10 @@
 package pl.edu.tcs.graph.model;
 
+import javafx.geometry.Side;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -10,16 +13,33 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 public class DrawableVertexImpl implements DrawableVertex {
+    public static double defaultSize = 20;
     private Vertex underlyingVertex;
-    private double x, y;
-    private Paint fill;
+    private final StackPane toDraw;
+    private final Circle circle;
+
 
     public DrawableVertexImpl(Vertex underlyingVertex) {
-        x = y = 0.0;
-        fill = javafx.scene.paint.Color.WHITE;
         this.underlyingVertex = underlyingVertex;
+        circle = new Circle(DrawableVertexImpl.defaultSize);
+        circle.setFill(Color.WHITE);
+        circle.setStroke(Color.BLACK);
+        Text text = new Text(Integer.valueOf(getVertex().getId()).toString());
+        toDraw = new StackPane(circle, text);
+    }
+
+    @Override
+    public void setOnclick(Function<? super DrawableVertex, Object> onClick) {
+        toDraw.setOnMouseClicked(e -> onClick.apply(this));
+    }
+
+    @Override
+    public void setContextMenu(ContextMenu contextMenu) {
+        toDraw.setOnContextMenuRequested(e ->
+                contextMenu.show(circle, Side.BOTTOM, e.getX(), e.getY()-2*DrawableVertexImpl.defaultSize));
     }
 
     @Override
@@ -29,43 +49,36 @@ public class DrawableVertexImpl implements DrawableVertex {
 
     @Override
     public void setX(double newX) {
-        x = newX;
+        toDraw.setLayoutX(newX);
     }
 
     @Override
     public void setY(double newY) {
-        y = newY;
+        toDraw.setLayoutY(newY);
     }
 
     @Override
     public double getX() {
-        return x;
+        return toDraw.getLayoutX();
     }
 
     @Override
     public double getY() {
-        return y;
+        return toDraw.getLayoutY();
     }
 
     @Override
     public Collection<Node> toDraw() {
-        Circle circle = new Circle(20.0);
-        circle.setFill(getFill());
-        circle.setStroke(javafx.scene.paint.Color.BLACK);
-        Text text = new Text(Integer.valueOf(getVertex().getId()).toString());
-        StackPane stackPane = new StackPane(circle, text);
-        stackPane.setLayoutX(getX());
-        stackPane.setLayoutY(getY());
-        return List.of(new StackPane[] { stackPane });
+        return List.of(new Node[]{toDraw});
     }
 
     @Override
     public Paint getFill() {
-        return fill;
+        return circle.getFill();
     }
 
     @Override
     public void setFill(Paint newPaint) {
-        fill = newPaint;
+        circle.setFill(newPaint);
     }
 }

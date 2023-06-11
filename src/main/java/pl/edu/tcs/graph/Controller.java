@@ -6,13 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -40,11 +34,15 @@ import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Controller {
+
     private Visualization visualization = new GraphVisualization();
+
+    private Thread algoThread;
     private final AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
         public boolean setVertexColor(Vertex v, int r, int g, int b) {
@@ -113,6 +111,15 @@ public class Controller {
     @FXML
     private CheckBox diGraphCheckBox;
 
+    @FXML
+    private TabPane tabPane;
+
+    @FXML
+    private Tab normalTab;
+
+    @FXML
+    private Tab gridTab;
+
     private boolean diGraph = false;
 
     @FXML
@@ -131,48 +138,6 @@ public class Controller {
                     GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
             choiceBox.setItems(choiceList);
         }
-    }
-
-    private boolean mode = true;
-
-    @FXML
-    private void changeMode() {
-        mode = !mode;
-        if (!mode) { // grid mode
-            gridLabel.setVisible(true);
-            gridAcceptButton.setVisible(true);
-            gridHeightTextField.setVisible(true);
-            gridWidthTextField.setVisible(true);
-            adjListInput.setVisible(false);
-            insertLabel.setVisible(false);
-            acceptFromInput.setVisible(false);
-            randomButton.setVisible(false);
-            diGraph = false;
-            diGraphCheckBox.setSelected(false);
-            diGraphCheckBox.setVisible(false);
-            visualization = new GridVisualization(0, 0, 0, 0);
-            choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                    GraphAlgorithms.BFS);
-            choiceBox.setItems(choiceList);
-
-        } else { // graph mode
-            gridLabel.setVisible(false);
-            gridAcceptButton.setVisible(false);
-            gridHeightTextField.setVisible(false);
-            gridWidthTextField.setVisible(false);
-            adjListInput.setVisible(true);
-            insertLabel.setVisible(true);
-            acceptFromInput.setVisible(true);
-            randomButton.setVisible(true);
-            diGraphCheckBox.setVisible(true);
-            visualization = new GraphVisualization();
-            choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
-                    GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-                    GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS,
-                    GraphAlgorithms.ANYCYCLE);
-            choiceBox.setItems(choiceList);
-        }
-        graphPane.getChildren().clear();
     }
 
     public void changeToGrid() {
@@ -200,12 +165,41 @@ public class Controller {
 
     @FXML
     private void initialize() {
-
         choiceBox.setItems(choiceList);
-        gridLabel.setVisible(false);
-        gridAcceptButton.setVisible(false);
-        gridHeightTextField.setVisible(false);
-        gridWidthTextField.setVisible(false);
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            if(algoThread!=null) {
+                System.out.println("interrupting");
+                isSomeoneRunning = false;
+                algoThread.stop();
+                //TODO: fix the stop?
+            }
+            if (newTab == normalTab) {
+                System.out.println("normal tab ");
+                visualization = new GraphVisualization();
+                choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
+                        GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
+                        GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS,
+                        GraphAlgorithms.ANYCYCLE);
+                choiceBox.setItems(choiceList);
+
+//                choiceBox.getSelectionModel().selectedItemProperty().
+//                        addListener((boxObservable, oldValue, newValue) -> {
+//                            ContextMenu contextMenu = new ContextMenu();
+//                            for(AlgorithmProperties ap : )
+//                            visualization.setVertexContextMenu();
+//                            System.out.println("Selected: " + newValue);
+//
+//                        });
+            }
+            else if(newTab == gridTab) {
+                System.out.println("grid tab");
+                visualization = new GridVisualization(0, 0, 0, 0);
+                choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
+                        GraphAlgorithms.BFS);
+                choiceBox.setItems(choiceList);
+            }
+            graphPane.getChildren().clear();
+        });
     }
 
     private enum GraphAlgorithms {
@@ -277,7 +271,7 @@ public class Controller {
     private boolean isSomeoneRunning = false;
 
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {
-        new Thread(() -> {
+        algoThread = new Thread(() -> {
             try {
                 a.run(visualization.getGraph(), aM, req);
                 isSomeoneRunning = false;
@@ -290,7 +284,8 @@ public class Controller {
                     isSomeoneRunning = false;
                 });
             }
-        }).start();
+        });
+        algoThread.start();
     }
 
     public void runAlgorithm(ActionEvent ev) {
@@ -304,6 +299,7 @@ public class Controller {
                 visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
+
         if (choiceBox.getValue() == GraphAlgorithms.DFS)
             runAlgo(new DFS(), requirements);
         else if (choiceBox.getValue() == GraphAlgorithms.BIPARTITION)

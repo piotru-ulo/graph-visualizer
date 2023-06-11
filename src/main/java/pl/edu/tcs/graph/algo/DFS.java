@@ -5,13 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
 
-public class DFS implements Algorithm {
+public class DFS implements Algorithm<Vertex, Edge> {
     private final Collection<AlgorithmProperties> properties = Arrays.asList(AlgorithmProperties.SOURCE,
             AlgorithmProperties.TARGET);
 
@@ -37,7 +34,7 @@ public class DFS implements Algorithm {
     private boolean found;
     private Map<Vertex, Boolean> visited;
 
-    private void dfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
+    private void dfs(Graph<? extends Vertex, ? extends Edge> g, Vertex u, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         algoMiddleman.setVertexColor(u, 255, 192, 203);
         visited.put(u, true);
@@ -58,7 +55,7 @@ public class DFS implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM,
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
         found = false;

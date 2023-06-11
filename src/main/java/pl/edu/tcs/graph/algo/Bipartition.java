@@ -1,18 +1,12 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
 
-public class Bipartition implements Algorithm {
-    private final Collection<AlgorithmProperties> properties = Arrays.asList();
+public class Bipartition implements Algorithm<Vertex, Edge> {
+    private final Collection<AlgorithmProperties> properties = List.of();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -26,7 +20,7 @@ public class Bipartition implements Algorithm {
 
     private Map<Vertex, Boolean> color;
 
-    private void dfs(boolean col, Graph g, Vertex u, AlgoMiddleman algoMiddleman)
+    private void dfs(boolean col, Graph<? extends Vertex, ? extends Edge> g, Vertex u, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         if (col)
             algoMiddleman.setVertexColor(u, 0, 128, 0);
@@ -43,7 +37,7 @@ public class Bipartition implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         color = new HashMap<>();
         try {

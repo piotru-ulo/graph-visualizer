@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class GridVisualization implements Visualization {
+public class GridVisualization implements Visualization<GridVertex, Edge> {
     private final AnchorPane drawingPane;
     private GridGraph gg;
     private Map<Vertex, DrawableGridVertex> drawableVertexes;
@@ -90,7 +90,7 @@ public class GridVisualization implements Visualization {
     }
 
     @Override
-    public void setGraph(Graph newGraph) {
+    public void setGraph(Graph<? extends Vertex, ? extends Edge> newGraph) {
         if (newGraph instanceof GridGraph) {
             gg = (GridGraph) newGraph;
         } else {

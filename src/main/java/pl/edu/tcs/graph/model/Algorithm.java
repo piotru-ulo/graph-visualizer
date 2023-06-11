@@ -10,7 +10,7 @@ import lombok.Setter;
 import pl.edu.tcs.graph.algo.AlgorithmException;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 
-public interface Algorithm {
+public interface Algorithm<V extends Vertex, E extends Edge> {
 	@AllArgsConstructor
 	class VertexAction implements Function<Vertex, Object> {
 		@Getter @Setter
@@ -26,7 +26,7 @@ public interface Algorithm {
 
 	}
 
-	void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+	void run(Graph<? extends V, ? extends E> g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
 			throws AlgorithmException;
 
 	Collection<AlgorithmProperties> getProperties();

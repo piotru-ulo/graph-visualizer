@@ -1,11 +1,13 @@
 package pl.edu.tcs.graph.viewmodel;
 
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.Vertex;
 
 import java.util.Collection;
 
 public class RescaleDraw implements DrawStrategy {
-    public void draw(double width, double height, Graph graph, Collection<DrawableVertex> dw) {
+    public void draw(double width, double height, Graph<? extends Vertex, ? extends Edge> graph, Collection<DrawableVertex> dw) {
         // rescale
         double x_min = Double.POSITIVE_INFINITY, y_min = Double.POSITIVE_INFINITY;
         double x_max = Double.NEGATIVE_INFINITY, y_max = Double.NEGATIVE_INFINITY;

@@ -1,19 +1,12 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
 
-public class SCC implements Algorithm {
-    private final Collection<AlgorithmProperties> properties = Arrays.asList();
+public class SCC implements Algorithm<Vertex, Edge> {
+    private final Collection<AlgorithmProperties> properties = List.of();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -37,7 +30,7 @@ public class SCC implements Algorithm {
         algoMiddleman.setVertexColor(v, r, g, b);
     }
 
-    private int dfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
+    private int dfs(Graph<? extends Vertex, ? extends Edge> g, Vertex u, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         time++;
         dp.put(u, time);
@@ -66,7 +59,7 @@ public class SCC implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM,
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         vertexList = new Stack<>();
         dp = new HashMap<>();

@@ -2,13 +2,10 @@ package pl.edu.tcs.graph.algo;
 
 import java.util.*;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
 
-public class BFS implements Algorithm {
+public class BFS implements Algorithm<Vertex, Edge> {
     private final Collection<AlgorithmProperties> properties = Arrays.asList(
             AlgorithmProperties.SOURCE,
             AlgorithmProperties.TARGET);
@@ -36,7 +33,7 @@ public class BFS implements Algorithm {
     private Map<Vertex, Boolean> visited;
     private Queue<Vertex> que;
 
-    private void bfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
+    private void bfs(Graph<? extends Vertex,? extends Edge> g, Vertex u, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         que = new LinkedList<>();
         que.add(u);
@@ -60,7 +57,7 @@ public class BFS implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         visited = new HashMap<>();
         try {

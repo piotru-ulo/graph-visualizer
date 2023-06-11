@@ -9,14 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
 
-public class Maze implements Algorithm {
-    private final Collection<AlgorithmProperties> properties = Arrays.asList();
+public class Maze implements Algorithm<Vertex, Edge> {
+    private final Collection<AlgorithmProperties> properties = List.of();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -30,7 +27,7 @@ public class Maze implements Algorithm {
 
     private Set<Vertex> unvisited;
 
-    private int countOccupied(Graph g, Vertex u) {
+    private int countOccupied(Graph<? extends Vertex, ? extends Edge> g, Vertex u) {
         int sum = 0;
         for (Vertex to : g.getIncidentVertices(u)) {
             sum += (unvisited.contains(to) ? 1 : 0);
@@ -38,7 +35,7 @@ public class Maze implements Algorithm {
         return g.getIncidentVertices(u).size() - sum;
     }
 
-    private void dfessa(Graph g, AlgoMiddleman aM, Vertex u) {
+    private void dfessa(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM, Vertex u) {
         unvisited.remove(u);
         List<Vertex> adj = new ArrayList<Vertex>(g.getIncidentVertices(u));
         Collections.shuffle(adj);
@@ -50,11 +47,10 @@ public class Maze implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         unvisited = new HashSet<>();
-        for (Vertex v : g.getVertices())
-            unvisited.add(v);
+        unvisited.addAll(g.getVertices());
         dfessa(g, aM, g.getVertex(0));
         // for(int i = 0; i * i < unvisited.size(); i++) { } maybe remove ~sqrt(unvisited) vertices to make it more interesting?
         for (Vertex v : unvisited) {

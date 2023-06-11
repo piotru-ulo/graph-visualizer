@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GraphVisualization implements Visualization {
+public class GraphVisualization implements Visualization<Vertex, Edge> {
     private AnchorPane drawingPane;
     private int height = 600;
     private int width = 800;
@@ -19,16 +19,16 @@ public class GraphVisualization implements Visualization {
     private Map<Vertex, DrawableVertex> drawableVertexMap;
 
     private Collection<Algorithm.VertexAction> vertexActions = new ArrayList<>();
-    private Graph g;
+    private Graph<? extends Vertex, ? extends Edge> g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
 
     @Override
-    public Graph getGraph() {
-        return g;
+    public Graph<Vertex, Edge> getGraph() {
+        return (Graph<Vertex, Edge>) g;
     }
 
     @Override
-    public void setGraph(Graph newGraph) {
+    public void setGraph(Graph<? extends Vertex, ? extends Edge> newGraph) {
         g = newGraph;
     }
 

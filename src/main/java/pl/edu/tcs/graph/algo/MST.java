@@ -1,12 +1,6 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
@@ -15,8 +9,8 @@ import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
 
-public class MST implements Algorithm {
-    private final Collection<AlgorithmProperties> properties = Arrays.asList();
+public class MST implements Algorithm<Vertex, Edge> {
+    private final Collection<AlgorithmProperties> properties = List.of();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -46,13 +40,13 @@ public class MST implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman algoMiddleman,
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman algoMiddleman,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         forest = new HashMap<>();
         for (Vertex v : g.getVertices())
             forest.put(v, v);
         ArrayList<Edge> edges = new ArrayList<>(g.getEdges());
-        Collections.sort(edges, Comparator.comparingInt(Edge::getWeight));
+        edges.sort(Comparator.comparingInt(Edge::getWeight));
         for (Edge e : edges) {
             if (e.isDirected())
                 throw new AlgorithmException(

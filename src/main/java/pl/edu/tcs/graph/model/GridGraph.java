@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GridGraph implements Graph {
+public class GridGraph implements Graph<GridVertex, Edge> {
     private GridVertex[][] grid; // x, y
     private Edge[][][] edges;
     private int height;
@@ -39,18 +39,18 @@ public class GridGraph implements Graph {
     }
 
     @Override
-    public Collection<Vertex> getVertices() {
+    public Collection<GridVertex> getVertices() {
         return Arrays.stream(grid)
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
-    public Vertex getVertex(int vertexId) {
+    public GridVertex getVertex(int vertexId) {
         return grid[vertexId % width][vertexId / width];
     }
 
-    public Vertex getVertex(int x, int y) {
+    public GridVertex getVertex(int x, int y) {
         return grid[x][y];
     }
 
@@ -88,8 +88,8 @@ public class GridGraph implements Graph {
     }
 
     @Override
-    public Collection<Vertex> getIncidentVertices(Vertex v) {
-        Collection<Vertex> result = new ArrayList<>();
+    public Collection<GridVertex> getIncidentVertices(Vertex v) {
+        Collection<GridVertex> result = new ArrayList<>();
         int id = v.getId();
         int x = id % width;
         int y = id / width;
@@ -105,7 +105,7 @@ public class GridGraph implements Graph {
     }
 
     @Override
-    public Vertex insertVertex(int vertexId) {
+    public GridVertex insertVertex(int vertexId) {
         throw new RuntimeException("inserting a vertex to a grid");
     }
 

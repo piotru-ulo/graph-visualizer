@@ -1,18 +1,12 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
 
-public class CycleFinding implements Algorithm {
-    private final Collection<AlgorithmProperties> properties = Arrays.asList();
+public class CycleFinding implements Algorithm<Vertex, Edge> {
+    private final Collection<AlgorithmProperties> properties = List.of();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -28,7 +22,7 @@ public class CycleFinding implements Algorithm {
     private Map<Vertex, Vertex> vertexParent;
     private Vertex cycleStart, cycleEnd;
 
-    private boolean dfs(Graph g, Vertex u, Vertex par, AlgoMiddleman algoMiddleman)
+    private boolean dfs(Graph<? extends Vertex, ? extends Edge> g, Vertex u, Vertex par, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         vertexColor.put(u, 1);
         algoMiddleman.setVertexColor(u, 250, 25, 25);
@@ -39,7 +33,7 @@ public class CycleFinding implements Algorithm {
                 vertexParent.put(to, u);
                 if (dfs(g, to, u, algoMiddleman))
                     return true;
-            } else if (vertexColor.get(to).equals(Integer.valueOf(1))) {
+            } else if (vertexColor.get(to).equals(1)) {
                 cycleStart = to;
                 cycleEnd = u;
                 return true;
@@ -51,7 +45,7 @@ public class CycleFinding implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM,
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         vertexColor = new HashMap<>();
         vertexParent = new HashMap<>();

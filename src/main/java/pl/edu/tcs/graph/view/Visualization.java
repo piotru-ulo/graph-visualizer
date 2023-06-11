@@ -9,10 +9,10 @@ import pl.edu.tcs.graph.model.Vertex;
 
 import java.util.Collection;
 
-public interface Visualization {
-    Graph getGraph();
+public interface Visualization<V extends Vertex, E extends Edge> {
+    Graph<V, E> getGraph();
 
-    void setGraph(Graph newGraph);
+    void setGraph(Graph<? extends Vertex, ? extends Edge> newGraph);
 
     void initialize();
 

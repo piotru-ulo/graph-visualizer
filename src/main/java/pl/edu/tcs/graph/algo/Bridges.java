@@ -1,18 +1,12 @@
 package pl.edu.tcs.graph.algo;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
 
-public class Bridges implements Algorithm {
-    private final Collection<AlgorithmProperties> properties = Arrays.asList();
+public class Bridges implements Algorithm<Vertex, Edge> {
+    private final Collection<AlgorithmProperties> properties = List.of();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -28,7 +22,7 @@ public class Bridges implements Algorithm {
     private Map<Vertex, Integer> preOrder, low;
     private int time;
 
-    private void dfs(Graph g, Vertex u, Vertex p, AlgoMiddleman algoMiddleman)
+    private void dfs(Graph<? extends Vertex,? extends Edge> g, Vertex u, Vertex p, AlgoMiddleman algoMiddleman)
             throws AlgorithmException {
         visited.put(u, true);
         time++;
@@ -50,8 +44,8 @@ public class Bridges implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM,
-            Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
+    public void run(Graph<? extends Vertex, ? extends Edge> g, AlgoMiddleman aM,
+                    Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
         preOrder = new HashMap<>();
         low = new HashMap<>();

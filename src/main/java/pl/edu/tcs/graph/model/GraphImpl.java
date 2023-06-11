@@ -2,17 +2,12 @@ package pl.edu.tcs.graph.model;
 
 import javafx.util.Pair;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class GraphImpl implements Graph {
-    private Map<Integer, Vertex> vertices;
-    private Map<Integer, Edge> edges;
+public class GraphImpl implements Graph<Vertex, Edge> {
+    private final Map<Integer, Vertex> vertices;
+    private final Map<Integer, Edge> edges;
 
     public GraphImpl() {
         vertices = new HashMap<>();
@@ -21,7 +16,7 @@ public class GraphImpl implements Graph {
 
     @Override
     public Collection<Vertex> getVertices() {
-        return vertices.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(vertices.values());
     }
 
     @Override
@@ -31,7 +26,7 @@ public class GraphImpl implements Graph {
 
     @Override
     public Collection<Edge> getEdges() {
-        return edges.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(edges.values());
     }
 
     @Override
@@ -72,9 +67,7 @@ public class GraphImpl implements Graph {
 
     @Override
     public void removeVertex(Vertex vertex) {
-        getIncidentEdges(vertex).forEach(e -> {
-            removeEdge(e);
-        });
+        getIncidentEdges(vertex).forEach(this::removeEdge);
         vertices.remove(vertex.getId());
     }
 
@@ -99,8 +92,8 @@ public class GraphImpl implements Graph {
                 .orElse(null);
     }
 
-    public static Graph fromAdjacencyList(int[] input) {
-        Graph g = new GraphImpl();
+    public static Graph<Vertex, Edge> fromAdjacencyList(int[] input) {
+        Graph<Vertex, Edge> g = new GraphImpl();
         for (int i = 0; i < input.length; i += 3) {
             if (!g.containsVertex(input[i]))
                 g.insertVertex(input[i]);
@@ -111,8 +104,8 @@ public class GraphImpl implements Graph {
         return g;
     }
 
-    public static Graph randomGraph(int i) {
-        Graph g = new GraphImpl();
+    public static Graph<Vertex, Edge> randomGraph(int i) {
+        Graph<Vertex, Edge> g = new GraphImpl();
         for (i = 0; i < 8; i++)
             g.insertVertex(i);
         Random r = new Random();

@@ -2,30 +2,30 @@ package pl.edu.tcs.graph.model;
 
 import java.util.Collection;
 
-public interface Graph {
-    public Collection<Vertex> getVertices();
+public interface Graph<V extends Vertex, E extends Edge> {
+    Collection<V> getVertices();
 
-    public Vertex getVertex(int vertexId);
+    V getVertex(int vertexId);
 
-    public Collection<Edge> getEdges();
+    Collection<E> getEdges();
 
-    public Edge getEdge(int edgeId);
+    E getEdge(int edgeId);
 
-    public Collection<Edge> getIncidentEdges(Vertex v);
+    Collection<E> getIncidentEdges(Vertex v);
 
-    public Collection<Vertex> getIncidentVertices(Vertex v);
+    Collection<V> getIncidentVertices(Vertex v);
 
-    public Vertex insertVertex(int vertexId);
+    V insertVertex(int vertexId);
 
-    public Edge insertEdge(Vertex from, Vertex to, int edgeWeight, int edgeId);
+    E insertEdge(Vertex from, Vertex to, int edgeWeight, int edgeId);
 
-    public Edge insertEdge(int from, int to, int edgeWeight, int edgeId);
+    E insertEdge(int from, int to, int edgeWeight, int edgeId);
 
-    public void removeVertex(Vertex v);
+    void removeVertex(Vertex v);
 
-    public void removeEdge(Edge e);
+    void removeEdge(Edge e);
 
-    public boolean containsVertex(int i);
+    boolean containsVertex(int i);
 
-    public Edge getCorrespondingEdge(Vertex from, Vertex to);
+    E getCorrespondingEdge(Vertex from, Vertex to);
 }

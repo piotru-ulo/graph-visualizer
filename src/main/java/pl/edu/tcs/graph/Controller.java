@@ -3,45 +3,22 @@ package pl.edu.tcs.graph;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import pl.edu.tcs.graph.algo.AlgorithmException;
-import pl.edu.tcs.graph.algo.Articulation;
-import pl.edu.tcs.graph.algo.BFS;
-import pl.edu.tcs.graph.algo.Bipartition;
-import pl.edu.tcs.graph.algo.Bridges;
-import pl.edu.tcs.graph.algo.CycleFinding;
-import pl.edu.tcs.graph.algo.DFS;
-import pl.edu.tcs.graph.algo.MST;
-import pl.edu.tcs.graph.algo.Maze;
-import pl.edu.tcs.graph.algo.SCC;
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
-import pl.edu.tcs.graph.model.DigraphImpl;
-import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.algo.*;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.view.GraphVisualization;
 import pl.edu.tcs.graph.view.GridVisualization;
 import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Edge;
-import pl.edu.tcs.graph.model.Vertex;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -63,10 +40,10 @@ public class Controller {
         ANYCYCLE(new CycleFinding()),
         MAZE(new Maze());
 
-        private final Algorithm algorithm;
+        private final Algorithm<? extends Vertex, ? extends Edge> algorithm;
     }
 
-    private Visualization visualization = new GraphVisualization();
+    private Visualization<? extends Vertex, ? extends Edge> visualization = new GraphVisualization();
 
     private Collection<Algorithm.VertexAction> vertexActions;
 
@@ -111,33 +88,15 @@ public class Controller {
     @FXML
     private AnchorPane graphPane;
     @FXML
-    private AnchorPane menuPane;
-    @FXML
     private TextArea adjListInput;
     @FXML
     private ChoiceBox<GraphAlgorithms> choiceBox;
-    @FXML
-    private Button runButton;
     @FXML
     private TextField gridHeightTextField;
     @FXML
     private TextField gridWidthTextField;
     @FXML
-    private Button setPropertiesButton;
-    @FXML
     private TextField paintDelayTextField;
-    @FXML
-    private Text gridLabel;
-    @FXML
-    private Button gridAcceptButton;
-    @FXML
-    private Text insertLabel;
-    @FXML
-    private Button acceptFromInput;
-    @FXML
-    private Button randomButton;
-    @FXML
-    private CheckBox diGraphCheckBox;
 
     @FXML
     private TabPane tabPane;
@@ -263,7 +222,8 @@ public class Controller {
         graphPane.getChildren().add(visualization.getNode());
         visualization.initialize();
         try {
-            int[] input = Arrays.stream(adjListInput.getText().split("[\\s\n]+"))
+            int[] input = Arrays.stream(adjListInput.getText().split("[\\s\n" +
+                            "]+"))
                     .mapToInt(Integer::parseInt)
                     .toArray();
             if (input.length % 3 != 0)
@@ -290,10 +250,10 @@ public class Controller {
 
     private boolean isSomeoneRunning = false;
 
-    private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {
+        private <V extends Vertex, E extends Edge> void runAlgo (Algorithm<V, E> a, Map<AlgorithmProperties, Integer> req, Graph<? extends V, ? extends E> graph) {
         algoThread = new Thread(() -> {
             try {
-                a.run(visualization.getGraph(), aM, req);
+                a.run(graph, aM, req);
                 isSomeoneRunning = false;
             } catch (AlgorithmException e) {
                 Platform.runLater(() -> {
@@ -320,8 +280,8 @@ public class Controller {
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
 
-        Algorithm currentAlgo = choiceBox.getValue().getAlgorithm();
-        runAlgo(currentAlgo, requirements);
+        Algorithm<? extends Vertex,? extends Edge> currentAlgo = choiceBox.getValue().getAlgorithm();
+        runAlgo(currentAlgo, requirements, visualization.getGraph());
 
     }
 
@@ -330,7 +290,7 @@ public class Controller {
             URL fxmlLocation = getClass().getResource("/properties.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Stage root = loader.load();
-            PropertiesController controller = loader.<PropertiesController>getController();
+            PropertiesController controller = loader.getController();
             controller.setListOfProperties(choiceBox.getValue().algorithm.getProperties());
             root.show();
         } catch (Exception ex) {

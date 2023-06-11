@@ -73,7 +73,7 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
         }
     }
 
-    private void calculateAttraction(Graph graph, Map<Vertex, DrawableVertex> vertexToDrawable,
+    private void calculateAttraction(Graph<Vertex, Edge> graph, Map<Vertex, DrawableVertex> vertexToDrawable,
                                      Map<DrawableVertex, Double> moveX, Map<DrawableVertex, Double> moveY,
                                      Collection<DrawableVertex> drawableVertices) {
         for (Edge e : graph.getEdges()) {
@@ -141,7 +141,8 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
         temperature = Math.max(2.5, temperature * 0.98);
     }
 
-    public void draw(double width, double height, Graph graph, Collection<DrawableVertex> drawableVertices) {
+    @Override
+    public void draw(double width, double height, Graph<? extends Vertex,? extends Edge> graph, Collection<DrawableVertex> drawableVertices) {
         Map<Vertex, DrawableVertex> vertexToDrawable = new HashMap<>();
         for (DrawableVertex one : drawableVertices)
             vertexToDrawable.put(one.getVertex(), one);

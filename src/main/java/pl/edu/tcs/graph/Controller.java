@@ -52,8 +52,8 @@ public class Controller {
     @Getter
     @RequiredArgsConstructor
     private enum GraphAlgorithms {
-        DFS(new BFS()),
-        BFS(new DFS()),
+        DFS(new DFS()),
+        BFS(new BFS()),
         BIPARTITION(new Bipartition()),
         BRIDGES(new Bridges()),
         ARTICULATION_POINTS(new Articulation()),

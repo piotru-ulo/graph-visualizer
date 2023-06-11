@@ -20,6 +20,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.algo.AlgorithmException;
 import pl.edu.tcs.graph.algo.Articulation;
 import pl.edu.tcs.graph.algo.BFS;
@@ -47,6 +49,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Controller {
+    @Getter
+    @RequiredArgsConstructor
+    private enum GraphAlgorithms {
+        DFS(new BFS()),
+        BFS(new DFS()),
+        BIPARTITION(new Bipartition()),
+        BRIDGES(new Bridges()),
+        ARTICULATION_POINTS(new Articulation()),
+        SCCS(new SCC()),
+        MST(new MST()),
+        ANYCYCLE(new CycleFinding()),
+        MAZE(new Maze());
+
+        private final Algorithm algorithm;
+    }
 
     private Visualization visualization = new GraphVisualization();
 
@@ -190,15 +207,18 @@ public class Controller {
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
 
-                // choiceBox.getSelectionModel().selectedItemProperty().
-                // addListener((boxObservable, oldValue, newValue) -> {
-                // ContextMenu contextMenu = new ContextMenu();
-                // for(AlgorithmProperties ap : )
-                // visualization.setVertexContextMenu();
-                // System.out.println("Selected: " + newValue);
-                //
-                // });
-            } else if (newTab == gridTab) {
+//                choiceBox.getSelectionModel().selectedItemProperty().
+//                        addListener((boxObservable, oldValue, newValue) -> {
+//                            ContextMenu contextMenu = new ContextMenu(
+//                                    new MenuItem("option 1"),
+//                                    new MenuItem("option 2"));
+//                            for(AlgorithmProperties ap : )
+//                            visualization.setVertexContextMenu(contextMenu);
+//                            System.out.println("Selected: " + newValue);
+//
+//                        });
+            }
+            else if(newTab == gridTab) {
                 System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
                 choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
@@ -209,21 +229,10 @@ public class Controller {
         });
     }
 
-    private enum GraphAlgorithms {
-        DFS,
-        BFS,
-        BIPARTITION,
-        BRIDGES,
-        ARTICULATION_POINTS,
-        SCCS,
-        MST,
-        ANYCYCLE,
-        MAZE
-    }
 
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
             GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
+            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE, GraphAlgorithms.MAZE);
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {
@@ -308,24 +317,7 @@ public class Controller {
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
 
-        if (choiceBox.getValue() == GraphAlgorithms.DFS)
-            runAlgo(new DFS(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.BIPARTITION)
-            runAlgo(new Bipartition(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.BFS)
-            runAlgo(new BFS(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.BRIDGES)
-            runAlgo(new Bridges(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.ARTICULATION_POINTS)
-            runAlgo(new Articulation(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.SCCS)
-            runAlgo(new SCC(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.MST)
-            runAlgo(new MST(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.ANYCYCLE)
-            runAlgo(new CycleFinding(), requirements);
-        else if (choiceBox.getValue() == GraphAlgorithms.MAZE)
-            runAlgo(new Maze(), requirements);
+        runAlgo(choiceBox.getValue().getAlgorithm(), requirements);
     }
 
     public void openProperties(ActionEvent e) {
@@ -334,24 +326,7 @@ public class Controller {
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Stage root = loader.load();
             PropertiesController controller = loader.<PropertiesController>getController();
-            if (choiceBox.getValue() == GraphAlgorithms.DFS)
-                controller.setListOfProperties(new DFS().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.BIPARTITION)
-                controller.setListOfProperties(new Bipartition().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.BFS)
-                controller.setListOfProperties(new BFS().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.BRIDGES)
-                controller.setListOfProperties(new Bridges().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.ARTICULATION_POINTS)
-                controller.setListOfProperties(new Articulation().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.SCCS)
-                controller.setListOfProperties(new SCC().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.MST)
-                controller.setListOfProperties(new MST().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.ANYCYCLE)
-                controller.setListOfProperties(new CycleFinding().getProperties());
-            else if (choiceBox.getValue() == GraphAlgorithms.MAZE)
-                controller.setListOfProperties(new Maze().getProperties());
+            controller.setListOfProperties(choiceBox.getValue().algorithm.getProperties());
             root.show();
         } catch (Exception ex) {
             ex.printStackTrace();

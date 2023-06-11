@@ -3,9 +3,9 @@ package pl.edu.tcs.graph.view;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Graph;
-import pl.edu.tcs.graph.viewmodel.Vertex;
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.Vertex;
 
 import java.util.Collection;
 

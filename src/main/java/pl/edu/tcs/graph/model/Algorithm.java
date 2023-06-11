@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.edu.tcs.graph.algo.AlgorithmException;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.viewmodel.Graph;
-import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public interface Algorithm {
 	@AllArgsConstructor

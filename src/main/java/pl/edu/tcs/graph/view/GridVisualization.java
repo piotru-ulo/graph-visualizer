@@ -8,9 +8,9 @@ import pl.edu.tcs.graph.model.DrawableGridVertex;
 import pl.edu.tcs.graph.model.GridGraph;
 import pl.edu.tcs.graph.model.GridVertex;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
-import pl.edu.tcs.graph.viewmodel.Edge;
-import pl.edu.tcs.graph.viewmodel.Graph;
-import pl.edu.tcs.graph.viewmodel.Vertex;
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.Vertex;
 
 import java.util.Collection;
 import java.util.HashMap;

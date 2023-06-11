@@ -8,7 +8,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
-import pl.edu.tcs.graph.viewmodel.Vertex;
 
 import java.util.ArrayList;
 import java.util.Collection;

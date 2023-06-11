@@ -1,7 +1,5 @@
 package pl.edu.tcs.graph.model;
 
-import pl.edu.tcs.graph.viewmodel.Vertex;
-
 class GraphVertex implements Vertex {
     private int id;
     private boolean active = true;

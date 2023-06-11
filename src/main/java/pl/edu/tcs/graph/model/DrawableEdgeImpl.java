@@ -5,7 +5,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import pl.edu.tcs.graph.viewmodel.DrawableEdge;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
-import pl.edu.tcs.graph.viewmodel.Edge;
 
 import java.util.Arrays;
 import java.util.Collection;

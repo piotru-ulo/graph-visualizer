@@ -2,10 +2,7 @@ package pl.edu.tcs.graph.view;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.DrawableEdgeImpl;
-import pl.edu.tcs.graph.model.DrawableVertexImpl;
-import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.viewmodel.*;
 
 import java.util.ArrayList;

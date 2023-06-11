@@ -8,6 +8,7 @@ import pl.edu.tcs.graph.model.DrawableVertexImpl;
 import pl.edu.tcs.graph.model.GraphImpl;
 import pl.edu.tcs.graph.viewmodel.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class GraphVisualization implements Visualization {
 
     private Map<Vertex, DrawableVertex> drawableVertexMap;
 
-    private Collection<Algorithm.VertexAction> vertexActions;
+    private Collection<Algorithm.VertexAction> vertexActions = new ArrayList<>();
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
 
@@ -63,6 +64,8 @@ public class GraphVisualization implements Visualization {
     @Override
     public void setVertexActions(Collection<Algorithm.VertexAction> vcm) {
         vertexActions = vcm;
+        for (var dv : drawableVertexMap.values())
+            dv.setActions(vertexActions);
     }
 
     @Override
@@ -77,9 +80,8 @@ public class GraphVisualization implements Visualization {
         for (Vertex v : g.getVertices())
             drawableVertexMap.putIfAbsent(v, new DrawableVertexImpl(v));
 
-        if (vertexActions != null)
-            for (var dv : drawableVertexMap.values())
-                dv.setActions(vertexActions);
+        for (var dv : drawableVertexMap.values())
+            dv.setActions(vertexActions);
 
         for (Edge e : g.getEdges()) {
             DrawableVertex one = null, two = null;

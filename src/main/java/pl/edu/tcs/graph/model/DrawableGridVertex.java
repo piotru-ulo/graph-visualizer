@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -57,6 +58,7 @@ public class DrawableGridVertex implements DrawableVertex {
     @Override
     public void setActions(Collection<Algorithm.VertexAction> actions) {
         ContextMenu contextMenu = new ContextMenu();
+        if(actions==null) actions = new ArrayList<>();
         for(var action : actions) {
             MenuItem item = new MenuItem(action.getName());
             item.setOnAction(event-> {

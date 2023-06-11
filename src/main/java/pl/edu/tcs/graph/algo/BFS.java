@@ -31,8 +31,8 @@ public class BFS implements Algorithm {
                 })));
     }
 
-    private Vertex targetVertex;
-    private Vertex sourceVertex;
+    private Vertex targetVertex = null;
+    private Vertex sourceVertex = null;
     private Map<Vertex, Boolean> visited;
     private Queue<Vertex> que;
 
@@ -63,16 +63,16 @@ public class BFS implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         visited = new HashMap<>();
-        targetVertex = null;
         try {
             System.out.println(requirements);
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
             if (requirements.get(AlgorithmProperties.TARGET) != null)
                 targetVertex = g.getVertex(requirements.get(AlgorithmProperties.TARGET));
-            bfs(g, sourceVertex, aM);
-            if (sourceVertex==null)
+            if (sourceVertex == null)
                 sourceVertex = g.getVertex(1);
+            bfs(g, sourceVertex, aM);
+            sourceVertex = targetVertex = null;
 
         } catch (AlgorithmException e) {
             throw e;

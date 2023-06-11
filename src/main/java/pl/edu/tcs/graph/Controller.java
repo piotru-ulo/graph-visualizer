@@ -6,7 +6,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -192,7 +200,6 @@ public class Controller {
                 System.out.println("interrupting");
                 isSomeoneRunning = false;
                 algoThread.stop();
-                // TODO: fix the stop?
             }
             if (newTab == normalTab) {
                 System.out.println("normal tab ");
@@ -202,8 +209,7 @@ public class Controller {
                         GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS,
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
-            }
-            else if(newTab == gridTab) {
+            } else if (newTab == gridTab) {
                 System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
                 choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
@@ -212,21 +218,19 @@ public class Controller {
             }
             visualization.setVertexActions(vertexActions);
             graphPane.getChildren().clear();
-            choiceBox.getSelectionModel().selectedItemProperty().
-                    addListener((boxObservable, oldValue, newValue) -> {
-                        System.out.println("cz changed to :" + newValue);
-                        if(newValue!=null) {
-                            vertexActions = newValue.algorithm.getVertexActions();
-                            visualization.setVertexActions(vertexActions);
-                        }
-                    });
+            choiceBox.getSelectionModel().selectedItemProperty().addListener((boxObservable, oldValue, newValue) -> {
+                System.out.println("cz changed to :" + newValue);
+                if (newValue != null) {
+                    vertexActions = newValue.algorithm.getVertexActions();
+                    visualization.setVertexActions(vertexActions);
+                }
+            });
         });
     }
 
-
     ObservableList<GraphAlgorithms> choiceList = FXCollections.observableArrayList(GraphAlgorithms.DFS,
             GraphAlgorithms.BFS, GraphAlgorithms.BIPARTITION, GraphAlgorithms.BRIDGES,
-            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE, GraphAlgorithms.MAZE);
+            GraphAlgorithms.ARTICULATION_POINTS, GraphAlgorithms.MST, GraphAlgorithms.SCCS, GraphAlgorithms.ANYCYCLE);
     private static Map<AlgorithmProperties, Integer> requirements;
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {

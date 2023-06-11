@@ -1,6 +1,5 @@
 package pl.edu.tcs.graph.view;
 
-import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
@@ -80,7 +79,7 @@ public class GridVisualization implements Visualization {
 
     @Override
     public void setVertexActions(Collection<Algorithm.VertexAction> actions) {
-        for (var v : drawableVertexes.values()){
+        for (var v : drawableVertexes.values()) {
             v.setActions(actions);
         }
     }

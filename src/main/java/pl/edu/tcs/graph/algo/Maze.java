@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import pl.edu.tcs.graph.model.Algorithm;
@@ -17,7 +16,7 @@ import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public class Maze implements Algorithm {
-    Collection<AlgorithmProperties> properties = Arrays.asList();
+    private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {

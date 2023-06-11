@@ -12,7 +12,7 @@ import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public class CycleFinding implements Algorithm {
-    private Collection<AlgorithmProperties> properties = Arrays.asList();
+    private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {

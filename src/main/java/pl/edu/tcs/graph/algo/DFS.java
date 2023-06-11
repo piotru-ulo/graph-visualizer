@@ -12,7 +12,7 @@ import pl.edu.tcs.graph.viewmodel.Graph;
 import pl.edu.tcs.graph.viewmodel.Vertex;
 
 public class DFS implements Algorithm {
-    private Collection<AlgorithmProperties> properties = Arrays.asList(AlgorithmProperties.SOURCE,
+    private final Collection<AlgorithmProperties> properties = Arrays.asList(AlgorithmProperties.SOURCE,
             AlgorithmProperties.TARGET);
 
     @Override
@@ -22,10 +22,18 @@ public class DFS implements Algorithm {
 
     @Override
     public Collection<VertexAction> getVertexActions() {
-        return null;
+        return Arrays.asList(
+                new VertexAction("set start", (v -> {
+                    sourceVertex = v;
+                    return null;
+                })),
+                new VertexAction("set end", (v -> {
+                    targetVertex = v;
+                    return null;
+                })));
     }
 
-    private Vertex targetVertex;
+    private Vertex sourceVertex, targetVertex;
     private boolean found;
     private Map<Vertex, Boolean> visited;
 
@@ -53,10 +61,8 @@ public class DFS implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
-        targetVertex = null;
         found = false;
         try {
-            Vertex sourceVertex = g.getVertex(1);
             System.out.println(requirements);
             if (requirements.get(AlgorithmProperties.SOURCE) != null
                     && g.getVertex(requirements.get(AlgorithmProperties.SOURCE)) != null)
@@ -64,7 +70,10 @@ public class DFS implements Algorithm {
             if (requirements.get(AlgorithmProperties.TARGET) != null
                     && g.getVertex(requirements.get(AlgorithmProperties.TARGET)) != null)
                 targetVertex = g.getVertex(requirements.get(AlgorithmProperties.TARGET));
+            if (sourceVertex == null)
+                sourceVertex = g.getVertex(1);
             dfs(g, sourceVertex, aM);
+            sourceVertex = targetVertex = null;
         } catch (AlgorithmException e) {
             throw e;
         }

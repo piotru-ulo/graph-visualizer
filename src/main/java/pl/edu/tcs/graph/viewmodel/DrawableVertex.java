@@ -3,7 +3,6 @@ package pl.edu.tcs.graph.viewmodel;
 import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import pl.edu.tcs.graph.model.Algorithm;
-
 import java.util.Collection;
 import java.util.function.Function;
 

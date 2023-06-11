@@ -32,7 +32,7 @@ public class Bipartition implements Algorithm {
             if (to.isActive() && !color.containsKey(to)) {
                 dfs(!col, g, to, algoMiddleman);
             } else if (to.isActive() && color.get(to).equals(col)) {
-                throw new AlgorithmException("Given graph has negative length cycle.");
+                throw new AlgorithmException("Given graph has an odd-length cycle.");
             }
         }
     }

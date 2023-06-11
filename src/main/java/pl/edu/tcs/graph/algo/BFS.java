@@ -23,6 +23,11 @@ public class BFS implements Algorithm {
         return properties;
     }
 
+    @Override
+    public Collection<VertexAction> getVertexActions() {
+        return null;
+    }
+
     private Vertex targetVertex;
     private Map<Vertex, Boolean> visited;
     private Queue<Vertex> que;

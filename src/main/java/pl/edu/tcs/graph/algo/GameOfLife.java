@@ -25,13 +25,14 @@ public class GameOfLife implements Algorithm {
         alive = new HashSet<>();
         for (Vertex v : g.getVertices()) {
             algoMiddleman.setVertexColor(v, 235, 242, 233);
+            alive.add(v);
         }
     }
 
     private ArrayList<Vertex> hack(Graph g, Vertex v) {
         Set<Vertex> visited = new HashSet<>();
         visited.add(v);
-        for (int rep = 0; rep < 3; rep++) {
+        for (int rep = 0; rep < 2; rep++) {
             for (Vertex u : visited) {
                 Set<Vertex> newVisited = new HashSet<>(visited);
                 for (Vertex to : g.getIncidentVertices(u)) {
@@ -71,9 +72,9 @@ public class GameOfLife implements Algorithm {
                 for (Vertex v : g.getVertices()) {
                     if (willLive(v, g)) {
                         newAlive.add(v);
-                        aM.setVertexColor(v, 147, 112, 82);
-                    } else {
                         aM.setVertexColor(v, 235, 242, 233);
+                    } else {
+                        aM.setVertexColor(v, 147, 112, 82);
                     }
                 }
                 alive = newAlive;
@@ -106,9 +107,9 @@ public class GameOfLife implements Algorithm {
                 alive.add(v);
             if (algoMiddleman != null) {
                 if (!alive.contains(v)) {
-                    algoMiddleman.setVertexColor(v, 235, 242, 233);
-                } else {
                     algoMiddleman.setVertexColor(v, 147, 112, 82);
+                } else {
+                    algoMiddleman.setVertexColor(v, 235, 242, 233);
                 }
             }
             return null;

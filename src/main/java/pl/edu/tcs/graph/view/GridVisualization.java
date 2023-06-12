@@ -138,7 +138,6 @@ public class GridVisualization implements Visualization {
     public boolean setVertexColor(Vertex v, Paint p) {
         if (!drawableVertexes.containsKey(v))
             return false;
-        System.out.println("changed color of " + v.getId() + " to " + p);
         drawableVertexes.get(v).setFill(p);
         return true;
     }

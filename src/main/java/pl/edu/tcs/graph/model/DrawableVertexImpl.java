@@ -23,7 +23,6 @@ public class DrawableVertexImpl implements DrawableVertex {
     private final StackPane toDraw;
     private final Circle circle;
 
-
     public DrawableVertexImpl(Vertex underlyingVertex) {
         this.underlyingVertex = underlyingVertex;
         circle = new Circle(DrawableVertexImpl.defaultSize);
@@ -36,8 +35,7 @@ public class DrawableVertexImpl implements DrawableVertex {
     @Override
     public void setOnclick(Function<? super DrawableVertex, Object> onClick) {
         toDraw.setOnMouseClicked(e -> {
-            if(e.getButton() == MouseButton.PRIMARY) {
-                System.out.println("onclick requested");
+            if (e.getButton() == MouseButton.PRIMARY) {
                 onClick.apply(this);
             }
         });
@@ -46,16 +44,16 @@ public class DrawableVertexImpl implements DrawableVertex {
     @Override
     public void setActions(Collection<Algorithm.VertexAction> actions) {
         ContextMenu contextMenu = new ContextMenu();
-        if(actions==null) actions = new ArrayList<>();
-        for(var action : actions) {
+        if (actions == null)
+            actions = new ArrayList<>();
+        for (var action : actions) {
             MenuItem item = new MenuItem(action.getName());
-            item.setOnAction(event-> {
+            item.setOnAction(event -> {
                 action.apply(underlyingVertex);
             });
             contextMenu.getItems().add(item);
         }
         toDraw.setOnContextMenuRequested(e -> {
-            System.out.println("cm requested");
             contextMenu.show(circle, Side.BOTTOM, e.getX(), e.getY() - 2 * DrawableVertexImpl.defaultSize);
         });
     }
@@ -87,7 +85,7 @@ public class DrawableVertexImpl implements DrawableVertex {
 
     @Override
     public Collection<Node> toDraw() {
-        return List.of(new Node[]{toDraw});
+        return List.of(new Node[] { toDraw });
     }
 
     @Override

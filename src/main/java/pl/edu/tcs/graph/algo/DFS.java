@@ -63,7 +63,6 @@ public class DFS implements Algorithm {
         visited = new HashMap<>();
         found = false;
         try {
-            System.out.println(requirements);
             if (requirements.get(AlgorithmProperties.SOURCE) != null
                     && g.getVertex(requirements.get(AlgorithmProperties.SOURCE)) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));

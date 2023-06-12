@@ -113,12 +113,12 @@ public class GraphImpl implements Graph {
 
     public static Graph randomGraph(int i) {
         Graph g = new GraphImpl();
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 15; i++)
             g.insertVertex(i);
         Random r = new Random();
         Set<Pair<Integer, Integer>> mapka = new HashSet<>();
-        for (i = 0; i < 15; i++) {
-            int a = r.nextInt(8), b = r.nextInt(8);
+        for (i = 0; i < 25; i++) {
+            int a = r.nextInt(15), b = r.nextInt(15);
             if (mapka.contains(new Pair<Integer, Integer>(a, b)) ||
                     mapka.contains(new Pair<Integer, Integer>(b, a)))
                 continue;

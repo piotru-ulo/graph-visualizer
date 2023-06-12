@@ -64,7 +64,6 @@ public class BFS implements Algorithm {
             throws AlgorithmException {
         visited = new HashMap<>();
         try {
-            System.out.println(requirements);
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
             if (requirements.get(AlgorithmProperties.TARGET) != null)

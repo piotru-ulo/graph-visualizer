@@ -41,8 +41,7 @@ public class DrawableGridVertex implements DrawableVertex {
     @Override
     public void setOnclick(Function<? super DrawableVertex, Object> onClick) {
         toDraw.setOnMouseClicked(e -> {
-            if(e.getButton() == MouseButton.PRIMARY) {
-                System.out.println("onclick requested");
+            if (e.getButton() == MouseButton.PRIMARY) {
                 onClick.apply(this);
             }
         });
@@ -52,17 +51,18 @@ public class DrawableGridVertex implements DrawableVertex {
     @Override
     public void setActions(Collection<Algorithm.VertexAction> actions) {
         ContextMenu contextMenu = new ContextMenu();
-        if(actions==null) actions = new ArrayList<>();
-        for(var action : actions) {
+        if (actions == null)
+            actions = new ArrayList<>();
+        for (var action : actions) {
             MenuItem item = new MenuItem(action.getName());
-            item.setOnAction(event-> {
+            item.setOnAction(event -> {
                 action.apply(underlyingVertex);
             });
             contextMenu.getItems().add(item);
         }
         toDraw.setOnContextMenuRequested(e -> {
             contextMenu.show(toDraw, Side.BOTTOM, 0, 0);
-            //naah not the best placement
+            // naah not the best placement
         });
     }
 

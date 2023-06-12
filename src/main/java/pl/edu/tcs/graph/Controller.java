@@ -48,6 +48,7 @@ public class Controller {
         MST(new MST()),
         ANYCYCLE(new CycleFinding()),
         GEOTEST(new TestGeoAlgo()),
+        GAMEOFLIFE(new GameOfLife()),
         MAZE(new Maze());
 
         private final Algorithm algorithm;
@@ -202,14 +203,16 @@ public class Controller {
                         GraphAlgorithms.SCCS,
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
-            } else if (newTab == gridTab) {
+            }
+            else if (newTab == gridTab) {
                 System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,
                         GraphAlgorithms.BFS,
                         GraphAlgorithms.MAZE,
-                        GraphAlgorithms.GEOTEST);
+                        GraphAlgorithms.GEOTEST,
+                        GraphAlgorithms.GAMEOFLIFE);
                 choiceBox.setItems(choiceList);
             }
             visualization.setVertexActions(vertexActions);
@@ -220,6 +223,11 @@ public class Controller {
             if (newValue != null) {
                 vertexActions = newValue.algorithm.getVertexActions();
                 visualization.setVertexActions(vertexActions);
+                if(newValue == GraphAlgorithms.GAMEOFLIFE) {
+                    GameOfLife game = (GameOfLife) newValue.algorithm;
+                    game.initialize(visualization.getGraph(), aM);
+                    visualization.setOnClickHandler(game.getVertexOnclick());
+                }
             }
         });
     }
@@ -305,15 +313,17 @@ public class Controller {
         if (requirements == null)
             requirements = new HashMap<>();
         isSomeoneRunning = true;
-        for (Vertex v : visualization.getGraph().getVertices())
-            if (v.isActive())
-                visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
+
         for (Edge e : visualization.getGraph().getEdges())
             visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
 
         Algorithm currentAlgo = choiceBox.getValue().getAlgorithm();
         runAlgo(currentAlgo, requirements);
 
+        if(!(currentAlgo instanceof GameOfLife))
+            for (Vertex v : visualization.getGraph().getVertices())
+                if (v.isActive())
+                    visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
     }
 
     public void openProperties(ActionEvent e) {

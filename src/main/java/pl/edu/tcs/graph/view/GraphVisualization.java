@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class GraphVisualization implements Visualization {
     private AnchorPane drawingPane;
@@ -64,6 +65,12 @@ public class GraphVisualization implements Visualization {
         if(drawableVertexMap != null)
             for (var dv : drawableVertexMap.values())
                 dv.setActions(vertexActions);
+    }
+
+    @Override
+    public void setOnClickHandler(Function<? super DrawableVertex, Object> onClickHandler) {
+        for (var dv : drawableVertexMap.values())
+            dv.setOnclick(onClickHandler);
     }
 
     @Override

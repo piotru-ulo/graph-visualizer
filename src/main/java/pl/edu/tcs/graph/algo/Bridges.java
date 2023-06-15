@@ -36,7 +36,7 @@ public class Bridges implements Algorithm {
         preOrder.put(u, time);
         low.put(u, time);
         for (Vertex to : g.getIncidentVertices(u)) {
-            if (to == p)
+            if (to.equals(p))
                 continue;
             if (visited.containsKey(to))
                 low.put(u, Math.min(low.get(u), preOrder.get(to)));

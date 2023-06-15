@@ -31,6 +31,7 @@ public class Maze implements Algorithm {
     }
 
     private Set<Vertex> unvisited;
+    private Set<Vertex> touched;
 
     private int countOccupied(Graph g, Vertex u) {
         int sum = 0;
@@ -44,7 +45,9 @@ public class Maze implements Algorithm {
         unvisited.remove(u);
         List<Vertex> adj = new ArrayList<Vertex>(g.getIncidentVertices(u));
         Collections.shuffle(adj);
+        touched.add(u);
         for (Vertex to : adj) {
+            touched.add(to);
             if (unvisited.contains(to) && countOccupied(g, to) <= 1) {
                 dfessa(g, aM, to);
             }
@@ -55,6 +58,7 @@ public class Maze implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         unvisited = new HashSet<>();
+        touched = new HashSet<>();
         for (Vertex v : g.getVertices()) {
             if (!v.isActive())
                 v.setActive(true);
@@ -65,6 +69,11 @@ public class Maze implements Algorithm {
         for (Vertex v : g.getVertices())
             unvisited.add(v);
         dfessa(g, aM, g.getVertex(0));
+        for (Vertex v : g.getVertices()) {
+            if (touched.contains(v))
+                continue;
+            dfessa(g, aM, v);
+        }
         // for(int i = 0; i * i < unvisited.size(); i++) { } maybe remove
         // ~sqrt(unvisited) vertices to make it more interesting?
         for (Vertex v : unvisited) {

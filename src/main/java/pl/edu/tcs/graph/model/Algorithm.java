@@ -13,7 +13,8 @@ import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 public interface Algorithm {
 	@AllArgsConstructor
 	class VertexAction implements Function<Vertex, Object> {
-		@Getter @Setter
+		@Getter
+		@Setter
 		private String name;
 
 		@Override
@@ -21,7 +22,8 @@ public interface Algorithm {
 			return f.apply(v);
 		}
 
-		@Getter @Setter
+		@Getter
+		@Setter
 		private Function<? super Vertex, Object> f;
 
 	}

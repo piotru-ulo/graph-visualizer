@@ -29,7 +29,7 @@ public class Articulation implements Algorithm {
     private Map<Vertex, Integer> preOrder, low;
     private int time;
 
-    private void dfs(Graph g, Vertex u, Vertex p, AlgoMiddleman aM)
+    private void dfs(Graph g, Vertex u, Vertex p, Vertex startVertex, AlgoMiddleman aM)
             throws AlgorithmException {
         visited.put(u, true);
         time++;
@@ -42,14 +42,14 @@ public class Articulation implements Algorithm {
             if (visited.containsKey(to))
                 low.put(u, Math.min(low.get(u), preOrder.get(to)));
             else {
-                dfs(g, to, u, aM);
+                dfs(g, to, u, startVertex, aM);
                 low.put(u, Math.min(low.get(u), low.get(to)));
-                if (low.get(to) >= preOrder.get(u) && p != g.getVertex(1))
+                if (low.get(to) >= preOrder.get(u) && !u.equals(startVertex))
                     aM.setVertexColor(u, 255, 160, 122);
                 ++childrenCount;
             }
         }
-        if (p.equals(g.getVertex(1)) && childrenCount > 1)
+        if (u.equals(startVertex) && childrenCount > 1)
             aM.setVertexColor(u, 255, 0, 0);
     }
 
@@ -69,7 +69,7 @@ public class Articulation implements Algorithm {
         try {
             for (Vertex v : g.getVertices())
                 if (v.isActive() && !visited.containsKey(v))
-                    dfs(g, v, v, aM);
+                    dfs(g, v, v, v, aM);
         } catch (AlgorithmException e) {
             throw e;
         }

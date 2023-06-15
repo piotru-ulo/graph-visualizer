@@ -55,7 +55,7 @@ public class SCC implements Algorithm {
                     low = Math.min(low, dfs(g, to, algoMiddleman));
             }
         }
-        if (Integer.valueOf(low).equals(dp.get(u))) {
+        if (low == dp.get(u)) {
             componentCount++;
             Vertex v = null;
             do {

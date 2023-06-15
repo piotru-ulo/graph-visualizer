@@ -76,6 +76,7 @@ public class DFS implements Algorithm {
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
         found = false;
+        rainbowRate = 7.0/g.getVertices().size();
         for (Vertex v : g.getVertices())
             if (v.isActive())
                 algoMiddleman.instantSetVertexColor(v, new int[]{255, 255, 255});

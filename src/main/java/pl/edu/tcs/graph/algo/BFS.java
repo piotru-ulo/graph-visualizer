@@ -83,6 +83,7 @@ public class BFS implements Algorithm {
     @Override
     public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
+        rainbowRate = 7.0/g.getVertices().size();
         visited = new HashMap<>();
         for (Vertex v : g.getVertices())
             if (v.isActive())

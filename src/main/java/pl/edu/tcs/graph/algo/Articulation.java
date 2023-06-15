@@ -7,6 +7,7 @@ import java.util.Map;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -36,7 +37,7 @@ public class Articulation implements Algorithm {
         low.put(u, time);
         int childrenCount = 0;
         for (Vertex to : g.getIncidentVertices(u)) {
-            if (to.equals(p))
+            if (to.equals(p) || !to.isActive())
                 continue;
             if (visited.containsKey(to))
                 low.put(u, Math.min(low.get(u), preOrder.get(to)));
@@ -55,12 +56,20 @@ public class Articulation implements Algorithm {
     @Override
     public void run(Graph g, AlgoMiddleman aM,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
+        for (Vertex v : g.getVertices())
+            if (v.isActive())
+                aM.instantSetVertexColor(v, 255, 255, 255);
+        for (Edge e : g.getEdges())
+            aM.instantSetEdgeColor(e, 0, 0, 0);
+
         visited = new HashMap<>();
         preOrder = new HashMap<>();
         low = new HashMap<>();
         time = 0;
         try {
-            dfs(g, g.getVertex(1), g.getVertex(1), aM);
+            for (Vertex v : g.getVertices())
+                if (v.isActive() && !visited.containsKey(v))
+                    dfs(g, v, v, aM);
         } catch (AlgorithmException e) {
             throw e;
         }

@@ -2,6 +2,7 @@ package pl.edu.tcs.graph.algo;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
@@ -40,7 +41,8 @@ public class Astar implements Algorithm {
 
     Double getScore(Vertex from, Vertex to, AlgoMiddleman algoMiddleman) {
         return Math.pow(algoMiddleman.getX(from).get().doubleValue() - algoMiddleman.getX(to).get().doubleValue(), 2)
-                + Math.pow(algoMiddleman.getY(from).get().doubleValue() - algoMiddleman.getY(to).get().doubleValue(), 2);
+                + Math.pow(algoMiddleman.getY(from).get().doubleValue() - algoMiddleman.getY(to).get().doubleValue(),
+                        2);
     }
 
     private class Location implements Comparable<Location> {
@@ -87,6 +89,9 @@ public class Astar implements Algorithm {
     @Override
     public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
+        for (Vertex v : g.getVertices())
+            if (v.isActive())
+                aM.instantSetVertexColor(v, 255, 255, 255);
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));

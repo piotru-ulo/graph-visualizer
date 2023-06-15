@@ -7,6 +7,7 @@ import java.util.Map;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -33,7 +34,7 @@ public class CycleFinding implements Algorithm {
         vertexColor.put(u, 1);
         algoMiddleman.setVertexColor(u, 250, 25, 25);
         for (Vertex to : g.getIncidentVertices(u)) {
-            if (to.equals(par))
+            if (to.equals(par) || !to.isActive())
                 continue;
             if (!vertexColor.containsKey(to)) {
                 vertexParent.put(to, u);
@@ -57,7 +58,12 @@ public class CycleFinding implements Algorithm {
         vertexParent = new HashMap<>();
         cycleStart = cycleEnd = null;
         for (Vertex v : g.getVertices())
-            if (!vertexColor.containsKey(v) && dfs(g, v, v, aM))
+            if (v.isActive())
+                aM.instantSetVertexColor(v, 255, 255, 255);
+        for (Edge e : g.getEdges())
+            aM.instantSetEdgeColor(e, 0, 0, 0);
+        for (Vertex v : g.getVertices())
+            if (v.isActive() && !vertexColor.containsKey(v) && dfs(g, v, v, aM))
                 break;
         if (cycleStart != null) {
             for (Vertex me = cycleEnd; me != null && !me.equals(cycleStart); me = vertexParent.get(me)) {

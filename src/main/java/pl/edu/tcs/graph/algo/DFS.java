@@ -7,6 +7,7 @@ import java.util.Map;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -62,6 +63,11 @@ public class DFS implements Algorithm {
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
         found = false;
+        for (Vertex v : g.getVertices())
+            if (v.isActive())
+                aM.instantSetVertexColor(v, 255, 255, 255);
+        for (Edge e : g.getEdges())
+            aM.instantSetEdgeColor(e, 0, 0, 0);
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null
                     && g.getVertex(requirements.get(AlgorithmProperties.SOURCE)) != null)

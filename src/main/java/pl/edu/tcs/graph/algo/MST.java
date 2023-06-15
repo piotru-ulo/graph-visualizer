@@ -53,6 +53,8 @@ public class MST implements Algorithm {
             forest.put(v, v);
         ArrayList<Edge> edges = new ArrayList<>(g.getEdges());
         Collections.sort(edges, Comparator.comparingInt(Edge::getWeight));
+        for (Edge e : g.getEdges())
+            algoMiddleman.instantSetEdgeColor(e, 0, 0, 0);
         for (Edge e : edges) {
             if (e.isDirected())
                 throw new AlgorithmException(

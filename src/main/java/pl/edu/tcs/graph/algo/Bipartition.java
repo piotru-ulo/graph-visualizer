@@ -7,6 +7,7 @@ import java.util.Map;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -46,9 +47,14 @@ public class Bipartition implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         color = new HashMap<>();
+        for (Vertex v : g.getVertices())
+            if (v.isActive())
+                aM.instantSetVertexColor(v, 255, 255, 255);
+        for (Edge e : g.getEdges())
+            aM.instantSetEdgeColor(e, 0, 0, 0);
         try {
             for (Vertex v : g.getVertices()) {
-                if (color.containsKey(v))
+                if (!v.isActive() || color.containsKey(v))
                     continue;
                 dfs(false, g, v, aM);
             }

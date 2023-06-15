@@ -7,6 +7,7 @@ import java.util.Map;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -56,8 +57,14 @@ public class Bridges implements Algorithm {
         preOrder = new HashMap<>();
         low = new HashMap<>();
         time = 0;
+        for (Vertex v : g.getVertices())
+            aM.instantSetVertexColor(v, 255, 255, 255);
+        for (Edge e : g.getEdges())
+            aM.instantSetEdgeColor(e, 0, 0, 0);
         try {
-            dfs(g, g.getVertex(1), g.getVertex(1), aM);
+            for (Vertex v : g.getVertices())
+                if (v.isActive() && !visited.containsKey(v))
+                    dfs(g, v, v, aM);
         } catch (AlgorithmException e) {
             throw e;
         }

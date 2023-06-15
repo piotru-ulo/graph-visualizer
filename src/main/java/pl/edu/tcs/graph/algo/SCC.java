@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -45,6 +46,8 @@ public class SCC implements Algorithm {
         vertexList.add(u);
         colorVertex(u, algoMiddleman, 123);
         for (Vertex to : g.getIncidentVertices(u)) {
+            if (!to.isActive())
+                continue;
             if (!vertexComponentId.containsKey(to)) {
                 if (dp.containsKey(to))
                     low = Math.min(low, dp.get(to));
@@ -72,9 +75,14 @@ public class SCC implements Algorithm {
         dp = new HashMap<>();
         vertexComponentId = new HashMap<>();
         time = componentCount = 0;
+        for (Vertex v : g.getVertices())
+            if (v.isActive())
+                aM.instantSetVertexColor(v, 255, 255, 255);
+        for (Edge e : g.getEdges())
+            aM.instantSetEdgeColor(e, 0, 0, 0);
         try {
             for (Vertex v : g.getVertices()) {
-                if (vertexComponentId.containsKey(v))
+                if (!v.isActive() || vertexComponentId.containsKey(v))
                     continue;
                 dfs(g, v, aM);
             }

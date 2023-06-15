@@ -11,6 +11,7 @@ import java.util.Set;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -54,10 +55,18 @@ public class Maze implements Algorithm {
     public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         unvisited = new HashSet<>();
+        for (Vertex v : g.getVertices()) {
+            if (!v.isActive())
+                v.setActive(true);
+            aM.instantSetVertexColor(v, 255, 255, 255);
+        }
+        for (Edge e : g.getEdges())
+            aM.instantSetEdgeColor(e, 0, 0, 0);
         for (Vertex v : g.getVertices())
             unvisited.add(v);
         dfessa(g, aM, g.getVertex(0));
-        // for(int i = 0; i * i < unvisited.size(); i++) { } maybe remove ~sqrt(unvisited) vertices to make it more interesting?
+        // for(int i = 0; i * i < unvisited.size(); i++) { } maybe remove
+        // ~sqrt(unvisited) vertices to make it more interesting?
         for (Vertex v : unvisited) {
             v.setActive(false);
             aM.setVertexColor(v, 100, 100, 100);

@@ -79,6 +79,28 @@ public class Controller {
         }
 
         @Override
+        public boolean instantSetVertexColor(Vertex v, int r, int g, int b) {
+            boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
+            Platform.runLater((() -> {
+                visualization.updateDrawing(false);
+                stage.setScene(scene);
+                stage.show();
+            }));
+            return result;
+        }
+
+        @Override
+        public boolean instantSetEdgeColor(Edge e, int r, int g, int b) {
+            boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
+            Platform.runLater((() -> {
+                visualization.updateDrawing(false);
+                stage.setScene(scene);
+                stage.show();
+            }));
+            return result;
+        }
+
+        @Override
         public boolean setEdgeColor(Edge e, int r, int g, int b) {
             boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             try {
@@ -210,7 +232,10 @@ public class Controller {
                         GraphAlgorithms.DFS,
                         GraphAlgorithms.BFS,
                         GraphAlgorithms.MAZE,
-                        GraphAlgorithms.ASTAR);
+                        GraphAlgorithms.ASTAR,
+                        GraphAlgorithms.SCCS,
+                        GraphAlgorithms.ANYCYCLE,
+                        GraphAlgorithms.ARTICULATION_POINTS);
                 choiceBox.setItems(choiceList);
             }
             visualization.setVertexActions(vertexActions);
@@ -218,7 +243,9 @@ public class Controller {
         });
         choiceBox.getSelectionModel().selectedItemProperty().addListener((boxObservable, oldValue, newValue) -> {
             if (newValue != null) {
-                vertexActions = new ArrayList<>(newValue.algorithm.getVertexActions());
+                vertexActions = new ArrayList<VertexAction>();
+                if (newValue.algorithm.getVertexActions() != null)
+                    vertexActions.addAll(newValue.algorithm.getVertexActions());
                 vertexActions.add(new VertexAction("choose color", (v -> {
                     Stage popupStage = new Stage();
                     popupStage.initModality(Modality.APPLICATION_MODAL);
@@ -319,11 +346,6 @@ public class Controller {
         if (requirements == null)
             requirements = new HashMap<>();
         isSomeoneRunning = true;
-        for (Vertex v : visualization.getGraph().getVertices())
-            if (v.isActive())
-                visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
-        for (Edge e : visualization.getGraph().getEdges())
-            visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
 
         Algorithm currentAlgo = choiceBox.getValue().getAlgorithm();
         runAlgo(currentAlgo, requirements);

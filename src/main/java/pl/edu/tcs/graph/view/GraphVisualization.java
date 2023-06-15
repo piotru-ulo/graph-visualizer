@@ -1,11 +1,17 @@
 package pl.edu.tcs.graph.view;
 
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import pl.edu.tcs.graph.model.*;
+import pl.edu.tcs.graph.model.Algorithm.VertexAction;
 import pl.edu.tcs.graph.viewmodel.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,9 +67,11 @@ public class GraphVisualization implements Visualization {
     @Override
     public void setVertexActions(Collection<Algorithm.VertexAction> vcm) {
         vertexActions = vcm;
-        if (drawableVertexMap != null)
-            for (var dv : drawableVertexMap.values())
+        if (drawableVertexMap != null) {
+            for (DrawableVertex dv : drawableVertexMap.values()) {
                 dv.setActions(vertexActions);
+            }
+        }
     }
 
     @Override

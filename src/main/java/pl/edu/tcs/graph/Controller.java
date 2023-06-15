@@ -7,26 +7,32 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.algo.*;
 import pl.edu.tcs.graph.model.*;
+import pl.edu.tcs.graph.model.Algorithm.VertexAction;
 import pl.edu.tcs.graph.view.GraphVisualization;
 import pl.edu.tcs.graph.view.GridVisualization;
 import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -212,7 +218,22 @@ public class Controller {
         });
         choiceBox.getSelectionModel().selectedItemProperty().addListener((boxObservable, oldValue, newValue) -> {
             if (newValue != null) {
-                vertexActions = newValue.algorithm.getVertexActions();
+                vertexActions = new ArrayList<>(newValue.algorithm.getVertexActions());
+                vertexActions.add(new VertexAction("choose color", (v -> {
+                    Stage popupStage = new Stage();
+                    popupStage.initModality(Modality.APPLICATION_MODAL);
+                    ColorPicker colorPicker = new ColorPicker();
+                    Button submit = new Button("submit");
+                    submit.setOnAction(e -> {
+                        visualization.setVertexColor(v, colorPicker.getValue());
+                        popupStage.close();
+                    });
+                    VBox root = new VBox(colorPicker, submit);
+                    Scene scene = new Scene(root, 300, 200);
+                    popupStage.setScene(scene);
+                    popupStage.showAndWait();
+                    return null;
+                })));
                 visualization.setVertexActions(vertexActions);
             }
         });

@@ -147,4 +147,11 @@ public class GridVisualization implements Visualization {
         return false;
     }
 
+    public void setHeight(int height) {
+        this.graphHeight = height;
+    }
+    public void setWidth(int width) {
+        this.graphWidth = width;
+    }
+
 }

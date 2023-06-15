@@ -25,4 +25,7 @@ public interface Visualization {
     boolean setEdgeColor(Edge e, Paint p);
 
     void setVertexActions(Collection<Algorithm.VertexAction> vertexActions);
+
+    void setWidth(int width);
+    void setHeight(int height);
 }

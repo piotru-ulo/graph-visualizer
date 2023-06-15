@@ -57,7 +57,6 @@ public class Controller {
         private final Algorithm algorithm;
     }
 
-    private Visualization visualization = new GraphVisualization();
 
     private Collection<Algorithm.VertexAction> vertexActions;
 
@@ -158,6 +157,7 @@ public class Controller {
     private Tab gridTab;
 
     private boolean diGraph = false;
+    private Visualization visualization = new GraphVisualization();
 
     @FXML
     private void diGraphSwitch() {
@@ -216,6 +216,7 @@ public class Controller {
             }
             if (newTab == normalTab) {
                 visualization = new GraphVisualization();
+                System.out.println(graphPane.getWidth() + " " + graphPane.getHeight());
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,
                         GraphAlgorithms.BFS,
@@ -276,6 +277,8 @@ public class Controller {
     }
 
     public void nextGraph(ActionEvent e) {
+        visualization.setWidth((int)graphPane.getWidth());
+        visualization.setHeight((int)graphPane.getHeight());
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -290,6 +293,8 @@ public class Controller {
     }
 
     public void graphFromInput(ActionEvent e) {
+        visualization.setWidth((int)graphPane.getWidth());
+        visualization.setHeight((int)graphPane.getHeight());
         mainPane.lookup("graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());

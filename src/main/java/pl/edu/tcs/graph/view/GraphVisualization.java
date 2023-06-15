@@ -6,6 +6,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import pl.edu.tcs.graph.Controller;
 import pl.edu.tcs.graph.model.*;
 import pl.edu.tcs.graph.model.Algorithm.VertexAction;
 import pl.edu.tcs.graph.viewmodel.*;
@@ -27,6 +28,12 @@ public class GraphVisualization implements Visualization {
     private Collection<Algorithm.VertexAction> vertexActions = new ArrayList<>();
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
+    public void setWidth(int width) {
+        this.width = width - 10;
+    }
+    public void setHeight(int height) {
+        this.height = height - 10;
+    }
 
     @Override
     public Graph getGraph() {

@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class GraphVisualization implements Visualization {
     private AnchorPane drawingPane;
-    private int height = 900;
-    private int width = 1420;
+    private int height = 600;
+    private int width = 800;
     public static final double magic = 15 * Math.sqrt(2); // TODO: FIX THIS!
 
     private Map<Vertex, DrawableVertex> drawableVertexMap;

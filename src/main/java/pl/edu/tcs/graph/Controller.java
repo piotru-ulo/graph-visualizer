@@ -7,8 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
@@ -17,7 +15,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import lombok.Getter;
@@ -180,6 +177,7 @@ public class Controller {
         stage.show();
     }
 
+    @SuppressWarnings("deprecation")
     @FXML
     private void initialize() {
         choiceBox.setItems(choiceList);
@@ -308,7 +306,6 @@ public class Controller {
 
         Algorithm currentAlgo = choiceBox.getValue().getAlgorithm();
         runAlgo(currentAlgo, requirements);
-
     }
 
     public void openProperties(ActionEvent e) {

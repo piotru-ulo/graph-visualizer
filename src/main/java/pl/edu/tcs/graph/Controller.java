@@ -57,13 +57,15 @@ public class Controller {
         private final Algorithm algorithm;
     }
 
-
     private Collection<Algorithm.VertexAction> vertexActions;
 
     private Thread algoThread;
     private final AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
-        public boolean setVertexColor(Vertex v, int r, int g, int b) {
+        public boolean setVertexColor(Vertex v, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
             boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
@@ -76,10 +78,35 @@ public class Controller {
             }));
             return result;
         }
+        @Override
+        public boolean setVertexColor(Vertex v, int r, int g, int b) {
+            return setVertexColor(v, new int[]{r, g, b});
+        }
 
         @Override
-        public boolean instantSetVertexColor(Vertex v, int r, int g, int b) {
+        public boolean instantSetVertexColor(Vertex v, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
             boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
+            Platform.runLater((() -> {
+                visualization.updateDrawing(false);
+                stage.setScene(scene);
+                stage.show();
+            }));
+            return result;
+        }
+        @Override
+        public boolean instantSetVertexColor(Vertex v, int r, int g, int b) {
+            return instantSetVertexColor(v, new int[] {r, g, b});
+        }
+
+        @Override
+        public boolean instantSetEdgeColor(Edge e, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
+            boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
                 stage.setScene(scene);
@@ -90,17 +117,14 @@ public class Controller {
 
         @Override
         public boolean instantSetEdgeColor(Edge e, int r, int g, int b) {
-            boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
-            Platform.runLater((() -> {
-                visualization.updateDrawing(false);
-                stage.setScene(scene);
-                stage.show();
-            }));
-            return result;
+            return instantSetEdgeColor(e, new int[] {r, g, b});
         }
 
         @Override
-        public boolean setEdgeColor(Edge e, int r, int g, int b) {
+        public boolean setEdgeColor(Edge e, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
             boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
@@ -112,6 +136,10 @@ public class Controller {
                 stage.show();
             }));
             return result;
+        }
+
+        public boolean setEdgeColor(Edge e, int r, int g, int b) {
+            return setEdgeColor(e, new int[] {r, g, b});
         }
 
         @Override

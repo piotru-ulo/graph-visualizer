@@ -61,7 +61,7 @@ public class MST implements Algorithm {
         ArrayList<Edge> edges = new ArrayList<>(g.getEdges());
         edges.sort(Comparator.comparingInt(Edge::getWeight));
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, 0, 0, 0);
+            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
         for (Edge e : edges) {
             if (e.isDirected())
                 throw new AlgorithmException(
@@ -74,7 +74,7 @@ public class MST implements Algorithm {
                     two = v;
             }
             if (mergeComponents(one, two))
-                aM.setEdgeColor(e, 255, 182, 193);
+                aM.setEdgeColor(e, new int[]{255, 182, 193});
         }
     }
 }

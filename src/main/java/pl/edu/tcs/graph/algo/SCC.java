@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.view.Colors;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -41,7 +42,7 @@ public class SCC implements Algorithm {
         int r = 7123 * component % 256;
         int g = 2136 * component % 256;
         int b = 8753 * component % 256;
-        algoMiddleman.setVertexColor(v, r, g, b);
+        algoMiddleman.setVertexColor(v, new int[]{r, g, b});
     }
 
     private int dfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
@@ -83,9 +84,9 @@ public class SCC implements Algorithm {
         time = componentCount = 0;
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, 255, 255, 255);
+                aM.instantSetVertexColor(v, Colors.white);
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, 0, 0, 0);
+            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
         try {
             for (Vertex v : g.getVertices()) {
                 if (!v.isActive() || vertexComponentId.containsKey(v))

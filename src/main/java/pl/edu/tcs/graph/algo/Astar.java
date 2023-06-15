@@ -7,6 +7,7 @@ import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.view.Colors;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 
 import java.util.Arrays;
@@ -75,9 +76,9 @@ public class Astar implements Algorithm {
         queue.add(new Location(sourceVertex, 0.0));
         while (!queue.isEmpty()) {
             Location location = queue.poll();
-            algoMiddleman.setVertexColor(location.vertex, 127, 255, 212);
+            algoMiddleman.setVertexColor(location.vertex, new int[]{127, 255, 212});
             if (location.vertex.equals(targetVertex)) {
-                algoMiddleman.setVertexColor(location.vertex, 212, 175, 55);
+                algoMiddleman.setVertexColor(location.vertex, new int[]{212, 175, 55});
                 return;
             }
             for (Vertex to : g.getIncidentVertices(location.vertex)) {
@@ -87,10 +88,10 @@ public class Astar implements Algorithm {
                 if (!minDist.containsKey(to) || minDist.get(to).compareTo(score) > 0) {
                     minDist.put(to, score);
                     queue.add(new Location(to, getScore(to, targetVertex, algoMiddleman)));
-                    algoMiddleman.setVertexColor(to, 250, 240, 230);
+                    algoMiddleman.setVertexColor(to, new int[]{250, 240, 230});
                 }
             }
-            algoMiddleman.setVertexColor(location.vertex, 138, 43, 226);
+            algoMiddleman.setVertexColor(location.vertex, new int[]{138, 43, 226});
         }
     }
 
@@ -99,7 +100,7 @@ public class Astar implements Algorithm {
             throws AlgorithmException {
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                algoMiddleman.instantSetVertexColor(v, 255, 255, 255);
+                algoMiddleman.instantSetVertexColor(v, Colors.white);
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));

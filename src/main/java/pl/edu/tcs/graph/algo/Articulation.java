@@ -52,12 +52,12 @@ public class Articulation implements Algorithm {
                 dfs(g, to, u, startVertex, aM);
                 low.put(u, Math.min(low.get(u), low.get(to)));
                 if (low.get(to) >= preOrder.get(u) && !u.equals(startVertex))
-                    aM.setVertexColor(u, 255, 160, 122);
+                    aM.setVertexColor(u, new int[] {255, 160, 122});
                 ++childrenCount;
             }
         }
         if (u.equals(startVertex) && childrenCount > 1)
-            aM.setVertexColor(u, 255, 0, 0);
+            aM.setVertexColor(u, new int[]{255, 0, 0});
     }
 
     @Override
@@ -65,9 +65,9 @@ public class Articulation implements Algorithm {
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, 255, 255, 255);
+                aM.instantSetVertexColor(v, new int[]{255, 255, 255});
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, 0, 0, 0);
+            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
 
         visited = new HashMap<>();
         preOrder = new HashMap<>();

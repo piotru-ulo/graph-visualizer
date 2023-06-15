@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.view.Colors;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
@@ -39,7 +40,7 @@ public class CycleFinding implements Algorithm {
     private boolean dfs(Graph g, Vertex u, Vertex par)
             throws AlgorithmException {
         vertexColor.put(u, 1);
-        aM.setVertexColor(u, 250, 25, 25);
+        aM.setVertexColor(u, new int[]{250, 25, 25});
         for (Vertex to : g.getIncidentVertices(u)) {
             if (to.equals(par) || !to.isActive())
                 continue;
@@ -54,7 +55,7 @@ public class CycleFinding implements Algorithm {
             }
         }
         vertexColor.put(u, 2);
-        aM.setVertexColor(u, 25, 250, 25);
+        aM.setVertexColor(u, new int[]{25, 250, 25});
         return false;
     }
 
@@ -66,17 +67,17 @@ public class CycleFinding implements Algorithm {
         cycleStart = cycleEnd = null;
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, 255, 255, 255);
+                aM.instantSetVertexColor(v, Colors.white);
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, 0, 0, 0);
+            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
         for (Vertex v : g.getVertices())
             if (v.isActive() && !vertexColor.containsKey(v) && dfs(g, v, v))
                 break;
         if (cycleStart != null) {
             for (Vertex me = cycleEnd; me != null && !me.equals(cycleStart); me = vertexParent.get(me)) {
-                aM.setVertexColor(me, 25, 25, 250);
+                aM.setVertexColor(me, new int[]{25, 25, 250});
             }
-            aM.setVertexColor(cycleStart, 25, 25, 250);
+            aM.setVertexColor(cycleStart, new int[]{25, 25, 250});
         }
     }
 }

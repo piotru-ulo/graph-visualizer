@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
-
 public class Maze implements Algorithm {
 
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
@@ -29,7 +30,12 @@ public class Maze implements Algorithm {
     public Collection<VertexAction> getVertexActions() {
         return null;
     }
+    AlgoMiddleman aM;
 
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.aM = aM;
+    }
     private Set<Vertex> unvisited;
     private Set<Vertex> touched;
 
@@ -41,7 +47,7 @@ public class Maze implements Algorithm {
         return g.getIncidentVertices(u).size() - sum;
     }
 
-    private void dfessa(Graph g, AlgoMiddleman aM, Vertex u) {
+    private void dfessa(Graph g, Vertex u) {
         unvisited.remove(u);
         List<Vertex> adj = new ArrayList<Vertex>(g.getIncidentVertices(u));
         Collections.shuffle(adj);
@@ -49,13 +55,13 @@ public class Maze implements Algorithm {
         for (Vertex to : adj) {
             touched.add(to);
             if (unvisited.contains(to) && countOccupied(g, to) <= 1) {
-                dfessa(g, aM, to);
+                dfessa(g, to);
             }
         }
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         unvisited = new HashSet<>();
         touched = new HashSet<>();
@@ -66,13 +72,12 @@ public class Maze implements Algorithm {
         }
         for (Edge e : g.getEdges())
             aM.instantSetEdgeColor(e, 0, 0, 0);
-        for (Vertex v : g.getVertices())
-            unvisited.add(v);
-        dfessa(g, aM, g.getVertex(0));
+        unvisited.addAll(g.getVertices());
+        dfessa(g, g.getVertex(0));
         for (Vertex v : g.getVertices()) {
             if (touched.contains(v))
                 continue;
-            dfessa(g, aM, v);
+            dfessa(g, v);
         }
         // for(int i = 0; i * i < unvisited.size(); i++) { } maybe remove
         // ~sqrt(unvisited) vertices to make it more interesting?

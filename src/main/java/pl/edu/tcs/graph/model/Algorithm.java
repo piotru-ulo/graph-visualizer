@@ -28,8 +28,10 @@ public interface Algorithm {
 
 	}
 
-	void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+	void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
 			throws AlgorithmException;
+
+	void setAlgoMiddleman(AlgoMiddleman aM);
 
 	Collection<AlgorithmProperties> getProperties();
 

@@ -208,6 +208,9 @@ public class Controller {
     @SuppressWarnings("deprecation")
     @FXML
     private void initialize() {
+        for (var A : GraphAlgorithms.values()) {
+            A.algorithm.setAlgoMiddleman(aM);
+        }
         choiceBox.setItems(choiceList);
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (algoThread != null) {
@@ -330,7 +333,7 @@ public class Controller {
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {
         algoThread = new Thread(() -> {
             try {
-                a.run(visualization.getGraph(), aM, req);
+                a.run(visualization.getGraph(), req);
                 isSomeoneRunning = false;
             } catch (AlgorithmException e) {
                 Platform.runLater(() -> {

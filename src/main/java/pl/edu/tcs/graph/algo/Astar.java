@@ -1,5 +1,7 @@
 package pl.edu.tcs.graph.algo;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
@@ -12,16 +14,22 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
-
 public class Astar implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList(
             AlgorithmProperties.SOURCE,
             AlgorithmProperties.TARGET);
+    AlgoMiddleman algoMiddleman;
+
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.algoMiddleman = aM;
+    }
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
         return properties;
     }
+
 
     @Override
     public Collection<VertexAction> getVertexActions() {
@@ -60,7 +68,7 @@ public class Astar implements Algorithm {
         }
     }
 
-    private void astar(Graph g, AlgoMiddleman algoMiddleman)
+    private void astar(Graph g)
             throws AlgorithmException {
         PriorityQueue<Location> queue = new PriorityQueue<>();
         Map<Vertex, Double> minDist = new HashMap<>();
@@ -87,11 +95,11 @@ public class Astar implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, 255, 255, 255);
+                algoMiddleman.instantSetVertexColor(v, 255, 255, 255);
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
@@ -105,7 +113,7 @@ public class Astar implements Algorithm {
                     mx = Math.max(mx, v.getId());
                 targetVertex = g.getVertex(mx);
             }
-            astar(g, aM);
+            astar(g);
             sourceVertex = targetVertex = null;
         } catch (AlgorithmException e) {
             throw e;

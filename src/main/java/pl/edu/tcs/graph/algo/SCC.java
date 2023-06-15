@@ -6,13 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
-
 public class SCC implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
@@ -25,7 +26,12 @@ public class SCC implements Algorithm {
     public Collection<VertexAction> getVertexActions() {
         return null;
     }
+    AlgoMiddleman aM;
 
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.aM = aM;
+    }
     private Map<Vertex, Integer> dp, vertexComponentId;
     private Stack<Vertex> vertexList;
     private int time;
@@ -69,7 +75,7 @@ public class SCC implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM,
+    public void run(Graph g,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         vertexList = new Stack<>();
         dp = new HashMap<>();

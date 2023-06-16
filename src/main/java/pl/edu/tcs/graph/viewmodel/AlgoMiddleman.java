@@ -5,6 +5,8 @@ import java.util.Optional;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Vertex;
 
+import java.util.zip.CheckedOutputStream;
+
 public interface AlgoMiddleman {
     public boolean setVertexColor(Vertex v, int[] rgb, int waitTime);
 

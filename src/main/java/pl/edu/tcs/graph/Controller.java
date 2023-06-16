@@ -31,6 +31,7 @@ import pl.edu.tcs.graph.algo.Bipartition;
 import pl.edu.tcs.graph.algo.Bridges;
 import pl.edu.tcs.graph.algo.CycleFinding;
 import pl.edu.tcs.graph.algo.DFS;
+import pl.edu.tcs.graph.algo.GameOfLife;
 import pl.edu.tcs.graph.algo.MST;
 import pl.edu.tcs.graph.algo.Maze;
 import pl.edu.tcs.graph.algo.SCC;
@@ -68,7 +69,8 @@ public class Controller {
         MST(new MST()),
         ANYCYCLE(new CycleFinding()),
         ASTAR(new Astar()),
-        MAZE(new Maze());
+        MAZE(new Maze()),
+        GAMEOFLIFE(new GameOfLife());
 
         private final Algorithm algorithm;
     }
@@ -236,6 +238,7 @@ public class Controller {
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
             } else if (newTab == gridTab) {
+                System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,
@@ -244,7 +247,8 @@ public class Controller {
                         GraphAlgorithms.ASTAR,
                         GraphAlgorithms.SCCS,
                         GraphAlgorithms.ANYCYCLE,
-                        GraphAlgorithms.ARTICULATION_POINTS);
+                        GraphAlgorithms.ARTICULATION_POINTS,
+                        GraphAlgorithms.GAMEOFLIFE);
                 choiceBox.setItems(choiceList);
             }
             visualization.setVertexActions(vertexActions);
@@ -271,6 +275,11 @@ public class Controller {
                     return null;
                 })));
                 visualization.setVertexActions(vertexActions);
+                if (newValue == GraphAlgorithms.GAMEOFLIFE) {
+                    GameOfLife game = (GameOfLife) newValue.algorithm;
+                    game.initialize(visualization.getGraph());
+                    visualization.setOnClickHandler(game.getVertexOnclick());
+                }
             }
         });
     }

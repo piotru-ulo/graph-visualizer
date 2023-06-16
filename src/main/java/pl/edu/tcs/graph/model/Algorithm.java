@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.edu.tcs.graph.algo.AlgorithmException;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
+import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 
 public interface Algorithm {
 	@AllArgsConstructor
@@ -36,6 +37,10 @@ public interface Algorithm {
 	Collection<AlgorithmProperties> getProperties();
 
 	Collection<VertexAction> getVertexActions();
+
+	default Function<? super DrawableVertex, Object> getVertexOnclick() {
+		return v -> null;
+	}
 
 	void setPaintDelay(int delay);
 }

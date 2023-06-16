@@ -64,6 +64,7 @@ public class GridVisualization implements Visualization {
         this.onClickHandler = onClickHandler;
     }
 
+    @Override
     public void setOnClickHandler(Function<? super DrawableVertex, Object> onClickHandler) {
         this.onClickHandler = onClickHandler;
         for (var dv : drawableVertexes.values())

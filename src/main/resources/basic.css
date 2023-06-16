@@ -5,8 +5,8 @@
 
 .container {
     -fx-max-width: 800px;
-    -fx-margin: 0 auto;
-    -fx-padding: 0px;
+    -fx-padding: 0;
+    -fx-alignment: center;
 }
 
 .my-button {
@@ -117,7 +117,7 @@
 
 .text-field:focused {
     -fx-border-color: #0099CC;
-    -fx-box-shadow: 0 0 3px #0099CC;
+    -fx-effect: dropshadow(gaussian, #0099CC, 3, 0, 0, 0);
 }
 
 .text-field:hover {

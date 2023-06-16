@@ -44,7 +44,6 @@ public class GameOfLife implements Algorithm {
             }
         }
         visited.remove(v);
-        System.out.println(visited.size());
         return new ArrayList<Vertex>(visited);
     }
 

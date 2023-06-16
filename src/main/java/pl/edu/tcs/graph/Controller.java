@@ -238,7 +238,6 @@ public class Controller {
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
             } else if (newTab == gridTab) {
-                System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,

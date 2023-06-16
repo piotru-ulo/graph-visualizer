@@ -1,10 +1,14 @@
 package pl.edu.tcs.graph.algo;
 
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.view.Colors;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 
 import java.util.Arrays;
@@ -17,6 +21,12 @@ public class Astar implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList(
             AlgorithmProperties.SOURCE,
             AlgorithmProperties.TARGET);
+    AlgoMiddleman algoMiddleman;
+
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.algoMiddleman = aM;
+    }
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -45,11 +55,19 @@ public class Astar implements Algorithm {
                         2);
     }
 
+    private double rainbowRate = 0.01;
+
+    @AllArgsConstructor
+    private static class CVertex {
+        public final Vertex v;
+        public final double c;
+    }
+
     private class Location implements Comparable<Location> {
-        private Vertex vertex;
+        private CVertex vertex;
         private Double score;
 
-        Location(Vertex vertex, Double score) {
+        Location(CVertex vertex, Double score) {
             this.vertex = vertex;
             this.score = score;
         }
@@ -60,38 +78,39 @@ public class Astar implements Algorithm {
         }
     }
 
-    private void astar(Graph g, AlgoMiddleman algoMiddleman)
+    private void astar(Graph g)
             throws AlgorithmException {
         PriorityQueue<Location> queue = new PriorityQueue<>();
         Map<Vertex, Double> minDist = new HashMap<>();
-        queue.add(new Location(sourceVertex, 0.0));
+        queue.add(new Location(new CVertex(sourceVertex, 0), 0.0));
         while (!queue.isEmpty()) {
             Location location = queue.poll();
-            algoMiddleman.setVertexColor(location.vertex, 127, 255, 212);
-            if (location.vertex.equals(targetVertex)) {
-                algoMiddleman.setVertexColor(location.vertex, 212, 175, 55);
+            algoMiddleman.setVertexColor(location.vertex.v, new int[] { 127, 255, 212 });
+            if (location.vertex.v.equals(targetVertex)) {
+                algoMiddleman.setVertexColor(location.vertex.v, new int[] { 212, 175, 55 });
                 return;
             }
-            for (Vertex to : g.getIncidentVertices(location.vertex)) {
+            for (Vertex to : g.getIncidentVertices(location.vertex.v)) {
                 if (!to.isActive())
                     continue;
                 Double score = location.score + 1;
                 if (!minDist.containsKey(to) || minDist.get(to).compareTo(score) > 0) {
                     minDist.put(to, score);
-                    queue.add(new Location(to, getScore(to, targetVertex, algoMiddleman)));
-                    algoMiddleman.setVertexColor(to, 250, 240, 230);
+                    queue.add(new Location(new CVertex(to, location.vertex.c + rainbowRate),
+                            getScore(to, targetVertex, algoMiddleman)));
+                    algoMiddleman.setVertexColor(to, new int[] { 51, 153, 255 });
                 }
             }
-            algoMiddleman.setVertexColor(location.vertex, 138, 43, 226);
+            algoMiddleman.setVertexColor(location.vertex.v, Colors.rainbow(location.vertex.c));
         }
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, 255, 255, 255);
+                algoMiddleman.instantSetVertexColor(v, Colors.white);
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
@@ -105,7 +124,7 @@ public class Astar implements Algorithm {
                     mx = Math.max(mx, v.getId());
                 targetVertex = g.getVertex(mx);
             }
-            astar(g, aM);
+            astar(g);
             sourceVertex = targetVertex = null;
         } catch (AlgorithmException e) {
             throw e;

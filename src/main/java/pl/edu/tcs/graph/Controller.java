@@ -57,18 +57,39 @@ public class Controller {
         private final Algorithm algorithm;
     }
 
-
     private Collection<Algorithm.VertexAction> vertexActions;
 
     private Thread algoThread;
     private final AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
-        public boolean setVertexColor(Vertex v, int r, int g, int b) {
+        public boolean setVertexColor(Vertex v, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
             boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
             } catch (InterruptedException ignored) {
             }
+            Platform.runLater((() -> {
+                visualization.updateDrawing(false);
+                stage.setScene(scene);
+                stage.show();
+            }));
+            return result;
+        }
+
+        @Override
+        public boolean setVertexColor(Vertex v, int r, int g, int b) {
+            return setVertexColor(v, new int[] { r, g, b });
+        }
+
+        @Override
+        public boolean instantSetVertexColor(Vertex v, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
+            boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
                 stage.setScene(scene);
@@ -79,17 +100,14 @@ public class Controller {
 
         @Override
         public boolean instantSetVertexColor(Vertex v, int r, int g, int b) {
-            boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
-            Platform.runLater((() -> {
-                visualization.updateDrawing(false);
-                stage.setScene(scene);
-                stage.show();
-            }));
-            return result;
+            return instantSetVertexColor(v, new int[] { r, g, b });
         }
 
         @Override
-        public boolean instantSetEdgeColor(Edge e, int r, int g, int b) {
+        public boolean instantSetEdgeColor(Edge e, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
             boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
@@ -100,7 +118,15 @@ public class Controller {
         }
 
         @Override
-        public boolean setEdgeColor(Edge e, int r, int g, int b) {
+        public boolean instantSetEdgeColor(Edge e, int r, int g, int b) {
+            return instantSetEdgeColor(e, new int[] { r, g, b });
+        }
+
+        @Override
+        public boolean setEdgeColor(Edge e, int[] rgb) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
             boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             try {
                 Thread.sleep(paint_delay);
@@ -112,6 +138,10 @@ public class Controller {
                 stage.show();
             }));
             return result;
+        }
+
+        public boolean setEdgeColor(Edge e, int r, int g, int b) {
+            return setEdgeColor(e, new int[] { r, g, b });
         }
 
         @Override
@@ -208,6 +238,9 @@ public class Controller {
     @SuppressWarnings("deprecation")
     @FXML
     private void initialize() {
+        for (var A : GraphAlgorithms.values()) {
+            A.algorithm.setAlgoMiddleman(aM);
+        }
         choiceBox.setItems(choiceList);
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (algoThread != null) {
@@ -216,7 +249,6 @@ public class Controller {
             }
             if (newTab == normalTab) {
                 visualization = new GraphVisualization();
-                System.out.println(graphPane.getWidth() + " " + graphPane.getHeight());
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,
                         GraphAlgorithms.BFS,
@@ -277,8 +309,8 @@ public class Controller {
     }
 
     public void nextGraph(ActionEvent e) {
-        visualization.setWidth((int)graphPane.getWidth());
-        visualization.setHeight((int)graphPane.getHeight());
+        visualization.setWidth((int) graphPane.getWidth());
+        visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -293,8 +325,8 @@ public class Controller {
     }
 
     public void graphFromInput(ActionEvent e) {
-        visualization.setWidth((int)graphPane.getWidth());
-        visualization.setHeight((int)graphPane.getHeight());
+        visualization.setWidth((int) graphPane.getWidth());
+        visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -330,7 +362,7 @@ public class Controller {
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {
         algoThread = new Thread(() -> {
             try {
-                a.run(visualization.getGraph(), aM, req);
+                a.run(visualization.getGraph(), req);
                 isSomeoneRunning = false;
             } catch (AlgorithmException e) {
                 Platform.runLater(() -> {
@@ -342,6 +374,7 @@ public class Controller {
                 });
             }
         });
+        algoThread.setDaemon(true);
         algoThread.start();
     }
 

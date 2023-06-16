@@ -2,12 +2,14 @@ package pl.edu.tcs.graph.algo;
 
 import java.util.*;
 
-import pl.edu.tcs.graph.model.Algorithm;
-import pl.edu.tcs.graph.model.AlgorithmProperties;
-import pl.edu.tcs.graph.model.Edge;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import pl.edu.tcs.graph.model.*;
+import pl.edu.tcs.graph.view.Colors;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
-import pl.edu.tcs.graph.model.Graph;
-import pl.edu.tcs.graph.model.Vertex;
+
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 
 public class BFS implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList(
@@ -19,56 +21,77 @@ public class BFS implements Algorithm {
         return properties;
     }
 
+    AlgoMiddleman algoMiddleman;
+
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.algoMiddleman = aM;
+    }
+
     @Override
     public Collection<VertexAction> getVertexActions() {
         return Arrays.asList(
                 new VertexAction("set start", (v -> {
+                    algoMiddleman.setVertexColor(sourceVertex, Colors.white);
                     sourceVertex = v;
+                    algoMiddleman.setVertexColor(v, Colors.source);
+                    ;
                     return null;
                 })),
                 new VertexAction("set end", (v -> {
+                    algoMiddleman.setVertexColor(targetVertex, Colors.white);
                     targetVertex = v;
+                    algoMiddleman.setVertexColor(v, Colors.target);
                     return null;
                 })));
     }
 
     private Vertex targetVertex = null;
     private Vertex sourceVertex = null;
+    private double rainbowRate = 0.01;
     private Map<Vertex, Boolean> visited;
-    private Queue<Vertex> que;
 
-    private void bfs(Graph g, Vertex u, AlgoMiddleman algoMiddleman)
+    @AllArgsConstructor
+    private static class CVertex {
+        public final Vertex v;
+        public final double c;
+    }
+
+    private Queue<CVertex> que;
+
+    private void bfs(Graph g, Vertex u)
             throws AlgorithmException {
         que = new LinkedList<>();
-        que.add(u);
+        que.add(new CVertex(u, 0));
         visited.put(u, true);
         while (!que.isEmpty()) {
-            Vertex v = que.poll();
-            algoMiddleman.setVertexColor(v, 127, 255, 212);
-            for (Vertex to : g.getIncidentVertices(v)) {
+            CVertex cVertex = que.poll();
+            algoMiddleman.setVertexColor(cVertex.v, new int[] { 127, 255, 212 });
+            for (Vertex to : g.getIncidentVertices(cVertex.v)) {
                 if (!visited.containsKey(to) && to.isActive()) {
                     visited.put(to, true);
-                    que.add(to);
+                    que.add(new CVertex(to, cVertex.c + rainbowRate));
                     if (to.equals(targetVertex)) {
-                        algoMiddleman.setVertexColor(to, 212, 175, 55);
+                        algoMiddleman.setVertexColor(to, Colors.target);
                         return;
                     }
-                    algoMiddleman.setVertexColor(to, 250, 240, 230);
+                    algoMiddleman.setVertexColor(to, new int[] { 51, 153, 255 });
                 }
             }
-            algoMiddleman.setVertexColor(v, 138, 43, 226);
+            algoMiddleman.setVertexColor(cVertex.v, Colors.rainbow(cVertex.c));
         }
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
+        rainbowRate = 7.0 / g.getVertices().size();
         visited = new HashMap<>();
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, 255, 255, 255);
+                algoMiddleman.instantSetVertexColor(v, Colors.white);
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, 0, 0, 0);
+            algoMiddleman.instantSetEdgeColor(e, new int[] { 0, 0, 0 });
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
@@ -76,7 +99,7 @@ public class BFS implements Algorithm {
                 targetVertex = g.getVertex(requirements.get(AlgorithmProperties.TARGET));
             if (sourceVertex == null)
                 sourceVertex = g.getVertex(1);
-            bfs(g, sourceVertex, aM);
+            bfs(g, sourceVertex);
             sourceVertex = targetVertex = null;
 
         } catch (AlgorithmException e) {

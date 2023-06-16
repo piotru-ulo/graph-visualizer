@@ -8,13 +8,14 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
-
 public class MST implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
@@ -28,6 +29,12 @@ public class MST implements Algorithm {
         return null;
     }
 
+    AlgoMiddleman aM;
+
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.aM = aM;
+    }
     private Map<Vertex, Vertex> forest;
 
     Vertex findTopmost(Vertex v) {
@@ -46,15 +53,15 @@ public class MST implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman algoMiddleman,
+    public void run(Graph g,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         forest = new HashMap<>();
         for (Vertex v : g.getVertices())
             forest.put(v, v);
         ArrayList<Edge> edges = new ArrayList<>(g.getEdges());
-        Collections.sort(edges, Comparator.comparingInt(Edge::getWeight));
+        edges.sort(Comparator.comparingInt(Edge::getWeight));
         for (Edge e : g.getEdges())
-            algoMiddleman.instantSetEdgeColor(e, 0, 0, 0);
+            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
         for (Edge e : edges) {
             if (e.isDirected())
                 throw new AlgorithmException(
@@ -67,7 +74,7 @@ public class MST implements Algorithm {
                     two = v;
             }
             if (mergeComponents(one, two))
-                algoMiddleman.setEdgeColor(e, 255, 182, 193);
+                aM.setEdgeColor(e, new int[]{255, 182, 193});
         }
     }
 }

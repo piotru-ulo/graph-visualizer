@@ -1,6 +1,6 @@
 package pl.edu.tcs.graph.model;
 
-class GraphVertex implements Vertex {
+public class GraphVertex implements Vertex {
     private int id;
     private boolean active = true;
 

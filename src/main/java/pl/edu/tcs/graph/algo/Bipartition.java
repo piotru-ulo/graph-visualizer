@@ -5,15 +5,22 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
-
 public class Bipartition implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
+    AlgoMiddleman aM;
+
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.aM = aM;
+    }
 
     @Override
     public Collection<AlgorithmProperties> getProperties() {
@@ -44,7 +51,7 @@ public class Bipartition implements Algorithm {
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
         color = new HashMap<>();
         for (Vertex v : g.getVertices())

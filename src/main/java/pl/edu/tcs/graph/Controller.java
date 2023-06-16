@@ -338,9 +338,12 @@ public class Controller {
 
     @FXML
     private void setDelay() {
-        paint_delay = Integer.parseInt(paintDelayTextField.getText());
-        for (var A : GraphAlgorithms.values())
-            A.algorithm.setPaintDelay(paint_delay);
+        try{
+            paint_delay = Integer.parseInt(paintDelayTextField.getText());
+            for (var A : GraphAlgorithms.values())
+                A.algorithm.setPaintDelay(paint_delay);
+        } catch (Exception ignored) {
+        }
     }
 
     private boolean isSomeoneRunning = false;
@@ -384,7 +387,7 @@ public class Controller {
             controller.setListOfProperties(choiceBox.getValue().algorithm.getProperties());
             root.show();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
     }
 }

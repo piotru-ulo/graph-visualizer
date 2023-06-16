@@ -5,7 +5,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.DrawableGridVertex;
-import pl.edu.tcs.graph.model.GridGraph;
+import pl.edu.tcs.graph.model.GridGraph4;
 import pl.edu.tcs.graph.model.GridVertex;
 import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 import pl.edu.tcs.graph.model.Edge;
@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 public class GridVisualization implements Visualization {
     private final AnchorPane drawingPane;
-    private GridGraph gg;
+    private GridGraph4 gg;
     private Map<Vertex, DrawableGridVertex> drawableVertexes;
     private double pixelWidth;
     private double pixelHeight;
@@ -41,7 +41,7 @@ public class GridVisualization implements Visualization {
     public GridVisualization(int graphWidth, int graphHeight, double pixelWidth, double pixelHeight) {
         vertexSize = Math.min(pixelWidth / graphWidth, pixelHeight / graphHeight);
         drawingPane = new AnchorPane();
-        gg = new GridGraph(graphWidth, graphHeight);
+        gg = new GridGraph4(graphWidth, graphHeight);
         drawableVertexes = new HashMap<>();
         this.graphWidth = graphWidth;
         this.graphHeight = graphHeight;
@@ -54,7 +54,7 @@ public class GridVisualization implements Visualization {
             Function<? super DrawableVertex, Object> onClickHandler) {
         vertexSize = Math.min(pixelWidth / graphWidth, pixelHeight / graphHeight);
         drawingPane = new AnchorPane();
-        gg = new GridGraph(graphWidth, graphHeight);
+        gg = new GridGraph4(graphWidth, graphHeight);
         drawableVertexes = new HashMap<>();
         this.graphWidth = graphWidth;
         this.graphHeight = graphHeight;
@@ -92,8 +92,8 @@ public class GridVisualization implements Visualization {
 
     @Override
     public void setGraph(Graph newGraph) {
-        if (newGraph instanceof GridGraph) {
-            gg = (GridGraph) newGraph;
+        if (newGraph instanceof GridGraph4) {
+            gg = (GridGraph4) newGraph;
         } else {
             throw new RuntimeException("Grid graph set to non-grid graph");
         }

@@ -78,8 +78,9 @@ public class Astar implements Algorithm {
     private void astar(Graph g)
             throws AlgorithmException {
         PriorityQueue<Location> queue = new PriorityQueue<>();
-        Map<Vertex, Double> minDist = new HashMap<>();
+        Map<Vertex, Integer> minDist = new HashMap<>();
         queue.add(new Location(new CVertex(sourceVertex, 0), 0.0));
+        minDist.put(sourceVertex, 0);
         while (!queue.isEmpty()) {
             Location location = queue.poll();
             algoMiddleman.setVertexColor(location.vertex.v, new int[] { 127, 255, 212 }, paintDelay);
@@ -90,9 +91,8 @@ public class Astar implements Algorithm {
             for (Vertex to : g.getIncidentVertices(location.vertex.v)) {
                 if (!to.isActive())
                     continue;
-                Double score = location.score + 1;
-                if (!minDist.containsKey(to) || minDist.get(to).compareTo(score) > 0) {
-                    minDist.put(to, score);
+                if (!minDist.containsKey(to) || minDist.get(to) > minDist.get(location.vertex.v) + 1) {
+                    minDist.put(to, minDist.get(location.vertex.v) + 1);
                     queue.add(new Location(new CVertex(to, location.vertex.c + rainbowRate),
                             getScore(to, targetVertex, algoMiddleman)));
                     algoMiddleman.setVertexColor(to, new int[] { 51, 153, 255 }, paintDelay);
@@ -105,9 +105,13 @@ public class Astar implements Algorithm {
     @Override
     public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
+        int active = 0;
         for (Vertex v : g.getVertices())
-            if (v.isActive())
+            if (v.isActive()) {
                 algoMiddleman.setVertexColor(v, Colors.white, 0);
+                active++;
+            }
+        rainbowRate = 7.0 / active;
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));

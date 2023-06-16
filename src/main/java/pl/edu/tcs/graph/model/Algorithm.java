@@ -14,7 +14,8 @@ import pl.edu.tcs.graph.viewmodel.DrawableVertex;
 public interface Algorithm {
 	@AllArgsConstructor
 	class VertexAction implements Function<Vertex, Object> {
-		@Getter @Setter
+		@Getter
+		@Setter
 		private String name;
 
 		@Override
@@ -22,13 +23,16 @@ public interface Algorithm {
 			return f.apply(v);
 		}
 
-		@Getter @Setter
+		@Getter
+		@Setter
 		private Function<? super Vertex, Object> f;
 
 	}
 
-	void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+	void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
 			throws AlgorithmException;
+
+	void setAlgoMiddleman(AlgoMiddleman aM);
 
 	Collection<AlgorithmProperties> getProperties();
 
@@ -37,4 +41,6 @@ public interface Algorithm {
 	default Function<? super DrawableVertex, Object> getVertexOnclick() {
 		return v -> null;
 	}
+
+	void setPaintDelay(int delay);
 }

@@ -139,7 +139,6 @@ public class GridVisualization implements Visualization {
     public boolean setVertexColor(Vertex v, Paint p) {
         if (!drawableVertexes.containsKey(v))
             return false;
-        //System.out.println("changed color of " + v.getId() + " to " + p);
         drawableVertexes.get(v).setFill(p);
         return true;
     }
@@ -147,6 +146,14 @@ public class GridVisualization implements Visualization {
     @Override
     public boolean setEdgeColor(Edge e, Paint p) {
         return false;
+    }
+
+    public void setHeight(int height) {
+        this.graphHeight = height;
+    }
+
+    public void setWidth(int width) {
+        this.graphWidth = width;
     }
 
 }

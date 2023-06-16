@@ -29,4 +29,8 @@ public interface Visualization {
     void setVertexActions(Collection<Algorithm.VertexAction> vertexActions);
 
     void setOnClickHandler(Function<? super DrawableVertex, Object> onClickHandler);
+
+    void setWidth(int width);
+
+    void setHeight(int height);
 }

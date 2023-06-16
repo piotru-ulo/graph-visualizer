@@ -11,6 +11,7 @@ public class App extends Application {
         URL fxmlLocation = getClass().getResource("/graph.fxml");
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         primaryStage = loader.load();
+        primaryStage.setTitle("grapher");
         primaryStage.show();
     }
 

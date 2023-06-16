@@ -8,32 +8,53 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import pl.edu.tcs.graph.algo.*;
-import pl.edu.tcs.graph.model.*;
+import pl.edu.tcs.graph.algo.AlgorithmException;
+import pl.edu.tcs.graph.algo.Articulation;
+import pl.edu.tcs.graph.algo.Astar;
+import pl.edu.tcs.graph.algo.BFS;
+import pl.edu.tcs.graph.algo.Bipartition;
+import pl.edu.tcs.graph.algo.Bridges;
+import pl.edu.tcs.graph.algo.CycleFinding;
+import pl.edu.tcs.graph.algo.DFS;
+import pl.edu.tcs.graph.algo.GameOfLife;
+import pl.edu.tcs.graph.algo.MST;
+import pl.edu.tcs.graph.algo.Maze;
+import pl.edu.tcs.graph.algo.SCC;
+import pl.edu.tcs.graph.model.Algorithm;
+import pl.edu.tcs.graph.model.Algorithm.VertexAction;
+import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.DigraphImpl;
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.model.GridGraph;
+import pl.edu.tcs.graph.model.Vertex;
 import pl.edu.tcs.graph.view.GraphVisualization;
 import pl.edu.tcs.graph.view.GridVisualization;
 import pl.edu.tcs.graph.view.Visualization;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Controller {
     @Getter
@@ -47,26 +68,30 @@ public class Controller {
         SCCS(new SCC()),
         MST(new MST()),
         ANYCYCLE(new CycleFinding()),
-        GEOTEST(new TestGeoAlgo()),
-        GAMEOFLIFE(new GameOfLife()),
-        MAZE(new Maze());
+        ASTAR(new Astar()),
+        MAZE(new Maze()),
+        GAMEOFLIFE(new GameOfLife());
 
         private final Algorithm algorithm;
     }
-
-    private Visualization visualization = new GraphVisualization();
 
     private Collection<Algorithm.VertexAction> vertexActions;
 
     private Thread algoThread;
     private final AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
-        public boolean setVertexColor(Vertex v, int r, int g, int b) {
+        public boolean setVertexColor(Vertex v, int[] rgb, int waitTime) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
+            assert (r >= 0 && r <= 255);
+            assert (g >= 0 && g <= 255);
+            assert (b >= 0 && b <= 255);
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException ignored) {
+            }
             boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
-            try {
-                Thread.sleep(paint_delay);
-            } catch (InterruptedException ignored) {
-            }
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
                 stage.setScene(scene);
@@ -76,12 +101,18 @@ public class Controller {
         }
 
         @Override
-        public boolean setEdgeColor(Edge e, int r, int g, int b) {
+        public boolean setEdgeColor(Edge e, int[] rgb, int waitTime) {
+            int r = rgb[0];
+            int g = rgb[1];
+            int b = rgb[2];
+            assert (r >= 0 && r <= 255);
+            assert (g >= 0 && g <= 255);
+            assert (b >= 0 && b <= 255);
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException ignored) {
+            }
             boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
-            try {
-                Thread.sleep(paint_delay);
-            } catch (InterruptedException ignored) {
-            }
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
                 stage.setScene(scene);
@@ -91,17 +122,17 @@ public class Controller {
         }
 
         @Override
-        public double getX(Vertex v) {
-            if(visualization.getGraph() instanceof GridGraph)
-                return ((GridGraph) visualization.getGraph()).getX(v);
-            return 0;
+        public Optional<Double> getX(Vertex v) {
+            if (visualization.getGraph() instanceof GridGraph)
+                return Optional.of(((GridGraph) visualization.getGraph()).getX(v));
+            return Optional.empty();
         }
 
         @Override
-        public double getY(Vertex v) {
-            if(visualization.getGraph() instanceof GridGraph)
-                return ((GridGraph) visualization.getGraph()).getY(v);
-            return 0;
+        public Optional<Double> getY(Vertex v) {
+            if (visualization.getGraph() instanceof GridGraph)
+                return Optional.of(((GridGraph) visualization.getGraph()).getY(v));
+            return Optional.empty();
         }
     };
     @FXML
@@ -133,6 +164,7 @@ public class Controller {
     private Tab gridTab;
 
     private boolean diGraph = false;
+    private Visualization visualization = new GraphVisualization();
 
     @FXML
     private void diGraphSwitch() {
@@ -160,7 +192,6 @@ public class Controller {
         } catch (Exception e) {
             return;
         }
-        System.out.println("changing to grid: " + height + " " + width);
         visualization = new GridVisualization(width, height, width * 20, height * 20,
                 dv -> {
                     if (dv.getVertex().isActive()) {
@@ -181,17 +212,20 @@ public class Controller {
         stage.show();
     }
 
+    @SuppressWarnings("deprecation")
     @FXML
     private void initialize() {
+        for (var A : GraphAlgorithms.values()) {
+            A.algorithm.setAlgoMiddleman(aM);
+            A.algorithm.setPaintDelay(100);
+        }
         choiceBox.setItems(choiceList);
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (algoThread != null) {
-                System.out.println("interrupting");
                 isSomeoneRunning = false;
                 algoThread.stop();
             }
             if (newTab == normalTab) {
-                System.out.println("normal tab ");
                 visualization = new GraphVisualization();
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,
@@ -203,15 +237,17 @@ public class Controller {
                         GraphAlgorithms.SCCS,
                         GraphAlgorithms.ANYCYCLE);
                 choiceBox.setItems(choiceList);
-            }
-            else if (newTab == gridTab) {
+            } else if (newTab == gridTab) {
                 System.out.println("grid tab");
                 visualization = new GridVisualization(0, 0, 0, 0);
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,
                         GraphAlgorithms.BFS,
                         GraphAlgorithms.MAZE,
-                        GraphAlgorithms.GEOTEST,
+                        GraphAlgorithms.ASTAR,
+                        GraphAlgorithms.SCCS,
+                        GraphAlgorithms.ANYCYCLE,
+                        GraphAlgorithms.ARTICULATION_POINTS,
                         GraphAlgorithms.GAMEOFLIFE);
                 choiceBox.setItems(choiceList);
             }
@@ -219,13 +255,29 @@ public class Controller {
             graphPane.getChildren().clear();
         });
         choiceBox.getSelectionModel().selectedItemProperty().addListener((boxObservable, oldValue, newValue) -> {
-            System.out.println("cz changed to :" + newValue);
             if (newValue != null) {
-                vertexActions = newValue.algorithm.getVertexActions();
+                vertexActions = new ArrayList<VertexAction>();
+                if (newValue.algorithm.getVertexActions() != null)
+                    vertexActions.addAll(newValue.algorithm.getVertexActions());
+                vertexActions.add(new VertexAction("choose color", (v -> {
+                    Stage popupStage = new Stage();
+                    popupStage.initModality(Modality.APPLICATION_MODAL);
+                    ColorPicker colorPicker = new ColorPicker();
+                    Button submit = new Button("submit");
+                    submit.setOnAction(e -> {
+                        visualization.setVertexColor(v, colorPicker.getValue());
+                        popupStage.close();
+                    });
+                    VBox root = new VBox(colorPicker, submit);
+                    Scene scene = new Scene(root, 300, 200);
+                    popupStage.setScene(scene);
+                    popupStage.showAndWait();
+                    return null;
+                })));
                 visualization.setVertexActions(vertexActions);
-                if(newValue == GraphAlgorithms.GAMEOFLIFE) {
+                if (newValue == GraphAlgorithms.GAMEOFLIFE) {
                     GameOfLife game = (GameOfLife) newValue.algorithm;
-                    game.initialize(visualization.getGraph(), aM);
+                    game.initialize(visualization.getGraph());
                     visualization.setOnClickHandler(game.getVertexOnclick());
                 }
             }
@@ -239,10 +291,11 @@ public class Controller {
 
     public void setRequirements(Map<AlgorithmProperties, Integer> req) {
         requirements = new HashMap<>(req);
-        System.out.println(requirements);
     }
 
     public void nextGraph(ActionEvent e) {
+        visualization.setWidth((int) graphPane.getWidth());
+        visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -257,6 +310,8 @@ public class Controller {
     }
 
     public void graphFromInput(ActionEvent e) {
+        visualization.setWidth((int) graphPane.getWidth());
+        visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -285,6 +340,8 @@ public class Controller {
     @FXML
     private void setDelay() {
         paint_delay = Integer.parseInt(paintDelayTextField.getText());
+        for (var A : GraphAlgorithms.values())
+            A.algorithm.setPaintDelay(paint_delay);
     }
 
     private boolean isSomeoneRunning = false;
@@ -292,7 +349,7 @@ public class Controller {
     private void runAlgo(Algorithm a, Map<AlgorithmProperties, Integer> req) {
         algoThread = new Thread(() -> {
             try {
-                a.run(visualization.getGraph(), aM, req);
+                a.run(visualization.getGraph(), req);
                 isSomeoneRunning = false;
             } catch (AlgorithmException e) {
                 Platform.runLater(() -> {
@@ -304,6 +361,7 @@ public class Controller {
                 });
             }
         });
+        algoThread.setDaemon(true);
         algoThread.start();
     }
 
@@ -314,16 +372,8 @@ public class Controller {
             requirements = new HashMap<>();
         isSomeoneRunning = true;
 
-        for (Edge e : visualization.getGraph().getEdges())
-            visualization.setEdgeColor(e, javafx.scene.paint.Color.BLACK);
-
         Algorithm currentAlgo = choiceBox.getValue().getAlgorithm();
         runAlgo(currentAlgo, requirements);
-
-        if(!(currentAlgo instanceof GameOfLife))
-            for (Vertex v : visualization.getGraph().getVertices())
-                if (v.isActive())
-                    visualization.setVertexColor(v, javafx.scene.paint.Color.WHITE);
     }
 
     public void openProperties(ActionEvent e) {

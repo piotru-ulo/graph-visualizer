@@ -7,9 +7,11 @@ import java.util.Map;
 
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.view.Colors;
 
 public class Bridges implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
@@ -24,42 +26,62 @@ public class Bridges implements Algorithm {
         return null;
     }
 
+    AlgoMiddleman aM;
+
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman aM) {
+        this.aM = aM;
+    }
+
     private Map<Vertex, Boolean> visited;
     private Map<Vertex, Integer> preOrder, low;
     private int time;
 
-    private void dfs(Graph g, Vertex u, Vertex p, AlgoMiddleman algoMiddleman)
+    private void dfs(Graph g, Vertex u, Vertex p)
             throws AlgorithmException {
         visited.put(u, true);
         time++;
         preOrder.put(u, time);
         low.put(u, time);
         for (Vertex to : g.getIncidentVertices(u)) {
-            if (to == p)
+            if (to.equals(p))
                 continue;
             if (visited.containsKey(to))
                 low.put(u, Math.min(low.get(u), preOrder.get(to)));
             else {
-                dfs(g, to, u, algoMiddleman);
+                dfs(g, to, u);
                 low.put(u, Math.min(low.get(u), low.get(to)));
                 if (low.get(to) > preOrder.get(u)) {
-                    algoMiddleman.setEdgeColor(g.getCorrespondingEdge(u, to), 255, 160, 122);
+                    aM.setEdgeColor(g.getCorrespondingEdge(u, to), new int[] { 255, 160, 122 }, paintDelay);
                 }
             }
         }
     }
 
     @Override
-    public void run(Graph g, AlgoMiddleman aM,
+    public void run(Graph g,
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
         preOrder = new HashMap<>();
         low = new HashMap<>();
         time = 0;
+        for (Vertex v : g.getVertices())
+            aM.setVertexColor(v, Colors.white, 0);
+        for (Edge e : g.getEdges())
+            aM.setEdgeColor(e, Colors.black, 0);
         try {
-            dfs(g, g.getVertex(1), g.getVertex(1), aM);
+            for (Vertex v : g.getVertices())
+                if (v.isActive() && !visited.containsKey(v))
+                    dfs(g, v, v);
         } catch (AlgorithmException e) {
             throw e;
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

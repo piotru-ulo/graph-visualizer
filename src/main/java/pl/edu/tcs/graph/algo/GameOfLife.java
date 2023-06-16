@@ -1,7 +1,5 @@
 package pl.edu.tcs.graph.algo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Setter;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
@@ -15,17 +13,19 @@ import java.util.function.Function;
 
 public class GameOfLife implements Algorithm {
 
-    Set<Vertex> alive;
+    private Set<Vertex> alive;
     @Setter
-    AlgoMiddleman algoMiddleman;
+    private AlgoMiddleman algoMiddleman;
 
-    public void initialize(Graph g, AlgoMiddleman aM) {
-        algoMiddleman = aM;
-        System.out.println("initializing");
+    public void initialize(Graph g) {
         alive = new HashSet<>();
         for (Vertex v : g.getVertices()) {
-            algoMiddleman.setVertexColor(v, 235, 242, 233);
-            alive.add(v);
+            if (!v.isActive()) {
+                algoMiddleman.setVertexColor(v, new int[] { 235, 242, 233 }, 0);
+                alive.add(v);
+            } else {
+                algoMiddleman.setVertexColor(v, new int[] { 147, 112, 82 }, 0);
+            }
         }
     }
 
@@ -36,8 +36,8 @@ public class GameOfLife implements Algorithm {
             for (Vertex u : visited) {
                 Set<Vertex> newVisited = new HashSet<>(visited);
                 for (Vertex to : g.getIncidentVertices(u)) {
-                    if (Math.max(Math.abs(algoMiddleman.getX(to) - algoMiddleman.getX(v)),
-                            Math.abs(algoMiddleman.getY(to) - algoMiddleman.getY(v))) <= 1)
+                    if (Math.max(Math.abs(algoMiddleman.getX(to).get() - algoMiddleman.getX(v).get()),
+                            Math.abs(algoMiddleman.getY(to).get() - algoMiddleman.getY(v).get())) <= 1)
                         newVisited.add(to);
                 }
                 visited = newVisited;
@@ -54,7 +54,6 @@ public class GameOfLife implements Algorithm {
             if (alive.contains(n))
                 crowd++;
         }
-        System.out.println(crowd);
         if (alive.contains(v))
             return (crowd == 2 || crowd == 3);
         if (!alive.contains(v))
@@ -62,24 +61,28 @@ public class GameOfLife implements Algorithm {
         return false;
     }
 
+    private int paintDelay = 1000;
+
     @Override
-    public void run(Graph g, AlgoMiddleman aM, Map<AlgorithmProperties, Integer> requirements)
+    public void run(Graph g, Map<AlgorithmProperties, Integer> requirements)
             throws AlgorithmException {
-        algoMiddleman = aM;
         try {
             while (true) {
                 Set<Vertex> newAlive = new HashSet<>();
                 for (Vertex v : g.getVertices()) {
+                    if (!v.isActive())
+                        continue;
                     if (willLive(v, g)) {
                         newAlive.add(v);
-                        aM.setVertexColor(v, 235, 242, 233);
+                        algoMiddleman.setVertexColor(v, new int[] { 235, 242, 233 }, 0);
                     } else {
-                        aM.setVertexColor(v, 147, 112, 82);
+                        algoMiddleman.setVertexColor(v, new int[] { 147, 112, 82 }, 0);
                     }
                 }
+                if (alive.equals(newAlive))
+                    break;
                 alive = newAlive;
-                Thread.sleep(1000);
-                System.out.println("?");
+                Thread.sleep(paintDelay);
             }
         } catch (InterruptedException ignored) {
 
@@ -100,19 +103,25 @@ public class GameOfLife implements Algorithm {
     public Function<? super DrawableVertex, Object> getVertexOnclick() {
         return dv -> {
             Vertex v = dv.getVertex();
-            System.out.println("hello from the game");
             if (alive.contains(v))
                 alive.remove(v);
             else
                 alive.add(v);
-            if (algoMiddleman != null) {
-                if (!alive.contains(v)) {
-                    algoMiddleman.setVertexColor(v, 147, 112, 82);
-                } else {
-                    algoMiddleman.setVertexColor(v, 235, 242, 233);
-                }
-            }
+            if (!alive.contains(v))
+                algoMiddleman.setVertexColor(v, new int[] { 147, 112, 82 }, 0);
+            else
+                algoMiddleman.setVertexColor(v, new int[] { 235, 242, 233 }, 0);
             return null;
         };
+    }
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
+    }
+
+    @Override
+    public void setAlgoMiddleman(AlgoMiddleman algoMiddleman) {
+        this.algoMiddleman = algoMiddleman;
     }
 }

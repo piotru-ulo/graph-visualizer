@@ -1,0 +1,125 @@
+.root {
+    -fx-font-family: Arial, sans-serif;
+    -fx-background-color: #F8F8F8;
+}
+
+.container {
+    -fx-max-width: 800px;
+    -fx-margin: 0 auto;
+    -fx-padding: 0px;
+}
+
+.my-button {
+    -fx-font-size: 16px;
+    -fx-background-color: #0099CC;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+}
+
+.my-button:hover {
+    -fx-background-color: #0077A3;
+}
+
+.label {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.label.highlighted {
+    -fx-font-weight: bold;
+    -fx-text-fill: #0099CC;
+}
+
+.choice-box .text {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.choice-box .arrow-button {
+    -fx-background-color: #F2F2F2;
+    -fx-background-radius: 0;
+}
+
+.choice-box .arrow-button:hover {
+    -fx-background-color: #E5E5E5;
+}
+
+.choice-box .arrow {
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+    -fx-stroke: #666666;
+    -fx-stroke-width: 1.5;
+    -fx-scale-shape: false;
+}
+
+.tab-pane {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-background-color: #F2F2F2;
+}
+
+.tab {
+    -fx-padding: 10px 20px;
+}
+
+.tab:selected {
+    -fx-background-color: #0099CC;
+    -fx-text-fill: white;
+}
+
+.tab:hover {
+    -fx-background-color: #E5E5E5;
+}
+
+.tab-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.checkbox {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+}
+
+.checkbox .box {
+    -fx-background-color: #F2F2F2;
+    -fx-background-radius: 2px;
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 2px;
+    -fx-padding: 4px;
+}
+
+.checkbox .box:selected {
+    -fx-background-color: #0099CC;
+    -fx-border-color: #0077A3;
+}
+
+.checkbox .tick {
+    -fx-background-color: white;
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 2px;
+}
+
+.checkbox:selected .tick {
+    -fx-background-color: #0099CC;
+    -fx-border-color: #0077A3;
+}
+
+.text-field {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #F2F2F2;
+    -fx-background-radius: 2px;
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 2px;
+    -fx-padding: 4px;
+}
+
+.text-field:focused {
+    -fx-border-color: #0099CC;
+    -fx-box-shadow: 0 0 3px #0099CC;
+}
+
+.text-field:hover {
+    -fx-background-color: #E5E5E5;
+}

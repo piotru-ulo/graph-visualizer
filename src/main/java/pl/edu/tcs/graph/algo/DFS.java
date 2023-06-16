@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
@@ -14,6 +12,7 @@ import pl.edu.tcs.graph.view.Colors;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+
 public class DFS implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList(AlgorithmProperties.SOURCE,
             AlgorithmProperties.TARGET);
@@ -27,18 +26,19 @@ public class DFS implements Algorithm {
     public Collection<VertexAction> getVertexActions() {
         return Arrays.asList(
                 new VertexAction("set start", (v -> {
-                    algoMiddleman.setVertexColor(sourceVertex, Colors.white);
+                    algoMiddleman.setVertexColor(sourceVertex, Colors.white, 0);
                     sourceVertex = v;
-                    algoMiddleman.setVertexColor(v, Colors.source);
+                    algoMiddleman.setVertexColor(v, Colors.source, 0);
                     return null;
                 })),
                 new VertexAction("set end", (v -> {
-                    algoMiddleman.setVertexColor(targetVertex, Colors.white);
+                    algoMiddleman.setVertexColor(targetVertex, Colors.white, 0);
                     targetVertex = v;
-                    algoMiddleman.setVertexColor(v, Colors.target);
+                    algoMiddleman.setVertexColor(v, Colors.target, 0);
                     return null;
                 })));
     }
+
     AlgoMiddleman algoMiddleman;
 
     @Override
@@ -53,11 +53,11 @@ public class DFS implements Algorithm {
 
     private void dfs(Graph g, Vertex u, double progress)
             throws AlgorithmException {
-        algoMiddleman.setVertexColor(u, Colors.rainbow(progress));
+        algoMiddleman.setVertexColor(u, Colors.rainbow(progress), paintDelay);
         visited.put(u, true);
 
         if (u.equals(targetVertex)) {
-            algoMiddleman.setVertexColor(u, new int[]{255, 215, 0});
+            algoMiddleman.setVertexColor(u, new int[] { 255, 215, 0 }, paintDelay);
             found = true;
         }
 
@@ -66,8 +66,8 @@ public class DFS implements Algorithm {
                 return;
             if (visited.containsKey(to) || !to.isActive())
                 continue;
-            algoMiddleman.setEdgeColor(g.getCorrespondingEdge(u, to), new int[]{0, 128, 0});
-            dfs(g, to, progress+rainbowRate);
+            algoMiddleman.setEdgeColor(g.getCorrespondingEdge(u, to), new int[] { 0, 128, 0 }, paintDelay);
+            dfs(g, to, progress + rainbowRate);
         }
     }
 
@@ -76,12 +76,12 @@ public class DFS implements Algorithm {
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         visited = new HashMap<>();
         found = false;
-        rainbowRate = 7.0/g.getVertices().size();
+        rainbowRate = 7.0 / g.getVertices().size();
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                algoMiddleman.instantSetVertexColor(v, new int[]{255, 255, 255});
+                algoMiddleman.setVertexColor(v, Colors.white, 0);
         for (Edge e : g.getEdges())
-            algoMiddleman.instantSetEdgeColor(e, new int[]{0, 0, 0});
+            algoMiddleman.setEdgeColor(e, Colors.black, 0);
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null
                     && g.getVertex(requirements.get(AlgorithmProperties.SOURCE)) != null)
@@ -96,5 +96,12 @@ public class DFS implements Algorithm {
         } catch (AlgorithmException e) {
             throw e;
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

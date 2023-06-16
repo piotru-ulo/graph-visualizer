@@ -5,14 +5,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.view.Colors;
+
 public class Bridges implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
@@ -52,7 +52,7 @@ public class Bridges implements Algorithm {
                 dfs(g, to, u);
                 low.put(u, Math.min(low.get(u), low.get(to)));
                 if (low.get(to) > preOrder.get(u)) {
-                    aM.setEdgeColor(g.getCorrespondingEdge(u, to), 255, 160, 122);
+                    aM.setEdgeColor(g.getCorrespondingEdge(u, to), new int[] { 255, 160, 122 }, paintDelay);
                 }
             }
         }
@@ -66,9 +66,9 @@ public class Bridges implements Algorithm {
         low = new HashMap<>();
         time = 0;
         for (Vertex v : g.getVertices())
-            aM.instantSetVertexColor(v, 255, 255, 255);
+            aM.setVertexColor(v, Colors.white, 0);
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, 0, 0, 0);
+            aM.setEdgeColor(e, Colors.black, 0);
         try {
             for (Vertex v : g.getVertices())
                 if (v.isActive() && !visited.containsKey(v))
@@ -76,5 +76,12 @@ public class Bridges implements Algorithm {
         } catch (AlgorithmException e) {
             throw e;
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

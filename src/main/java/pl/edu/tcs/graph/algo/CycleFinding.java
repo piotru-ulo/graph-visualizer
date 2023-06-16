@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
@@ -14,6 +12,7 @@ import pl.edu.tcs.graph.view.Colors;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+
 public class CycleFinding implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
     AlgoMiddleman aM;
@@ -40,7 +39,7 @@ public class CycleFinding implements Algorithm {
     private boolean dfs(Graph g, Vertex u, Vertex par)
             throws AlgorithmException {
         vertexColor.put(u, 1);
-        aM.setVertexColor(u, new int[]{250, 25, 25});
+        aM.setVertexColor(u, new int[] { 250, 25, 25 }, paintDelay);
         for (Vertex to : g.getIncidentVertices(u)) {
             if (to.equals(par) || !to.isActive())
                 continue;
@@ -55,7 +54,7 @@ public class CycleFinding implements Algorithm {
             }
         }
         vertexColor.put(u, 2);
-        aM.setVertexColor(u, new int[]{25, 250, 25});
+        aM.setVertexColor(u, new int[] { 25, 250, 25 }, paintDelay);
         return false;
     }
 
@@ -67,17 +66,24 @@ public class CycleFinding implements Algorithm {
         cycleStart = cycleEnd = null;
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, Colors.white);
+                aM.setVertexColor(v, Colors.white, 0);
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
+            aM.setEdgeColor(e, Colors.black, 0);
         for (Vertex v : g.getVertices())
             if (v.isActive() && !vertexColor.containsKey(v) && dfs(g, v, v))
                 break;
         if (cycleStart != null) {
             for (Vertex me = cycleEnd; me != null && !me.equals(cycleStart); me = vertexParent.get(me)) {
-                aM.setVertexColor(me, new int[]{25, 25, 250});
+                aM.setVertexColor(me, new int[] { 25, 25, 250 }, paintDelay);
             }
-            aM.setVertexColor(cycleStart, new int[]{25, 25, 250});
+            aM.setVertexColor(cycleStart, new int[] { 25, 25, 250 }, paintDelay);
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

@@ -23,9 +23,25 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import pl.edu.tcs.graph.algo.*;
-import pl.edu.tcs.graph.model.*;
+import pl.edu.tcs.graph.algo.AlgorithmException;
+import pl.edu.tcs.graph.algo.Articulation;
+import pl.edu.tcs.graph.algo.Astar;
+import pl.edu.tcs.graph.algo.BFS;
+import pl.edu.tcs.graph.algo.Bipartition;
+import pl.edu.tcs.graph.algo.Bridges;
+import pl.edu.tcs.graph.algo.CycleFinding;
+import pl.edu.tcs.graph.algo.DFS;
+import pl.edu.tcs.graph.algo.MST;
+import pl.edu.tcs.graph.algo.Maze;
+import pl.edu.tcs.graph.algo.SCC;
+import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.Algorithm.VertexAction;
+import pl.edu.tcs.graph.model.AlgorithmProperties;
+import pl.edu.tcs.graph.model.DigraphImpl;
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.model.GridGraph;
+import pl.edu.tcs.graph.model.Vertex;
 import pl.edu.tcs.graph.view.GraphVisualization;
 import pl.edu.tcs.graph.view.GridVisualization;
 import pl.edu.tcs.graph.view.Visualization;
@@ -62,33 +78,17 @@ public class Controller {
     private Thread algoThread;
     private final AlgoMiddleman aM = new AlgoMiddleman() {
         @Override
-        public boolean setVertexColor(Vertex v, int[] rgb) {
+        public boolean setVertexColor(Vertex v, int[] rgb, int waitTime) {
             int r = rgb[0];
             int g = rgb[1];
             int b = rgb[2];
-            boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
+            assert (r >= 0 && r <= 255);
+            assert (g >= 0 && g <= 255);
+            assert (b >= 0 && b <= 255);
             try {
-                Thread.sleep(paint_delay);
+                Thread.sleep(waitTime);
             } catch (InterruptedException ignored) {
             }
-            Platform.runLater((() -> {
-                visualization.updateDrawing(false);
-                stage.setScene(scene);
-                stage.show();
-            }));
-            return result;
-        }
-
-        @Override
-        public boolean setVertexColor(Vertex v, int r, int g, int b) {
-            return setVertexColor(v, new int[] { r, g, b });
-        }
-
-        @Override
-        public boolean instantSetVertexColor(Vertex v, int[] rgb) {
-            int r = rgb[0];
-            int g = rgb[1];
-            int b = rgb[2];
             boolean result = visualization.setVertexColor(v, javafx.scene.paint.Color.rgb(r, g, b));
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
@@ -99,49 +99,24 @@ public class Controller {
         }
 
         @Override
-        public boolean instantSetVertexColor(Vertex v, int r, int g, int b) {
-            return instantSetVertexColor(v, new int[] { r, g, b });
-        }
-
-        @Override
-        public boolean instantSetEdgeColor(Edge e, int[] rgb) {
+        public boolean setEdgeColor(Edge e, int[] rgb, int waitTime) {
             int r = rgb[0];
             int g = rgb[1];
             int b = rgb[2];
-            boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
-            Platform.runLater((() -> {
-                visualization.updateDrawing(false);
-                stage.setScene(scene);
-                stage.show();
-            }));
-            return result;
-        }
-
-        @Override
-        public boolean instantSetEdgeColor(Edge e, int r, int g, int b) {
-            return instantSetEdgeColor(e, new int[] { r, g, b });
-        }
-
-        @Override
-        public boolean setEdgeColor(Edge e, int[] rgb) {
-            int r = rgb[0];
-            int g = rgb[1];
-            int b = rgb[2];
-            boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
+            assert (r >= 0 && r <= 255);
+            assert (g >= 0 && g <= 255);
+            assert (b >= 0 && b <= 255);
             try {
-                Thread.sleep(paint_delay);
+                Thread.sleep(waitTime);
             } catch (InterruptedException ignored) {
             }
+            boolean result = visualization.setEdgeColor(e, javafx.scene.paint.Color.rgb(r, g, b));
             Platform.runLater((() -> {
                 visualization.updateDrawing(false);
                 stage.setScene(scene);
                 stage.show();
             }));
             return result;
-        }
-
-        public boolean setEdgeColor(Edge e, int r, int g, int b) {
-            return setEdgeColor(e, new int[] { r, g, b });
         }
 
         @Override
@@ -240,6 +215,7 @@ public class Controller {
     private void initialize() {
         for (var A : GraphAlgorithms.values()) {
             A.algorithm.setAlgoMiddleman(aM);
+            A.algorithm.setPaintDelay(100);
         }
         choiceBox.setItems(choiceList);
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
@@ -355,6 +331,8 @@ public class Controller {
     @FXML
     private void setDelay() {
         paint_delay = Integer.parseInt(paintDelayTextField.getText());
+        for (var A : GraphAlgorithms.values())
+            A.algorithm.setPaintDelay(paint_delay);
     }
 
     private boolean isSomeoneRunning = false;

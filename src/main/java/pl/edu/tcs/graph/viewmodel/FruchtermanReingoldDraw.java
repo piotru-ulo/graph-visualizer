@@ -74,8 +74,8 @@ public class FruchtermanReingoldDraw implements DrawStrategy {
     }
 
     private void calculateAttraction(Graph graph, Map<Vertex, DrawableVertex> vertexToDrawable,
-                                     Map<DrawableVertex, Double> moveX, Map<DrawableVertex, Double> moveY,
-                                     Collection<DrawableVertex> drawableVertices) {
+            Map<DrawableVertex, Double> moveX, Map<DrawableVertex, Double> moveY,
+            Collection<DrawableVertex> drawableVertices) {
         for (Edge e : graph.getEdges()) {
             DrawableVertex one = null, two = null;
             for (Vertex v : e.getEndpoints())

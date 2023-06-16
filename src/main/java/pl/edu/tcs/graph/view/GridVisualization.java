@@ -150,6 +150,7 @@ public class GridVisualization implements Visualization {
     public void setHeight(int height) {
         this.graphHeight = height;
     }
+
     public void setWidth(int width) {
         this.graphWidth = width;
     }

@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.view.Colors;
+
 public class Maze implements Algorithm {
 
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
@@ -30,12 +30,14 @@ public class Maze implements Algorithm {
     public Collection<VertexAction> getVertexActions() {
         return null;
     }
+
     AlgoMiddleman aM;
 
     @Override
     public void setAlgoMiddleman(AlgoMiddleman aM) {
         this.aM = aM;
     }
+
     private Set<Vertex> unvisited;
     private Set<Vertex> touched;
 
@@ -68,10 +70,10 @@ public class Maze implements Algorithm {
         for (Vertex v : g.getVertices()) {
             if (!v.isActive())
                 v.setActive(true);
-            aM.instantSetVertexColor(v, 255, 255, 255);
+            aM.setVertexColor(v, Colors.white, 0);
         }
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, 0, 0, 0);
+            aM.setEdgeColor(e, Colors.black, 0);
         unvisited.addAll(g.getVertices());
         dfessa(g, g.getVertex(0));
         for (Vertex v : g.getVertices()) {
@@ -83,7 +85,14 @@ public class Maze implements Algorithm {
         // ~sqrt(unvisited) vertices to make it more interesting?
         for (Vertex v : unvisited) {
             v.setActive(false);
-            aM.setVertexColor(v, 100, 100, 100);
+            aM.setVertexColor(v, new int[] { 100, 100, 100 }, paintDelay);
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

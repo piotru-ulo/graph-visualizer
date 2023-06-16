@@ -5,21 +5,22 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.view.Colors;
+
 public class Articulation implements Algorithm {
     AlgoMiddleman aM;
+
     @Override
     public void setAlgoMiddleman(AlgoMiddleman aM) {
         this.aM = aM;
     }
+
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
     @Override
@@ -52,12 +53,12 @@ public class Articulation implements Algorithm {
                 dfs(g, to, u, startVertex, aM);
                 low.put(u, Math.min(low.get(u), low.get(to)));
                 if (low.get(to) >= preOrder.get(u) && !u.equals(startVertex))
-                    aM.setVertexColor(u, new int[] {255, 160, 122});
+                    aM.setVertexColor(u, Colors.target, paintDelay);
                 ++childrenCount;
             }
         }
         if (u.equals(startVertex) && childrenCount > 1)
-            aM.setVertexColor(u, new int[]{255, 0, 0});
+            aM.setVertexColor(u, Colors.target, paintDelay);
     }
 
     @Override
@@ -65,9 +66,9 @@ public class Articulation implements Algorithm {
             Map<AlgorithmProperties, Integer> requirements) throws AlgorithmException {
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                aM.instantSetVertexColor(v, new int[]{255, 255, 255});
+                aM.setVertexColor(v, Colors.white, 0);
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
+            aM.setEdgeColor(e, Colors.black, 0);
 
         visited = new HashMap<>();
         preOrder = new HashMap<>();
@@ -80,5 +81,12 @@ public class Articulation implements Algorithm {
         } catch (AlgorithmException e) {
             throw e;
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

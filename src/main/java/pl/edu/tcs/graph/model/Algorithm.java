@@ -36,4 +36,6 @@ public interface Algorithm {
 	Collection<AlgorithmProperties> getProperties();
 
 	Collection<VertexAction> getVertexActions();
+
+	void setPaintDelay(int delay);
 }

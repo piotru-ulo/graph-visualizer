@@ -1,11 +1,8 @@
 package pl.edu.tcs.graph.algo;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
-import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
 import pl.edu.tcs.graph.view.Colors;
@@ -85,9 +82,9 @@ public class Astar implements Algorithm {
         queue.add(new Location(new CVertex(sourceVertex, 0), 0.0));
         while (!queue.isEmpty()) {
             Location location = queue.poll();
-            algoMiddleman.setVertexColor(location.vertex.v, new int[] { 127, 255, 212 });
+            algoMiddleman.setVertexColor(location.vertex.v, new int[] { 127, 255, 212 }, paintDelay);
             if (location.vertex.v.equals(targetVertex)) {
-                algoMiddleman.setVertexColor(location.vertex.v, new int[] { 212, 175, 55 });
+                algoMiddleman.setVertexColor(location.vertex.v, new int[] { 212, 175, 55 }, paintDelay);
                 return;
             }
             for (Vertex to : g.getIncidentVertices(location.vertex.v)) {
@@ -98,10 +95,10 @@ public class Astar implements Algorithm {
                     minDist.put(to, score);
                     queue.add(new Location(new CVertex(to, location.vertex.c + rainbowRate),
                             getScore(to, targetVertex, algoMiddleman)));
-                    algoMiddleman.setVertexColor(to, new int[] { 51, 153, 255 });
+                    algoMiddleman.setVertexColor(to, new int[] { 51, 153, 255 }, paintDelay);
                 }
             }
-            algoMiddleman.setVertexColor(location.vertex.v, Colors.rainbow(location.vertex.c));
+            algoMiddleman.setVertexColor(location.vertex.v, Colors.rainbow(location.vertex.c), paintDelay);
         }
     }
 
@@ -110,7 +107,7 @@ public class Astar implements Algorithm {
             throws AlgorithmException {
         for (Vertex v : g.getVertices())
             if (v.isActive())
-                algoMiddleman.instantSetVertexColor(v, Colors.white);
+                algoMiddleman.setVertexColor(v, Colors.white, 0);
         try {
             if (requirements.get(AlgorithmProperties.SOURCE) != null)
                 sourceVertex = g.getVertex(requirements.get(AlgorithmProperties.SOURCE));
@@ -129,5 +126,12 @@ public class Astar implements Algorithm {
         } catch (AlgorithmException e) {
             throw e;
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

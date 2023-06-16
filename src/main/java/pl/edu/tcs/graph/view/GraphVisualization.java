@@ -1,18 +1,22 @@
 package pl.edu.tcs.graph.view;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
-import pl.edu.tcs.graph.Controller;
-import pl.edu.tcs.graph.model.*;
-import pl.edu.tcs.graph.model.Algorithm.VertexAction;
-import pl.edu.tcs.graph.viewmodel.*;
+import pl.edu.tcs.graph.model.Algorithm;
+import pl.edu.tcs.graph.model.DrawableEdgeImpl;
+import pl.edu.tcs.graph.model.DrawableVertexImpl;
+import pl.edu.tcs.graph.model.Edge;
+import pl.edu.tcs.graph.model.Graph;
+import pl.edu.tcs.graph.model.GraphImpl;
+import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.viewmodel.CircularDraw;
+import pl.edu.tcs.graph.viewmodel.DrawStrategy;
+import pl.edu.tcs.graph.viewmodel.DrawableEdge;
+import pl.edu.tcs.graph.viewmodel.DrawableVertex;
+import pl.edu.tcs.graph.viewmodel.FruchtermanReingoldDraw;
+import pl.edu.tcs.graph.viewmodel.RescaleDraw;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +32,11 @@ public class GraphVisualization implements Visualization {
     private Collection<Algorithm.VertexAction> vertexActions = new ArrayList<>();
     private Graph g;
     private Map<Edge, DrawableEdge> drawableEdgeMap;
+
     public void setWidth(int width) {
         this.width = width - 10;
     }
+
     public void setHeight(int height) {
         this.height = height - 10;
     }

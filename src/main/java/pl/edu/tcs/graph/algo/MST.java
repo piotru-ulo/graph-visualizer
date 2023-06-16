@@ -3,19 +3,18 @@ package pl.edu.tcs.graph.algo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import pl.edu.tcs.graph.model.Algorithm;
 import pl.edu.tcs.graph.model.AlgorithmProperties;
 import pl.edu.tcs.graph.viewmodel.AlgoMiddleman;
 import pl.edu.tcs.graph.model.Edge;
 import pl.edu.tcs.graph.model.Graph;
 import pl.edu.tcs.graph.model.Vertex;
+import pl.edu.tcs.graph.view.Colors;
+
 public class MST implements Algorithm {
     private final Collection<AlgorithmProperties> properties = Arrays.asList();
 
@@ -35,6 +34,7 @@ public class MST implements Algorithm {
     public void setAlgoMiddleman(AlgoMiddleman aM) {
         this.aM = aM;
     }
+
     private Map<Vertex, Vertex> forest;
 
     Vertex findTopmost(Vertex v) {
@@ -61,7 +61,7 @@ public class MST implements Algorithm {
         ArrayList<Edge> edges = new ArrayList<>(g.getEdges());
         edges.sort(Comparator.comparingInt(Edge::getWeight));
         for (Edge e : g.getEdges())
-            aM.instantSetEdgeColor(e, new int[]{0, 0, 0});
+            aM.setEdgeColor(e, Colors.black, 0);
         for (Edge e : edges) {
             if (e.isDirected())
                 throw new AlgorithmException(
@@ -74,7 +74,14 @@ public class MST implements Algorithm {
                     two = v;
             }
             if (mergeComponents(one, two))
-                aM.setEdgeColor(e, new int[]{255, 182, 193});
+                aM.setEdgeColor(e, new int[] { 255, 182, 193 }, paintDelay);
         }
+    }
+
+    private int paintDelay;
+
+    @Override
+    public void setPaintDelay(int delay) {
+        paintDelay = delay;
     }
 }

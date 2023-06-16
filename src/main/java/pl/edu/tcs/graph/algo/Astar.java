@@ -60,6 +60,8 @@ public class Astar implements Algorithm {
         public final double c;
     }
 
+    private Map<Vertex, Integer> minDist;
+
     private class Location implements Comparable<Location> {
         private CVertex vertex;
         private Double score;
@@ -71,14 +73,16 @@ public class Astar implements Algorithm {
 
         @Override
         public int compareTo(Location o) {
-            return score.compareTo(o.score);
+            Double one = score + minDist.get(vertex.v);
+            Double two = o.score + minDist.get(o.vertex.v);
+            return (one).compareTo(two);
         }
     }
 
     private void astar(Graph g)
             throws AlgorithmException {
         PriorityQueue<Location> queue = new PriorityQueue<>();
-        Map<Vertex, Integer> minDist = new HashMap<>();
+        minDist = new HashMap<>();
         queue.add(new Location(new CVertex(sourceVertex, 0), 0.0));
         minDist.put(sourceVertex, 0);
         while (!queue.isEmpty()) {

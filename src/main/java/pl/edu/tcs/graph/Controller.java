@@ -249,7 +249,6 @@ public class Controller {
             }
             if (newTab == normalTab) {
                 visualization = new GraphVisualization();
-                System.out.println(graphPane.getWidth() + " " + graphPane.getHeight());
                 choiceList = FXCollections.observableArrayList(
                         GraphAlgorithms.DFS,
                         GraphAlgorithms.BFS,

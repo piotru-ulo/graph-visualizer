@@ -78,9 +78,10 @@ public class Controller {
             }));
             return result;
         }
+
         @Override
         public boolean setVertexColor(Vertex v, int r, int g, int b) {
-            return setVertexColor(v, new int[]{r, g, b});
+            return setVertexColor(v, new int[] { r, g, b });
         }
 
         @Override
@@ -96,9 +97,10 @@ public class Controller {
             }));
             return result;
         }
+
         @Override
         public boolean instantSetVertexColor(Vertex v, int r, int g, int b) {
-            return instantSetVertexColor(v, new int[] {r, g, b});
+            return instantSetVertexColor(v, new int[] { r, g, b });
         }
 
         @Override
@@ -117,7 +119,7 @@ public class Controller {
 
         @Override
         public boolean instantSetEdgeColor(Edge e, int r, int g, int b) {
-            return instantSetEdgeColor(e, new int[] {r, g, b});
+            return instantSetEdgeColor(e, new int[] { r, g, b });
         }
 
         @Override
@@ -139,7 +141,7 @@ public class Controller {
         }
 
         public boolean setEdgeColor(Edge e, int r, int g, int b) {
-            return setEdgeColor(e, new int[] {r, g, b});
+            return setEdgeColor(e, new int[] { r, g, b });
         }
 
         @Override
@@ -308,8 +310,8 @@ public class Controller {
     }
 
     public void nextGraph(ActionEvent e) {
-        visualization.setWidth((int)graphPane.getWidth());
-        visualization.setHeight((int)graphPane.getHeight());
+        visualization.setWidth((int) graphPane.getWidth());
+        visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("#graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -324,8 +326,8 @@ public class Controller {
     }
 
     public void graphFromInput(ActionEvent e) {
-        visualization.setWidth((int)graphPane.getWidth());
-        visualization.setHeight((int)graphPane.getHeight());
+        visualization.setWidth((int) graphPane.getWidth());
+        visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("graphPane");
         graphPane.getChildren().clear();
         graphPane.getChildren().add(visualization.getNode());
@@ -373,6 +375,7 @@ public class Controller {
                 });
             }
         });
+        algoThread.setDaemon(true);
         algoThread.start();
     }
 

@@ -168,6 +168,7 @@ public class Controller {
 
     @FXML
     private void diGraphSwitch() {
+        if(algoThread!=null) algoThread.interrupt();
         diGraph = !diGraph;
         graphPane.getChildren().clear();
         if (!diGraph) {
@@ -185,6 +186,7 @@ public class Controller {
     }
 
     public void changeToGrid() {
+        if(algoThread!=null) algoThread.interrupt();
         int height, width;
         try {
             height = Integer.parseInt(gridHeightTextField.getText());
@@ -294,6 +296,7 @@ public class Controller {
     }
 
     public void nextGraph(ActionEvent e) {
+        if(algoThread!=null) algoThread.interrupt();
         visualization.setWidth((int) graphPane.getWidth());
         visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("#graphPane");
@@ -310,6 +313,7 @@ public class Controller {
     }
 
     public void graphFromInput(ActionEvent e) {
+        if(algoThread!=null) algoThread.interrupt();
         visualization.setWidth((int) graphPane.getWidth());
         visualization.setHeight((int) graphPane.getHeight());
         mainPane.lookup("graphPane");
